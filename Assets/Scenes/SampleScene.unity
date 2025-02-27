@@ -417,7 +417,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.9635812, y: 0.97699577}
   m_EdgeRadius: 0
 --- !u!212 &342680058
 SpriteRenderer:
@@ -690,7 +690,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.11, z: 0}
-  m_LocalScale: {x: 20.23, y: 1.74, z: 1}
+  m_LocalScale: {x: 20.23, y: 1.89, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -838,7 +838,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 4.5
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: b0e82550466cb6044b76280ce2d483b9, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -867,8 +867,13 @@ MonoBehaviour:
     m_Bits: 8
   speed: 7
   acceleration: 50
-  deceleration: 10
+  deceleration: 50
   jumpForce: 13
+  apexTime: 0.05
+  apexSpeed: 9
+  jumpEndEarlyDivisor: 2
+  jumpBufferingTime: 0.1
+  coyoteTime: 0.1
 --- !u!1 &740983247
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,7 +1203,7 @@ GameObject:
   m_Layer: 0
   m_Name: FloorCheck
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1211,7 +1216,7 @@ Transform:
   m_GameObject: {fileID: 2119749783}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.795, z: 0}
+  m_LocalPosition: {x: 0, y: -0.79, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
