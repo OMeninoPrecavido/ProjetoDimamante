@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpBufferingTime;
     [SerializeField] float coyoteTime;
 
-    //Auxiliaries
+    //Player states
     bool isGrounded;
     bool wasGrounded;
     bool hasJumped;
@@ -52,9 +52,11 @@ public class PlayerMovement : MonoBehaviour
     bool shouldCoyoteJump;
     bool shouldCheckGrounding = true;
 
+    //Value holders
     float previousHOrientation;
     float previousVOrientation;
 
+    //Auxiliaries
     Coroutine jumpBufferingCoroutine;
 
     #endregion
