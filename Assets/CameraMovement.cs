@@ -1,20 +1,13 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    #region Constants
-
-    private const float SD_THRESHOLD = 0.001f;
-
-    #endregion
-
     #region References
 
     //Serialized references
-    [SerializeField] Transform player;
+    [SerializeField] Transform player;  //Player character
 
     #endregion
 
@@ -23,22 +16,22 @@ public class CameraMovement : MonoBehaviour
     //Serialized Properties
 
         //Camera zones
-    [SerializeField] [Range(0, 1)] float playerZonePercentageEach;
-    [SerializeField] [Range(0, 1)] float spaceBetweenZonesPercentage;
+    [SerializeField][Range(0, 1)] float playerZonePercentageEach;
+    [SerializeField][Range(0, 1)] float spaceBetweenZonesPercentage;
 
-        //Camera smoothing time
+        //Camera shift duration - when changing player framing
+    [SerializeField] float shiftDuration;
+
+        //Camera smoothing duration
     [SerializeField] float smoothTime;
-    [SerializeField] float shiftSmoothTime;
 
-    //Value holders
-
-        //Camera zone viewport limits
+    //Camera zone viewport limits
     private float leftOuterLimitX;
     private float leftInnerLimitX;
     private float rightOuterLimitX;
     private float rightInnerLimitX;
 
-        //Widths
+    //Widths
     float playerWidthWorld;         //Player's width in world
     float halfPlayerWidthVP;        //Half the player's width in viewport
     float halfPlayerWidthWorld;     //Half the player's width in world
@@ -47,20 +40,22 @@ public class CameraMovement : MonoBehaviour
 
     float areaShiftOrientation; //Orientation when shifting areeas
 
-        //Movement states
+    //Movement states
     bool isChangingAreas;
 
     //Auxiliaries
-    private Vector3 sdVelocity = Vector3.zero;
+    Vector3 auxSDX = Vector3.zero;
+    float velocity = 0;
 
     #endregion
 
+    #region Event Functions
+
     private void Start()
     {
-        //Gets half the player's width from his collider
-        playerWidthWorld = player.GetComponentInChildren<BoxCollider2D>().bounds.size.x;
-        halfPlayerWidthWorld = playerWidthWorld / 2;
-        halfPlayerWidthVP = GetWidthWorldToVP(halfPlayerWidthWorld);
+        playerWidthWorld = player.GetComponentInChildren<BoxCollider2D>().bounds.size.x; //Assigns player width in world
+        halfPlayerWidthWorld = playerWidthWorld / 2;                                     //Assigns half player width in world
+        halfPlayerWidthVP = GetWidthWorldToVP(halfPlayerWidthWorld);                     //Assigns half player width in VP
     }
 
     private void Update()
@@ -78,6 +73,16 @@ public class CameraMovement : MonoBehaviour
         //Gets offset used for the MoveCameraX method
         camMoveOffsetWorld = halfInnerZoneWidthWorld + halfPlayerWidthWorld;
 
+        //Updates the auxiliary following Vector3, so that its position can be copied by the camera
+        auxSDX.x = Mathf.SmoothDamp(auxSDX.x, player.position.x, ref velocity, smoothTime);
+
+        //Raycasting for debugging
+        DrawLimitsInEditor();
+    }
+
+    //Camera movement is done in LateUpdate so it is applies after every other transform change has already happened
+    private void LateUpdate()
+    {
         //Player's position in viewport coordinates
         Vector3 playerPosVP = Camera.main.WorldToViewportPoint(player.position);
 
@@ -88,44 +93,60 @@ public class CameraMovement : MonoBehaviour
         if (!isChangingAreas)
         {
             //Camera's movement orientation in X axis
-            float camMoveOrientationX = new Vector3(transform.position.x - player.position.x, 0, 0).normalized.x;
+            float camMoveOrientationX = new Vector3(transform.position.x - auxSDX.x, 0, 0).normalized.x;
             if (camMoveOrientationX == 0)
                 camMoveOrientationX = 1;
 
             //Player entered inbetween both player zones
             if (playerRightXVP > leftInnerLimitX && playerLeftXVP < rightInnerLimitX)
-                transform.position = MoveCameraX(camMoveOffsetWorld, camMoveOrientationX, smoothTime);
+                transform.position = AuxSDInst(camMoveOffsetWorld, camMoveOrientationX);
 
             //Player wondered outside one of the outer limits
             if (playerLeftXVP < leftOuterLimitX || playerRightXVP > rightOuterLimitX)
             {
                 isChangingAreas = true;
                 areaShiftOrientation = -camMoveOrientationX;
-            }   
+                StartCoroutine(AuxSDLerp(shiftDuration, areaShiftOrientation, camMoveOffsetWorld));
+            }
         }
-
-        if (isChangingAreas)
-        {
-            //Player isn't yet on the correct camera zone, which depends on the orientation of the area shift
-            if ((areaShiftOrientation > 0 && playerRightXVP > leftInnerLimitX)
-                || (areaShiftOrientation < 0 && playerLeftXVP < rightInnerLimitX))
-                transform.position = MoveCameraX(camMoveOffsetWorld, areaShiftOrientation, shiftSmoothTime);
-
-            //Ensures the camera doesn't approach forever
-            if (areaShiftOrientation > 0 && (playerRightXVP - leftInnerLimitX <= SD_THRESHOLD)
-                || (areaShiftOrientation < 0 && rightInnerLimitX - playerLeftXVP <= SD_THRESHOLD))
-                isChangingAreas = false;
-        }
-
-        //Raycasting for debugging
-        DrawLimitsInEditor();        
     }
 
-    //Moves the camera in the X axis
-    private Vector3 MoveCameraX(float offset, float orientation, float sTime)
+    #endregion
+
+    #region Methods
+
+    //Used to lerp the camera to a new framing whenever the player tries to go outwards
+    private IEnumerator AuxSDLerp(float duration, float orientation, float offset)
     {
-        Vector3 targetPos = new Vector3(player.position.x + offset * orientation, transform.position.y, transform.position.z);
-        return Vector3.SmoothDamp(transform.position, targetPos, ref sdVelocity, sTime);
+        float startX = transform.position.x;
+        float timeElapsed = 0;
+
+        while (timeElapsed < duration)
+        {
+            float t = timeElapsed / duration;
+
+            t = t * t * (3f - 2f * t);
+
+            float targetX = auxSDX.x + orientation * offset;
+            float lerpedX = Mathf.Lerp(startX, targetX, t);
+            transform.position = new Vector3(lerpedX, transform.position.y, transform.position.z);
+            timeElapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        transform.position = new Vector3(auxSDX.x + orientation * offset, transform.position.y, transform.position.z);
+        isChangingAreas = false;
+    }
+
+    //Sets the camera position to the position of an auxiliary object that follows the player using smooth damping
+    //This makes it so the camera follows the player using smooth damping, but also allows for the lerping method
+    //to go straigth into smooth damping movement.
+    //Used when player goes inwards
+    private Vector3 AuxSDInst(float offset, float orientation)
+    {
+        float newPosX = auxSDX.x + orientation * offset;
+        return new Vector3(newPosX, transform.position.y, transform.position.z);
     }
 
     //Converts a world width to viewport measurements
@@ -166,4 +187,7 @@ public class CameraMovement : MonoBehaviour
         Debug.DrawRay(rcRightInnerLimitX, Vector3.down * 10f, UnityEngine.Color.blue, 0f, false);
         Debug.DrawRay(rcRightOuterLimitX, Vector3.down * 10f, UnityEngine.Color.blue, 0f, false);
     }
+
+    #endregion
 }
+

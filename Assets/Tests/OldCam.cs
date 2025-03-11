@@ -1,8 +1,9 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class TestCam : MonoBehaviour
+public class OldCam : MonoBehaviour
 {
     #region Constants
 
@@ -14,7 +15,6 @@ public class TestCam : MonoBehaviour
 
     //Serialized references
     [SerializeField] Transform player;
-    [SerializeField] Transform auxSD;
 
     #endregion
 
@@ -22,25 +22,23 @@ public class TestCam : MonoBehaviour
 
     //Serialized Properties
 
-    public float lerpTime;
+        //Camera zones
+    [SerializeField] [Range(0, 1)] float playerZonePercentageEach;
+    [SerializeField] [Range(0, 1)] float spaceBetweenZonesPercentage;
 
-    //Camera zones
-    [SerializeField][Range(0, 1)] float playerZonePercentageEach;
-    [SerializeField][Range(0, 1)] float spaceBetweenZonesPercentage;
-
-    //Camera smoothing time
+        //Camera smoothing time
     [SerializeField] float smoothTime;
     [SerializeField] float shiftSmoothTime;
 
     //Value holders
 
-    //Camera zone viewport limits
+        //Camera zone viewport limits
     private float leftOuterLimitX;
     private float leftInnerLimitX;
     private float rightOuterLimitX;
     private float rightInnerLimitX;
 
-    //Widths
+        //Widths
     float playerWidthWorld;         //Player's width in world
     float halfPlayerWidthVP;        //Half the player's width in viewport
     float halfPlayerWidthWorld;     //Half the player's width in world
@@ -49,7 +47,7 @@ public class TestCam : MonoBehaviour
 
     float areaShiftOrientation; //Orientation when shifting areeas
 
-    //Movement states
+        //Movement states
     bool isChangingAreas;
 
     //Auxiliaries
@@ -90,61 +88,40 @@ public class TestCam : MonoBehaviour
         if (!isChangingAreas)
         {
             //Camera's movement orientation in X axis
-            float camMoveOrientationX = new Vector3(transform.position.x - auxSD.position.x, 0, 0).normalized.x;
+            float camMoveOrientationX = new Vector3(transform.position.x - player.position.x, 0, 0).normalized.x;
             if (camMoveOrientationX == 0)
                 camMoveOrientationX = 1;
 
             //Player entered inbetween both player zones
             if (playerRightXVP > leftInnerLimitX && playerLeftXVP < rightInnerLimitX)
-            {
-                transform.position = AuxSDInst(camMoveOffsetWorld, camMoveOrientationX);
-            }
-                
+                transform.position = MoveCameraX(camMoveOffsetWorld, camMoveOrientationX, smoothTime);
 
             //Player wondered outside one of the outer limits
             if (playerLeftXVP < leftOuterLimitX || playerRightXVP > rightOuterLimitX)
             {
                 isChangingAreas = true;
                 areaShiftOrientation = -camMoveOrientationX;
-                StartCoroutine(AuxSDLerp(lerpTime, areaShiftOrientation, camMoveOffsetWorld));
-            }
+            }   
+        }
+
+        if (isChangingAreas)
+        {
+            //Player isn't yet on the correct camera zone, which depends on the orientation of the area shift
+            if ((areaShiftOrientation > 0 && playerRightXVP > leftInnerLimitX)
+                || (areaShiftOrientation < 0 && playerLeftXVP < rightInnerLimitX))
+                transform.position = MoveCameraX(camMoveOffsetWorld, areaShiftOrientation, shiftSmoothTime);
+
+            //Ensures the camera doesn't approach forever
+            if (areaShiftOrientation > 0 && (playerRightXVP - leftInnerLimitX <= SD_THRESHOLD)
+                || (areaShiftOrientation < 0 && rightInnerLimitX - playerLeftXVP <= SD_THRESHOLD))
+                isChangingAreas = false;
         }
 
         //Raycasting for debugging
-        DrawLimitsInEditor();
+        DrawLimitsInEditor();        
     }
 
     //Moves the camera in the X axis
-
-    private IEnumerator AuxSDLerp(float duration, float orientation, float offset)
-    {
-        float startX = transform.position.x;
-        float timeElapsed = 0;
-
-        while (timeElapsed < duration)
-        {
-            float t = timeElapsed / duration;
-
-            t = t * t * (3f - 2f * t);
-
-            float targetX = auxSD.position.x + orientation * offset;
-            float lerpedX = Mathf.Lerp(startX, targetX, t);
-            transform.position = new Vector3(lerpedX, transform.position.y, transform.position.z);
-            timeElapsed += Time.deltaTime;
-
-            yield return null;
-        }
-
-        transform.position = new Vector3(auxSD.position.x + orientation * offset, transform.position.y, transform.position.z);
-        isChangingAreas = false;
-    }
-
-    private Vector3 AuxSDInst(float offset, float orientation)
-    {
-        float newPosX = auxSD.position.x + orientation * offset;
-        return new Vector3(newPosX, transform.position.y, transform.position.z);
-    }
-
     private Vector3 MoveCameraX(float offset, float orientation, float sTime)
     {
         Vector3 targetPos = new Vector3(player.position.x + offset * orientation, transform.position.y, transform.position.z);
@@ -190,4 +167,3 @@ public class TestCam : MonoBehaviour
         Debug.DrawRay(rcRightOuterLimitX, Vector3.down * 10f, UnityEngine.Color.blue, 0f, false);
     }
 }
-

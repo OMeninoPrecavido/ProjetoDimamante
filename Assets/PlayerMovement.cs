@@ -52,7 +52,9 @@ public class PlayerMovement : MonoBehaviour
     bool shouldCoyoteJump;
     bool shouldCheckGrounding = true;
 
+
     //Value holders
+    float hOrientation;
     float previousHOrientation;
     float previousVOrientation;
 
@@ -73,17 +75,26 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        HandleHorizontalMovement();
+        ReadHorizontalMovement();
         HandleJump();
     }
 
+    private void FixedUpdate()
+    {
+        HandleHorizontalMovement();  
+    }
+
     #region Horizontal Movement
+
+    private void ReadHorizontalMovement()
+    {
+        hOrientation = moveAction.ReadValue<float>();
+    }
 
     private void HandleHorizontalMovement()
     {
         if (!isAffectedByPhysics)
         {
-            float hOrientation = moveAction.ReadValue<float>(); //Orientation. Left = -1, Still = 0, Right = 1
             float velX = rb2d.linearVelocityX; //Current Rigidbody2D horizontal velocity
 
             if (hOrientation != 0f) //Player wants to move
