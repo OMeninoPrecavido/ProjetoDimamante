@@ -833,8 +833,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 668395793}
-  playerZonePercentageEach: 0.15
-  spaceBetweenZonesPercentage: 0.15
+  playerHZonePercentageEach: 0.15
+  spaceBetweenHZonesPercentage: 0.15
+  playerVZonePercentage: 0.27
+  playerVZonePosition: 0.35
   shiftDuration: 1
   smoothTime: 0.1
   leftBound: -20

@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float coyoteTime;
 
     //Player states
-    bool isGrounded;
+    public bool isGrounded { get; private set; }
     bool wasGrounded;
     bool hasJumped;
     bool isFalling;
