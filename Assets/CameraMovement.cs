@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
@@ -25,6 +24,13 @@ public class CameraMovement : MonoBehaviour
         //Camera smoothing duration
     [SerializeField] float smoothTime;
 
+        //Camera bounds
+    [SerializeField] float leftBound;
+    [SerializeField] float rightBound;
+
+    //Current camera focus
+    Side currentFocus = Side.Left; //Auxiliates with camera bounds and setting the X movement orientation
+
     //Camera zone viewport limits
     private float leftOuterLimitX;
     private float leftInnerLimitX;
@@ -37,14 +43,15 @@ public class CameraMovement : MonoBehaviour
     float halfPlayerWidthWorld;     //Half the player's width in world
     float halfInnerZoneWidthWorld;  //Width of zone between inner limits in world
     float camMoveOffsetWorld;       //Offset to be added to the camera SmoothDamp in world
+    float halfCamWidthWorld;        //Half the camera's size in world
 
-    float areaShiftOrientation; //Orientation when shifting areeas
+    float areaShiftOrientation; //Orientation when shifting areas
 
     //Movement states
     bool isChangingAreas;
 
     //Auxiliaries
-    Vector3 auxSDX = Vector3.zero;
+    Vector3 auxSDX = Vector3.zero; //Follows the player in smooth damping
     float velocity = 0;
 
     #endregion
@@ -56,6 +63,8 @@ public class CameraMovement : MonoBehaviour
         playerWidthWorld = player.GetComponentInChildren<BoxCollider2D>().bounds.size.x; //Assigns player width in world
         halfPlayerWidthWorld = playerWidthWorld / 2;                                     //Assigns half player width in world
         halfPlayerWidthVP = GetWidthWorldToVP(halfPlayerWidthWorld);                     //Assigns half player width in VP
+
+        halfCamWidthWorld = Camera.main.orthographicSize * Camera.main.aspect;  //Gets half the camera's width
     }
 
     private void Update()
@@ -70,7 +79,7 @@ public class CameraMovement : MonoBehaviour
         //Gets half the inner zone's width
         halfInnerZoneWidthWorld = GetWidthVPToWorld(spaceBetweenZonesPercentage) / 2;
 
-        //Gets offset used for the MoveCameraX method
+        //Gets offset used for the cam's framing
         camMoveOffsetWorld = halfInnerZoneWidthWorld + halfPlayerWidthWorld;
 
         //Updates the auxiliary following Vector3, so that its position can be copied by the camera
@@ -86,6 +95,16 @@ public class CameraMovement : MonoBehaviour
         //Player's position in viewport coordinates
         Vector3 playerPosVP = Camera.main.WorldToViewportPoint(player.position);
 
+        HandleHorizontalMovement(playerPosVP);
+    }
+
+    #endregion
+
+    #region Horizontal Movement
+
+    //Horizontal camera movement logic
+    private void HandleHorizontalMovement(Vector3 playerPosVP)
+    {
         //Player's left and right bounds X coordinates
         float playerLeftXVP = playerPosVP.x - halfPlayerWidthVP;
         float playerRightXVP = playerPosVP.x + halfPlayerWidthVP;
@@ -93,13 +112,26 @@ public class CameraMovement : MonoBehaviour
         if (!isChangingAreas)
         {
             //Camera's movement orientation in X axis
-            float camMoveOrientationX = new Vector3(transform.position.x - auxSDX.x, 0, 0).normalized.x;
-            if (camMoveOrientationX == 0)
-                camMoveOrientationX = 1;
+            float camMoveOrientationX = currentFocus == Side.Left ? 1 : -1; //If cam is framing the player on
+                                                                            //the left, it's movement orientation
+                                                                            //will be left
 
             //Player entered inbetween both player zones
             if (playerRightXVP > leftInnerLimitX && playerLeftXVP < rightInnerLimitX)
-                transform.position = AuxSDInst(camMoveOffsetWorld, camMoveOrientationX);
+            {
+                //Ensures camera stays inside bounds
+                Vector3 newPos = AuxSDInst(camMoveOffsetWorld, camMoveOrientationX);
+                if (newPos.x - halfCamWidthWorld >= leftBound && newPos.x + halfCamWidthWorld <= rightBound)
+                    transform.position = newPos; //Cam follows closely with SmoothDamping               
+            }
+
+            //Changes the current camera focus in case the player is forced onto another area,
+            //such as when the camera hits a bound and can't follow
+            if (playerLeftXVP >= rightInnerLimitX)
+                currentFocus = Side.Right;
+
+            if (playerRightXVP <= leftInnerLimitX)
+                currentFocus = Side.Left;
 
             //Player wondered outside one of the outer limits
             if (playerLeftXVP < leftOuterLimitX || playerRightXVP > rightOuterLimitX)
@@ -111,23 +143,29 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    #endregion
-
-    #region Methods
-
     //Used to lerp the camera to a new framing whenever the player tries to go outwards
     private IEnumerator AuxSDLerp(float duration, float orientation, float offset)
     {
         float startX = transform.position.x;
         float timeElapsed = 0;
+        float targetX = 0;
 
         while (timeElapsed < duration)
         {
             float t = timeElapsed / duration;
 
+            //Smoothstep function
             t = t * t * (3f - 2f * t);
 
-            float targetX = auxSDX.x + orientation * offset;
+            targetX = auxSDX.x + orientation * offset;
+
+            //Ensures camera wtays within bounds
+            if (targetX <= leftBound + halfCamWidthWorld)
+                targetX = leftBound + halfCamWidthWorld;
+                
+            if (targetX >= rightBound - halfCamWidthWorld)
+                targetX = rightBound - halfCamWidthWorld;
+
             float lerpedX = Mathf.Lerp(startX, targetX, t);
             transform.position = new Vector3(lerpedX, transform.position.y, transform.position.z);
             timeElapsed += Time.deltaTime;
@@ -135,7 +173,8 @@ public class CameraMovement : MonoBehaviour
             yield return null;
         }
 
-        transform.position = new Vector3(auxSDX.x + orientation * offset, transform.position.y, transform.position.z);
+        transform.position = new Vector3(targetX, transform.position.y, transform.position.z);
+        currentFocus = currentFocus == Side.Left ? Side.Right : Side.Left;
         isChangingAreas = false;
     }
 
@@ -172,6 +211,8 @@ public class CameraMovement : MonoBehaviour
         return Mathf.Abs(rightWorld.x - leftWorld.x);
     }
 
+    #endregion
+
     //Draws the player zone limits in Unity editor
     private void DrawLimitsInEditor()
     {
@@ -186,8 +227,18 @@ public class CameraMovement : MonoBehaviour
 
         Debug.DrawRay(rcRightInnerLimitX, Vector3.down * 10f, UnityEngine.Color.blue, 0f, false);
         Debug.DrawRay(rcRightOuterLimitX, Vector3.down * 10f, UnityEngine.Color.blue, 0f, false);
+
+        Vector3 leftBoundLimit = new Vector3(leftBound, 8, 0);
+        Vector3 rightBoundLimit = new Vector3(rightBound, 8, 0);
+
+        Debug.DrawRay(leftBoundLimit, Vector3.down * 20f, UnityEngine.Color.green, 0f, false);
+        Debug.DrawRay(rightBoundLimit, Vector3.down * 20f, UnityEngine.Color.green, 0f, false);
     }
 
-    #endregion
+    public enum Side
+    {
+        Left,
+        Right
+    }
 }
 

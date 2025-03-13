@@ -79,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
         HandleJump();
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         HandleHorizontalMovement();  
     }
