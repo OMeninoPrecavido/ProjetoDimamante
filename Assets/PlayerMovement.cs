@@ -52,7 +52,6 @@ public class PlayerMovement : MonoBehaviour
     bool shouldCoyoteJump;
     bool shouldCheckGrounding = true;
 
-
     //Value holders
     float hOrientation;
     float previousHOrientation;

@@ -1,0 +1,745 @@
+fileFormatVersion: 2
+guid: e5c7f9c2b638c7f449d31ed16a178cce
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1461797414080453704
+    second: DimamanteAseprite-Sheet_0
+  - first:
+      213: -6304799349665105819
+    second: DimamanteAseprite-Sheet_1
+  - first:
+      213: -8824228690495776699
+    second: DimamanteAseprite-Sheet_2
+  - first:
+      213: -7497786719496603775
+    second: DimamanteAseprite-Sheet_3
+  - first:
+      213: 33792464892743479
+    second: DimamanteAseprite-Sheet_4
+  - first:
+      213: -8943233231891912725
+    second: DimamanteAseprite-Sheet_5
+  - first:
+      213: 5930931673727264739
+    second: DimamanteAseprite-Sheet_6
+  - first:
+      213: -2233512364962138232
+    second: DimamanteAseprite-Sheet_7
+  - first:
+      213: -1848832687657223394
+    second: DimamanteAseprite-Sheet_8
+  - first:
+      213: 7689443340840107218
+    second: DimamanteAseprite-Sheet_9
+  - first:
+      213: -1375611436641654113
+    second: DimamanteAseprite-Sheet_10
+  - first:
+      213: 4072592814805952865
+    second: DimamanteAseprite-Sheet_11
+  - first:
+      213: 2692927943416789898
+    second: DimamanteAseprite-Sheet_12
+  - first:
+      213: -4373753335473724574
+    second: DimamanteAseprite-Sheet_13
+  - first:
+      213: -4395550445020375408
+    second: DimamanteAseprite-Sheet_14
+  - first:
+      213: -5965315222786818881
+    second: DimamanteAseprite-Sheet_15
+  - first:
+      213: 1963482481533764706
+    second: DimamanteAseprite-Sheet_16
+  - first:
+      213: -7268947436347761070
+    second: DimamanteAseprite-Sheet_17
+  - first:
+      213: 3400268627188885536
+    second: DimamanteAseprite-Sheet_18
+  - first:
+      213: -9204576924486305450
+    second: DimamanteAseprite-Sheet_19
+  - first:
+      213: -1795310806698993762
+    second: DimamanteAseprite-Sheet_20
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 13
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 150
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84c99dfc009594410800000000000000
+      internalID: 1461797414080453704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 150
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 568f81f456ad088a0800000000000000
+      internalID: -6304799349665105819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 150
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 548503e32ca0a8580800000000000000
+      internalID: -8824228690495776699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 150
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18773ce14b282f790800000000000000
+      internalID: -7497786719496603775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 120
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73f440a511e087000800000000000000
+      internalID: 33792464892743479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 120
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be72d9542c043e380800000000000000
+      internalID: -8943233231891912725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 120
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e760af0fe6ee4250800000000000000
+      internalID: 5930931673727264739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 120
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8873df47658f001e0800000000000000
+      internalID: -2233512364962138232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 90
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1b7f035770a756e0800000000000000
+      internalID: -1848832687657223394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 90
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2dc74436af366ba60800000000000000
+      internalID: 7689443340840107218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 90
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9a620acfa8d8ece0800000000000000
+      internalID: -1375611436641654113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 90
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16921596691c48830800000000000000
+      internalID: 4072592814805952865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 90
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8bb41162b33f5520800000000000000
+      internalID: 2692927943416789898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 90
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 263a8e7b38e4d43c0800000000000000
+      internalID: -4373753335473724574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_14
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 60
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 096104ca82edff2c0800000000000000
+      internalID: -4395550445020375408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_15
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 60
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbcbf841961f63da0800000000000000
+      internalID: -5965315222786818881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_16
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 60
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 264c58af9e0bf3b10800000000000000
+      internalID: 1963482481533764706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_17
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 60
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25e5185b1d28f1b90800000000000000
+      internalID: -7268947436347761070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_18
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 60
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 028af701d4e203f20800000000000000
+      internalID: 3400268627188885536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_19
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 60
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6597c3c1e06c24080800000000000000
+      internalID: -9204576924486305450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 30
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9759415556c517e0800000000000000
+      internalID: -1795310806698993762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_21
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 30
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca53c1bcfd004d04d89ca56d18f75fb2
+      internalID: -1168878845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_22
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff4bbb912efc19d4788516c6cfac1970
+      internalID: -1164474002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DimamanteAseprite-Sheet_23
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 0
+        width: 33
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c3e8e595eb215945936ec95f20507d5
+      internalID: -1666422453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 65391d95b21a59447b1e413dc8b9d4bb
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      DimamanteAseprite-Sheet_0: 1461797414080453704
+      DimamanteAseprite-Sheet_1: -6304799349665105819
+      DimamanteAseprite-Sheet_10: -1375611436641654113
+      DimamanteAseprite-Sheet_11: 4072592814805952865
+      DimamanteAseprite-Sheet_12: 2692927943416789898
+      DimamanteAseprite-Sheet_13: -4373753335473724574
+      DimamanteAseprite-Sheet_14: -4395550445020375408
+      DimamanteAseprite-Sheet_15: -5965315222786818881
+      DimamanteAseprite-Sheet_16: 1963482481533764706
+      DimamanteAseprite-Sheet_17: -7268947436347761070
+      DimamanteAseprite-Sheet_18: 3400268627188885536
+      DimamanteAseprite-Sheet_19: -9204576924486305450
+      DimamanteAseprite-Sheet_2: -8824228690495776699
+      DimamanteAseprite-Sheet_20: -1795310806698993762
+      DimamanteAseprite-Sheet_21: -1168878845
+      DimamanteAseprite-Sheet_22: -1164474002
+      DimamanteAseprite-Sheet_23: -1666422453
+      DimamanteAseprite-Sheet_3: -7497786719496603775
+      DimamanteAseprite-Sheet_4: 33792464892743479
+      DimamanteAseprite-Sheet_5: -8943233231891912725
+      DimamanteAseprite-Sheet_6: 5930931673727264739
+      DimamanteAseprite-Sheet_7: -2233512364962138232
+      DimamanteAseprite-Sheet_8: -1848832687657223394
+      DimamanteAseprite-Sheet_9: 7689443340840107218
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
