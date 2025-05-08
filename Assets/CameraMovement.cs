@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
+    #region Properties
+
     //References
     [SerializeField] Transform player;
+    [SerializeField] PlayerMovement playerMovement;
 
     //Editor Parameters
     [SerializeField] float smoothTimeX; //Amount of smoothing in following aux
+    [SerializeField] float smoothTimeY; //Amount of smoothing in vertical camera movement
 
     [SerializeField][Range(0, 1)] float pZoneWidthVP; //Percentage of player zone in relation to viewport
     float pZoneWidthWorld;
@@ -16,10 +20,19 @@ public class CameraMovement : MonoBehaviour
     float pZoneLeftBound;
     float pZoneRightBound;
 
+    [SerializeField][Range(0, 1)] float playerVLimit;
+    float playerVLimitWorld;
+
     [SerializeField] float cameraOffset; //Offset camera has from center of screen
     float currCamOffset;
 
     [SerializeField] float cameraShiftDuration; //Time it takes to shift camera orientation
+
+    //Camera bounds
+    [SerializeField] float leftCamLimit;
+    [SerializeField] float rightCamLimit;
+    [SerializeField] float topCamLimit;
+    [SerializeField] float bottomCamLimit;
 
     //Aux SD - Follows the player in smoothdamping and is followed by camera
     Vector3 auxPos = Vector3.zero;
@@ -30,13 +43,25 @@ public class CameraMovement : MonoBehaviour
     float playerLeftX;
     float playerRightX;
     float playerHalfWidth;
+    float playerHalfHeight;
+
+    //Camera Coords & Bounds
+    float halfCamWidth;
+    float halfCamHeight;
 
     //Camera Focus
     Side currFocus = Side.Left;
 
+    float velocityY; //Used for vertical SmoothDamping
+
+    #endregion
+
+    #region Event Functions
+
     private void Start()
     {
         HorizontalStart();
+        VerticalStart();
     }
 
     private void Update()
@@ -48,12 +73,16 @@ public class CameraMovement : MonoBehaviour
     private void LateUpdate()
     {
         HorizontalLateUpdate();
+        VerticalLateUpdate();
     }
+
+    #endregion
 
     #region Horizontal Movement
 
     private void HorizontalStart()
     {
+        halfCamWidth = Camera.main.orthographicSize * Camera.main.aspect;  //Gets half the camera's width
 
         auxPos = player.position;
         currCamOffset = cameraOffset;
@@ -112,7 +141,9 @@ public class CameraMovement : MonoBehaviour
         }
 
         Vector3 newCamPos = new Vector3(auxPos.x + currCamOffset, transform.position.y, transform.position.z);
-        transform.position = newCamPos; //Updates camera position
+
+        if (newCamPos.x > leftCamLimit + halfCamWidth && newCamPos.x < rightCamLimit - halfCamWidth)
+            transform.position = newCamPos; //Updates camera position
     }
 
     //Shifts camera to different orientation gradually
@@ -142,6 +173,48 @@ public class CameraMovement : MonoBehaviour
 
     #endregion
 
+    #region Vertical Movement
+
+    private void VerticalStart()
+    {
+        halfCamHeight = Camera.main.orthographicSize;  //Gets half the camera's height
+
+        BoxCollider2D playerBC2D = player.GetComponentInChildren<BoxCollider2D>();
+        playerHalfHeight = playerBC2D.bounds.size.y / 2;
+    }
+
+    private void VerticalLateUpdate()
+    {
+        float playerY = player.position.y;
+        playerVLimitWorld = Camera.main.ViewportToWorldPoint(new Vector3(0, playerVLimit, 0)).y;
+
+        //Player is under the vertical limit
+        if (playerY < playerVLimitWorld)
+            MoveCameraY();
+
+        //Player is above the vertical limit and is already grounded
+        if (playerY > playerVLimitWorld && playerMovement.isGrounded)
+            MoveCameraY();
+    }
+
+    private void MoveCameraY()
+    {
+        float newY = Mathf.SmoothDamp(transform.position.y, player.position.y, ref velocityY, smoothTimeY);
+
+        //Checks for cam's vertical boundaries
+        if (newY + halfCamHeight > topCamLimit)
+            newY = topCamLimit - halfCamHeight;
+
+        if (newY - halfCamHeight < bottomCamLimit)
+            newY = bottomCamLimit + halfCamHeight;
+
+        transform.position = new Vector3(transform.position.x, newY, transform.position.z);
+    }
+
+    #endregion
+
+    #region Methods
+
     //Converts a viewport width to world measurements
     private float GetWidthVPToWorld(float widthVP)
     {
@@ -163,11 +236,26 @@ public class CameraMovement : MonoBehaviour
         Debug.DrawRay(lbPos, Vector3.down * 3f, UnityEngine.Color.blue, 0f, false);
         Debug.DrawRay(rbPos, Vector3.down * 3f, UnityEngine.Color.blue, 0f, false);
 
+        //Camera limits
+        Debug.DrawRay(new Vector3(leftCamLimit, 3, 0), Vector3.down * 5f, Color.green, 0f, false);
+        Debug.DrawRay(new Vector3(rightCamLimit, 3, 0), Vector3.down * 5f, Color.green, 0f, false);
+        Debug.DrawRay(new Vector3(-3, topCamLimit, 0), Vector3.right * 5f, Color.green, 0f, false);
+        Debug.DrawRay(new Vector3(-3, bottomCamLimit, 0), Vector3.right * 5f, Color.green, 0f, false);
+
+        //Camera movement vertical limit
+        Debug.DrawRay(new Vector3(transform.position.x-5, playerVLimitWorld, 0), Vector3.right * 10f, Color.red, 0f, false);
+
     }
+
+    #endregion
+
+    #region Enums
 
     private enum Side
     {
         Left,
         Right
     }
+
+    #endregion
 }
