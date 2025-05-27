@@ -41,6 +41,9 @@ TagManager:
   - name: Background
     uniqueID: 1648971299
     locked: 0
+  - name: BackgroundTiles
+    uniqueID: 415487369
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
