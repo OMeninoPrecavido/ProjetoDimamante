@@ -53,9 +53,11 @@ public class PlayerMovement : MonoBehaviour
     bool shouldCheckGrounding = true;
 
     //Value holders
-    float hOrientation;
+    float hOrientation; //Movement orientation -> can be 0
     float previousHOrientation;
     float previousVOrientation;
+
+    public int PlayerOrientation { get; private set; } = 1; //-1 = Left, 1 = Right
 
     //Auxiliaries
     Coroutine jumpBufferingCoroutine;
@@ -108,6 +110,7 @@ public class PlayerMovement : MonoBehaviour
                     velX = 0;
 
                 previousHOrientation = hOrientation;
+                PlayerOrientation = (int)hOrientation;
             }
             else if (hOrientation == 0f) //Player wants to stay still
             {

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9bd97b2571506a749b1d6808a8cdd6fe
+guid: 489eb2ad5bf92dd4295586c8cc1cc43b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2197699649039922573
-    second: test_tiles_0
+      213: -5967301435767084374
+    second: testStar_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 15
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,71 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: test_tiles_0
+      name: testStar_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 15
-        height: 15
+        width: 9
+        height: 9
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: d857608df2ccf7e10800000000000000
-      internalID: 2197699649039922573
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: test_tiles_1
-      rect:
-        serializedVersion: 2
-        x: 15
-        y: 0
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape:
-      - - {x: 7.5, y: 7.5}
-        - {x: -7.5, y: 7.5}
-        - {x: -7.5, y: -7.5}
-        - {x: 7.5, y: -7.5}
-      tessellationDetail: 0
-      bones: []
-      spriteID: 26bf18d124c60a74a93c8f110d306987
-      internalID: -4715766
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: test_tiles_2
-      rect:
-        serializedVersion: 2
-        x: 30
-        y: 0
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b774be64785259f4dabda8a2e76c5dcc
-      internalID: -1514791921
+      spriteID: aaaac65d5f2ef2da0800000000000000
+      internalID: -5967301435767084374
       vertices: []
       indices: 
       edges: []
@@ -186,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0ee88bcd414eece43bfe47add2e9f1c5
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -196,9 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      test_tiles_0: 2197699649039922573
-      test_tiles_1: -4715766
-      test_tiles_2: -1514791921
+      testStar_0: -5967301435767084374
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
