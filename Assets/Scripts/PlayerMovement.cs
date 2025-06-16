@@ -51,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
     bool hasJumpBuffered;
     bool shouldCoyoteJump;
     bool shouldCheckGrounding = true;
+    bool isMovementEnabled = true;
 
     //Value holders
     float hOrientation; //Movement orientation -> can be 0
@@ -72,17 +73,24 @@ public class PlayerMovement : MonoBehaviour
         moveAction = InputSystem.actions.FindAction("Move");
         lookAction = InputSystem.actions.FindAction("Look");
         jumpAction = InputSystem.actions.FindAction("Jump");
+
+        DashController dashController = GetComponent<DashController>();
+        dashController.OnDash += OnDashMade;
     }
 
     void Update()
     {
-        ReadHorizontalMovement();
-        HandleJump();
+        if (isMovementEnabled)
+        {
+            ReadHorizontalMovement();
+            HandleJump();
+        }
     }
 
     void FixedUpdate()
     {
-        HandleHorizontalMovement();  
+        if (isMovementEnabled)
+            HandleHorizontalMovement();  
     }
 
     #region Horizontal Movement
@@ -274,6 +282,23 @@ public class PlayerMovement : MonoBehaviour
         //Debug.DrawRay(new Vector3(floorCheck.position.x + bc2d.size.x/2, floorCheck.position.y, floorCheck.position.z), Vector3.down * 0.1f, UnityEngine.Color.red, 0f, false);
 
         return hit;
+    }
+
+    #endregion
+
+    #region Event Listeners
+
+    private void OnDashMade(Phase phase)
+    {
+        if (phase == Phase.Start)
+        {
+            isMovementEnabled = false;
+        }
+        else
+        if (phase == Phase.End)
+        {
+            isMovementEnabled = true;
+        }
     }
 
     #endregion

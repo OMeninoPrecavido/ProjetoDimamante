@@ -15,8 +15,13 @@ public class DashController : MonoBehaviour
 
     [SerializeField] float dashMaxDistance;
     [SerializeField] float dashStarSpeed;
+    [SerializeField] float dashEffectDelay;
+
     Transform starRef;
     bool dashIsCharging = false;
+
+    public delegate void Dash(Phase phase);
+    public event Dash OnDash;
 
     private void Start()
     {
@@ -45,10 +50,36 @@ public class DashController : MonoBehaviour
         StartCoroutine(MoveStar(playerMovement.PlayerOrientation));
     }
 
-    private void StopChargeDash(InputAction.CallbackContext context)
+    private void StopChargeDash(InputAction.CallbackContext context) => StartCoroutine(StopChargeDashCoroutine());
+
+    IEnumerator StopChargeDashCoroutine()
     {
-        Destroy(starRef.gameObject);
         dashIsCharging = false;
+        if (starRef != null)
+        {
+            Destroy(starRef.gameObject);
+
+            OnDash.Invoke(Phase.Start);
+            //Lock camera movement
+            //Set camera x smooth time to something slower
+            //Lock player movement
+            //START DASH ANIM ENDS
+
+            Vector3 newPlayerPos = starRef.position;
+            transform.position = newPlayerPos;
+            //FINAL DASH ANIM STARTS
+
+            yield return new WaitForSeconds(1);
+
+            OnDash.Invoke(Phase.End);
+            //Unlock camera movement
+            //Damage to enemies logic
+            //Set camera smoothX back to normal assuming camera has already reached player
+
+            //FINAL DASH ANIM ENDS  
+
+            //Unlock player movement
+        }
     }
 
     IEnumerator MoveStar(int orientation)
@@ -57,7 +88,7 @@ public class DashController : MonoBehaviour
         while (playerStartDist < dashMaxDistance && dashIsCharging)
         {
             Vector3 newPos = new Vector3(starRef.position.x + (dashStarSpeed * Time.deltaTime * orientation), 
-                                         starRef.position.y, starRef.position.z);
+                                            starRef.position.y, starRef.position.z);
 
             starRef.position = newPos;
             playerStartDist = Mathf.Abs(starRef.position.x - transform.position.x);
@@ -65,4 +96,6 @@ public class DashController : MonoBehaviour
             yield return null;
         }
     }
+
+
 }

@@ -9,10 +9,13 @@ public class CameraMovement : MonoBehaviour
     //References
     [SerializeField] Transform player;
     [SerializeField] PlayerMovement playerMovement;
+    [SerializeField] DashController dashController;
 
-    //Editor Parameters
-    [SerializeField] float smoothTimeX; //Amount of smoothing in following aux
+    //Editor Parameters - SmoothTime
+    [SerializeField] float regularSmoothTimeX; //Amount of smoothing in following aux
     [SerializeField] float smoothTimeY; //Amount of smoothing in vertical camera movement
+    [SerializeField] float dashSmoothTimeX; //Amount of smoothing during dash
+    float smoothTimeX;
 
     [SerializeField][Range(0, 1)] float pZoneWidthVP; //Percentage of player zone in relation to viewport
     float pZoneWidthWorld;
@@ -52,6 +55,10 @@ public class CameraMovement : MonoBehaviour
     //Camera Focus
     Side currFocus = Side.Left;
 
+    //Enablers
+    bool hMoveEnabled = true;
+    bool vMoveEnabled = true;
+
     float velocityY; //Used for vertical SmoothDamping
 
     #endregion
@@ -66,14 +73,19 @@ public class CameraMovement : MonoBehaviour
 
     private void Update()
     {
-        HorizontalUpdate();
+        if (hMoveEnabled)
+            HorizontalUpdate();
+
         DrawLimitsInEditor();
     }
 
     private void LateUpdate()
     {
-        HorizontalLateUpdate();
-        VerticalLateUpdate();
+        if (hMoveEnabled)
+            HorizontalLateUpdate();
+
+        if (vMoveEnabled)
+            VerticalLateUpdate();
     }
 
     #endregion
@@ -82,10 +94,14 @@ public class CameraMovement : MonoBehaviour
 
     private void HorizontalStart()
     {
+        dashController.OnDash += OnDashMade;
+
         halfCamWidth = Camera.main.orthographicSize * Camera.main.aspect;  //Gets half the camera's width
 
         auxPos = player.position;
         currCamOffset = cameraOffset;
+
+        smoothTimeX = regularSmoothTimeX;
 
         BoxCollider2D playerBC2D = player.GetComponentInChildren<BoxCollider2D>();
         playerHalfWidth = playerBC2D.bounds.size.x / 2;
@@ -171,6 +187,45 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
+    private void OnDashMade(Phase phase)
+    {
+        if (phase == Phase.Start)
+        {
+            hMoveEnabled = false;
+            smoothTimeX = dashSmoothTimeX;
+        }
+        else
+        if (phase == Phase.End)
+        {
+            hMoveEnabled = true;
+        }
+    }
+
+    private IEnumerator ChangeSmoothXGradual(float value, float changeTime, float delay)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < delay)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        elapsedTime = 0f;
+        float startingVal = smoothTimeX;
+
+        while (elapsedTime < changeTime)
+        {
+            float val = elapsedTime / changeTime;
+            smoothTimeX = Mathf.Lerp(smoothTimeX, value, val);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if (smoothTimeX > value)
+            smoothTimeX = value;
+    }
+
     #endregion
 
     #region Vertical Movement
@@ -245,16 +300,6 @@ public class CameraMovement : MonoBehaviour
         //Camera movement vertical limit
         Debug.DrawRay(new Vector3(transform.position.x-5, playerVLimitWorld, 0), Vector3.right * 10f, Color.red, 0f, false);
 
-    }
-
-    #endregion
-
-    #region Enums
-
-    private enum Side
-    {
-        Left,
-        Right
     }
 
     #endregion
