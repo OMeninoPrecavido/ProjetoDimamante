@@ -94,8 +94,6 @@ public class CameraMovement : MonoBehaviour
 
     private void HorizontalStart()
     {
-        dashController.OnDash += OnDashMade;
-
         halfCamWidth = Camera.main.orthographicSize * Camera.main.aspect;  //Gets half the camera's width
 
         auxPos = player.position;
@@ -187,20 +185,6 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    private void OnDashMade(Phase phase)
-    {
-        if (phase == Phase.Start)
-        {
-            hMoveEnabled = false;
-            smoothTimeX = dashSmoothTimeX;
-        }
-        else
-        if (phase == Phase.End)
-        {
-            hMoveEnabled = true;
-        }
-    }
-
     private IEnumerator ChangeSmoothXGradual(float value, float changeTime, float delay)
     {
         float elapsedTime = 0f;
@@ -248,7 +232,7 @@ public class CameraMovement : MonoBehaviour
             MoveCameraY();
 
         //Player is above the vertical limit and is already grounded
-        if (playerY > playerVLimitWorld && playerMovement.isGrounded)
+        if (playerY > playerVLimitWorld && playerMovement.IsGrounded)
             MoveCameraY();
     }
 

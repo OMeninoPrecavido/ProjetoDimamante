@@ -1,101 +1,117 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static DashControllerOLD;
 
+[RequireComponent(typeof(PlayerMovement))]
 public class DashController : MonoBehaviour
 {
-    [SerializeField] Transform starPrefab;
+    [SerializeField] AnimationClip _readyAnim;
 
-    PlayerMovement playerMovement;
+    [SerializeField] Transform _starPrefab;
+    Transform _starRef;
 
-    InputAction chargeDashAction;
-    InputAction releaseDashAction;
+    PlayerMovement _playerMovement;
 
-    [SerializeField] float dashMaxDistance;
-    [SerializeField] float dashStarSpeed;
-    [SerializeField] float dashEffectDelay;
+    InputAction _chargeDashAction;
+    InputAction _releaseDashAction;
 
-    Transform starRef;
-    bool dashIsCharging = false;
+    [SerializeField] float _dashMaxDistance;
+    [SerializeField] float _dashStarSpeed;
 
-    public delegate void Dash(Phase phase);
-    public event Dash OnDash;
+    public bool IsPreparing { get; private set; }
+    public bool IsCharging { get; private set; }
+
+    private Coroutine _dashCoroutine;
 
     private void Start()
     {
-        playerMovement = GetComponent<PlayerMovement>();
+        _playerMovement = GetComponent<PlayerMovement>();
+
+        //ChargeDash action setup
+        _chargeDashAction = InputSystem.actions.FindAction("ChargeDash");
+        _chargeDashAction.performed += OnChargeDashPerformed;
+
+        //ReleaseDash action setup
+        _releaseDashAction = InputSystem.actions.FindAction("ReleaseDash");
+        _releaseDashAction.performed += OnReleaseDashPerformed;
     }
 
-    private void OnEnable()
+    private void OnChargeDashPerformed(InputAction.CallbackContext context)
     {
-        chargeDashAction = InputSystem.actions.FindAction("ChargeDash");
-        chargeDashAction.performed += StartChargeDash;
-
-        releaseDashAction = InputSystem.actions.FindAction("ReleaseDash");
-        releaseDashAction.performed += StopChargeDash;
+        _dashCoroutine = StartCoroutine(ChargeDash());
     }
 
-    private void OnDisable()
+    private void OnReleaseDashPerformed(InputAction.CallbackContext context)
     {
-        chargeDashAction.performed -= StartChargeDash;
-        releaseDashAction.performed -= StopChargeDash;
+        ReleaseDash();
     }
 
-    private void StartChargeDash(InputAction.CallbackContext context)
+    private IEnumerator ChargeDash()
     {
-        starRef = Instantiate(starPrefab, transform.position, Quaternion.identity);
-        dashIsCharging = true;
-        StartCoroutine(MoveStar(playerMovement.PlayerOrientation));
-    }
+        //Preparing for charging the dash - time for animation to complete
+        IsPreparing = true;
+        IsCharging = false;
 
-    private void StopChargeDash(InputAction.CallbackContext context) => StartCoroutine(StopChargeDashCoroutine());
-
-    IEnumerator StopChargeDashCoroutine()
-    {
-        dashIsCharging = false;
-        if (starRef != null)
+        float timeElapsed = 0f;
+        while (timeElapsed < _readyAnim.length)
         {
-            Destroy(starRef.gameObject);
-
-            OnDash.Invoke(Phase.Start);
-            //Lock camera movement
-            //Set camera x smooth time to something slower
-            //Lock player movement
-            //START DASH ANIM ENDS
-
-            Vector3 newPlayerPos = starRef.position;
-            transform.position = newPlayerPos;
-            //FINAL DASH ANIM STARTS
-
-            yield return new WaitForSeconds(1);
-
-            OnDash.Invoke(Phase.End);
-            //Unlock camera movement
-            //Damage to enemies logic
-            //Set camera smoothX back to normal assuming camera has already reached player
-
-            //FINAL DASH ANIM ENDS  
-
-            //Unlock player movement
+            timeElapsed += Time.deltaTime;
+            yield return null;
         }
-    }
 
-    IEnumerator MoveStar(int orientation)
-    {
-        float playerStartDist = Mathf.Abs(starRef.position.x - transform.position.x);
-        while (playerStartDist < dashMaxDistance && dashIsCharging)
+        //Actual charging of the dash
+        IsPreparing = false;
+        IsCharging = true;
+
+        _starRef = Instantiate(_starPrefab, transform.position, Quaternion.identity);
+
+        float playerStartDist = Mathf.Abs(_starRef.position.x - transform.position.x);
+        while (playerStartDist < _dashMaxDistance)
         {
-            Vector3 newPos = new Vector3(starRef.position.x + (dashStarSpeed * Time.deltaTime * orientation), 
-                                            starRef.position.y, starRef.position.z);
+            int orientation = _playerMovement.PlayerOrientation;
+            Vector3 newPos = new Vector3(_starRef.position.x + (_dashStarSpeed * Time.deltaTime * orientation),
+                                         _starRef.position.y, _starRef.position.z);
 
-            starRef.position = newPos;
-            playerStartDist = Mathf.Abs(starRef.position.x - transform.position.x);
+            _starRef.position = newPos;
+            playerStartDist = Mathf.Abs(_starRef.position.x - transform.position.x);
 
             yield return null;
         }
     }
 
+    private void ReleaseDash()
+    {
+        if (IsPreparing)
+        {
+            StopCoroutine(_dashCoroutine);
+        }
+        else if (IsCharging)
+        {
+            if (_starRef != null)
+            {
+                Vector3 newPlayerPos = _starRef.position;
+                transform.position = newPlayerPos;
 
+                Destroy(_starRef.gameObject);
+            }
+        }
+
+        IsPreparing = false;
+        IsCharging = false;
+    }
+
+    public void CancelDash()
+    {
+        if (_dashCoroutine != null)
+        {
+            StopCoroutine(_dashCoroutine);
+
+            if (_starRef != null)
+                Destroy(_starRef.gameObject);
+
+            IsPreparing = false;
+            IsCharging = false;
+        }
+    }
 }

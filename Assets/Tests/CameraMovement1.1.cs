@@ -246,7 +246,7 @@ public class CameraMovement11 : MonoBehaviour
             MoveCameraY();
 
         //Player is above the vertical limit and is already grounded
-        if (playerPosVP.y > playerVLimitPosition && playerMovement.isGrounded)
+        if (playerPosVP.y > playerVLimitPosition && playerMovement.IsGrounded)
             MoveCameraY();
     }
 

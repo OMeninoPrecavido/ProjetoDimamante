@@ -38,7 +38,7 @@
                     "id": "c32d68de-7bb6-43ce-9419-315ca1686388",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Hold",
+                    "interactions": "",
                     "initialStateCheck": false
                 },
                 {
@@ -133,7 +133,7 @@
                     "name": "",
                     "id": "a0d89085-e088-44c0-8835-05408085fbcf",
                     "path": "<Keyboard>/space",
-                    "interactions": "",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
                     "action": "ChargeDash",

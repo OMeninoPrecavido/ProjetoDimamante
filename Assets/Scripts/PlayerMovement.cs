@@ -14,73 +14,77 @@ public class PlayerMovement : MonoBehaviour
 
     #region References
 
-    //Serialized references
-    [SerializeField] Transform floorCheck;
-    [SerializeField] LayerMask floorMask;
+    //Floor Check
+    [Header("-Floor Check-")]
+    [SerializeField] Transform _floorCheck;
+    [SerializeField] LayerMask _floorMask;
 
     //Component References
-    Rigidbody2D rb2d;
-    BoxCollider2D bc2d;
+    Rigidbody2D _rb2d;
+    BoxCollider2D _bc2d;
+    DashController _dashController;
 
     //Input Actions
-    InputAction moveAction;
-    InputAction lookAction;
-    InputAction jumpAction;
+    InputAction _moveAction;
+    InputAction _jumpAction;
 
     #endregion
 
-    #region Properties
+    #region Attributes
 
-    //Serialized Properties
-    [SerializeField] float speed;
-    [SerializeField] float acceleration;
-    [SerializeField] float deceleration;
-    [SerializeField] float jumpForce;
-    [SerializeField] float apexTime;
-    [SerializeField] float apexSpeed;
-    [SerializeField] float jumpEndEarlyDivisor;
-    [SerializeField] float jumpBufferingTime;
-    [SerializeField] float coyoteTime;
+    //Serialized Attributes
+    [Header("-Horizontal Attributes-")]
+    [SerializeField] float _speed;
+    [SerializeField] float _acceleration;
+    [SerializeField] float _deceleration;
+
+    [Header("-Vertical Attributes")]
+    [SerializeField] float _jumpForce;
+    [SerializeField] float _apexTime;
+    [SerializeField] float _apexSpeed;
+    [SerializeField] float _jumpEndEarlyDivisor;
+    [SerializeField] float _jumpBufferingTime;
+    [SerializeField] float _coyoteTime;
 
     //Player states
-    public bool isGrounded { get; private set; }
-    bool wasGrounded;
-    bool hasJumped;
-    bool isFalling;
-    bool isAffectedByPhysics;
-    bool hasJumpBuffered;
-    bool shouldCoyoteJump;
-    bool shouldCheckGrounding = true;
-    bool isMovementEnabled = true;
+    public bool IsGrounded { get; private set; }
+    public bool WasGrounded { get; private set; }
+    public bool HasJumped { get; private set; }
+    public bool IsFalling { get; private set; }
+    public bool IsAffectedByPhysics { get; private set; }
+    public bool HasJumpBuffered { get; private set; }
+    public bool ShouldCoyoteJump { get; private set; }
+    public bool ShouldCheckGrounding { get; private set; } = true;
+    public bool IsMovementEnabled { get; private set; } = true;
+        public void EnableMovement(bool b) => IsMovementEnabled = b;
 
     //Value holders
-    float hOrientation; //Movement orientation -> can be 0
-    float previousHOrientation;
-    float previousVOrientation;
+    public float HOrientation { get; private set; } //Movement orientation -> can be 0
+    float _previousHOrientation;
+    float _previousVOrientation;
 
     public int PlayerOrientation { get; private set; } = 1; //-1 = Left, 1 = Right
 
     //Auxiliaries
-    Coroutine jumpBufferingCoroutine;
+    Coroutine _jumpBufferingCoroutine;
 
     #endregion
 
     void Start()
     {
-        rb2d = GetComponent<Rigidbody2D>();
-        bc2d = GetComponentInChildren<BoxCollider2D>();
+        //Components setup
+        _rb2d = GetComponent<Rigidbody2D>();
+        _bc2d = GetComponentInChildren<BoxCollider2D>();
+        _dashController = GetComponent<DashController>();
 
-        moveAction = InputSystem.actions.FindAction("Move");
-        lookAction = InputSystem.actions.FindAction("Look");
-        jumpAction = InputSystem.actions.FindAction("Jump");
-
-        DashController dashController = GetComponent<DashController>();
-        dashController.OnDash += OnDashMade;
+        //Actions setup
+        _moveAction = InputSystem.actions.FindAction("Move");
+        _jumpAction = InputSystem.actions.FindAction("Jump");
     }
 
     void Update()
     {
-        if (isMovementEnabled)
+        if (IsMovementEnabled)
         {
             ReadHorizontalMovement();
             HandleJump();
@@ -89,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isMovementEnabled)
+        if (IsMovementEnabled)
             HandleHorizontalMovement();  
     }
 
@@ -97,36 +101,38 @@ public class PlayerMovement : MonoBehaviour
 
     private void ReadHorizontalMovement()
     {
-        hOrientation = moveAction.ReadValue<float>();
+        HOrientation = _moveAction.ReadValue<float>();
     }
 
     private void HandleHorizontalMovement()
     {
-        if (!isAffectedByPhysics)
+        if (!IsAffectedByPhysics)
         {
-            float velX = rb2d.linearVelocityX; //Current Rigidbody2D horizontal velocity
+            float velX = _rb2d.linearVelocityX; //Current Rigidbody2D horizontal velocity
 
-            if (hOrientation != 0f) //Player wants to move
+            if (HOrientation != 0f) //Player wants to move
             {
-                if (Mathf.Abs(velX) < speed) //Player hasn't reached full speed or is still
-                    velX = Accelerate(velX, hOrientation); //Accelerate
+                if (Mathf.Abs(velX) < _speed) //Player hasn't reached full speed or is still
+                    velX = Accelerate(velX, HOrientation); //Accelerate
 
-                if (Mathf.Abs(velX) > speed) //Player's velocity is over its expected speed
-                    velX = Decelerate(velX, speed); //Decelerate back to current speed
+                if (Mathf.Abs(velX) > _speed) //Player's velocity is over its expected speed
+                    velX = Decelerate(velX, _speed); //Decelerate back to current speed
 
-                if (hOrientation != previousHOrientation) //Player is moving and wants to change direction
+                if (HOrientation != _previousHOrientation) //Player is moving and wants to change direction
                     velX = 0;
 
-                previousHOrientation = hOrientation;
-                PlayerOrientation = (int)hOrientation;
+                _previousHOrientation = HOrientation;
+                PlayerOrientation = (int)HOrientation;
+
+                _dashController.CancelDash();
             }
-            else if (hOrientation == 0f) //Player wants to stay still
+            else if (HOrientation == 0f) //Player wants to stay still
             {
                 if (Mathf.Abs(velX) > 0f) //Player hasn't yet stopped
                     velX = Decelerate(velX, 0); //Decelerate to 0 speed
             }
 
-            rb2d.linearVelocityX = velX;
+            _rb2d.linearVelocityX = velX;
         }
     }
 
@@ -134,15 +140,15 @@ public class PlayerMovement : MonoBehaviour
     {
         float velX = currSpeed;
 
-        float addToVelX = Time.deltaTime * acceleration * hOrientation;
+        float addToVelX = Time.deltaTime * _acceleration * hOrientation;
 
         if (Mathf.Abs(addToVelX) < SPEED_ADD_THRESHOLD)
             addToVelX = SPEED_ADD_THRESHOLD * hOrientation;
 
         velX += addToVelX;
 
-        if (Mathf.Abs(velX) > speed)
-            velX = speed * hOrientation;
+        if (Mathf.Abs(velX) > _speed)
+            velX = _speed * hOrientation;
 
         return velX;
     }
@@ -151,21 +157,21 @@ public class PlayerMovement : MonoBehaviour
     {
         float velX = currSpeed;
 
-        float subtractFromVelX = Time.deltaTime * acceleration * previousHOrientation;
+        float subtractFromVelX = Time.deltaTime * _acceleration * _previousHOrientation;
 
         if (Mathf.Abs(subtractFromVelX) < SPEED_ADD_THRESHOLD)
-            subtractFromVelX = SPEED_ADD_THRESHOLD * previousHOrientation;
+            subtractFromVelX = SPEED_ADD_THRESHOLD * _previousHOrientation;
 
         velX -= subtractFromVelX;
 
         if (positiveTargetSpeed > 0)
         {
-            if (Mathf.Abs(velX) < speed)
-                velX = speed * previousHOrientation;
+            if (Mathf.Abs(velX) < _speed)
+                velX = _speed * _previousHOrientation;
         }
         else
         {
-            if (Mathf.Sign(velX) != MathF.Sign(previousHOrientation))
+            if (Mathf.Sign(velX) != MathF.Sign(_previousHOrientation))
                 velX = 0;
         }
 
@@ -178,79 +184,84 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleJump()
     {
-        if (shouldCheckGrounding)
-            isGrounded = CheckGrounding(); //Checks if player is grounded
+        if (ShouldCheckGrounding)
+            IsGrounded = CheckGrounding(); //Checks if player is grounded
 
-        if (isGrounded)
+        if (IsGrounded)
         {
-            hasJumped = false; //If player is grounded, obviously hasJumped == false
-            isFalling = false; //Same for isFalling
+            HasJumped = false; //If player is grounded, obviously hasJumped == false
+            IsFalling = false; //Same for isFalling
+        }
+        else
+        {
+            _dashController.CancelDash();
         }
 
-        if (!hasJumped && wasGrounded && !isGrounded && !shouldCoyoteJump) //Player dropped from a platform
+        if (!HasJumped && WasGrounded && !IsGrounded && !ShouldCoyoteJump) //Player dropped from a platform
         {
-            StartCoroutine(CoyoteTime(coyoteTime));
+            IsFalling = true;
+            StartCoroutine(CoyoteTime(_coyoteTime));
         }
 
-        if (!isGrounded && jumpAction.WasPressedThisFrame()) //Jump buffering. Player pressed jump but still isn't grounded
+        if (!IsGrounded && _jumpAction.WasPressedThisFrame()) //Jump buffering. Player pressed jump but still isn't grounded
         {
-            if (jumpBufferingCoroutine != null)
-                StopCoroutine(jumpBufferingCoroutine);
+            if (_jumpBufferingCoroutine != null)
+                StopCoroutine(_jumpBufferingCoroutine);
 
-            jumpBufferingCoroutine = StartCoroutine(JumpBuffering(jumpBufferingTime));
+            _jumpBufferingCoroutine = StartCoroutine(JumpBuffering(_jumpBufferingTime));
         }
 
-        if ((isGrounded && jumpAction.WasPressedThisFrame()) || hasJumpBuffered || shouldCoyoteJump) //Player pressed for jump while grounded
+        if ((IsGrounded && _jumpAction.WasPressedThisFrame()) || HasJumpBuffered || ShouldCoyoteJump) //Player pressed for jump while grounded
         {
-            hasJumped = true;
-            isGrounded = shouldCheckGrounding = false;
-            hasJumpBuffered = false;
-            shouldCoyoteJump = false;
+            HasJumped = true;
+            IsGrounded = ShouldCheckGrounding = false;
+            HasJumpBuffered = false;
+            ShouldCoyoteJump = false;
 
-            rb2d.linearVelocityY = jumpForce; //Adds vertical velocity to the player
+            _rb2d.linearVelocityY = _jumpForce; //Adds vertical velocity to the player
         }
 
-        if (hasJumped && !isFalling && jumpAction.WasReleasedThisFrame()) //Player has released the jump button early
+        if (HasJumped && !IsFalling && _jumpAction.WasReleasedThisFrame()) //Player has released the jump button early
         {
-            rb2d.linearVelocityY = rb2d.linearVelocityY / jumpEndEarlyDivisor;
+            _rb2d.linearVelocityY = _rb2d.linearVelocityY / _jumpEndEarlyDivisor;
         }
 
-        if (hasJumped && !isFalling && Mathf.Sign(rb2d.linearVelocityY) < previousVOrientation) //Player has reached the peak of a jump
+        if (HasJumped && !IsFalling && Mathf.Sign(_rb2d.linearVelocityY) < _previousVOrientation) //Player has reached the peak of a jump
         {
-            shouldCheckGrounding = true; //Allows the ground check only after mid-jump so there's no risk of hasJumped becoming true prematurely
-            isFalling = true;
-            StartCoroutine(ApexTime(apexTime));
+            ShouldCheckGrounding = true; //Allows the ground check only after mid-jump so there's no risk of hasJumped becoming true prematurely
+            IsFalling = true;
+            StartCoroutine(ApexTime(_apexTime));
         }
 
-        previousVOrientation = Mathf.Sign(rb2d.linearVelocityY);
-        wasGrounded = isGrounded;
+        _previousVOrientation = Mathf.Sign(_rb2d.linearVelocityY);
+        WasGrounded = IsGrounded;
     }
 
     private IEnumerator ApexTime(float secondsInZeroGravity)
     {
-        float normalSpeed = speed;
-        float normalAcceleration = acceleration;
+        float normalSpeed = _speed;
+        float normalAcceleration = _acceleration;
 
-        rb2d.linearVelocityY = 0;
-        rb2d.gravityScale = 0;
+        _rb2d.linearVelocityY = 0;
+        _rb2d.gravityScale = 0;
 
-        speed = apexSpeed;
-        acceleration = 50000;
+        _speed = _apexSpeed;
+        _acceleration = 50000;
 
         yield return new WaitForSeconds(secondsInZeroGravity);
 
-        rb2d.gravityScale = GRAVITY_SCALE;
-        speed = normalSpeed;
-        acceleration = normalAcceleration;
+        _rb2d.gravityScale = GRAVITY_SCALE;
+        _speed = normalSpeed;
+        _acceleration = normalAcceleration;
     }
 
     private IEnumerator JumpBuffering(float bufferSeconds)
     {
         for (float i = 0; i < bufferSeconds; i += Time.deltaTime)
         {
-            if (isGrounded)
+            if (IsGrounded)
             {
-                hasJumpBuffered = true;
+                HasJumpBuffered = true;
                 break;
             }
                 
@@ -262,9 +273,9 @@ public class PlayerMovement : MonoBehaviour
     {
         for (float i = 0; i < seconds; i += Time.deltaTime)
         {
-            if (jumpAction.WasPressedThisFrame())
+            if (_jumpAction.WasPressedThisFrame())
             {
-                shouldCoyoteJump = true;
+                ShouldCoyoteJump = true;
                 break;
             }
 
@@ -276,7 +287,7 @@ public class PlayerMovement : MonoBehaviour
     {
         RaycastHit2D hit; //RaycastHit2D may also operate as a boolean value. True = It hit something
 
-        hit = Physics2D.BoxCast(floorCheck.position, new Vector2(bc2d.size.x, 0.01f), 0, Vector2.down, 0.1f, floorMask);
+        hit = Physics2D.BoxCast(_floorCheck.position, new Vector2(_bc2d.size.x, 0.01f), 0, Vector2.down, 0.1f, _floorMask);
 
         //Debug.DrawRay(new Vector3(floorCheck.position.x - bc2d.size.x/2, floorCheck.position.y, floorCheck.position.z), Vector3.down * 0.1f, UnityEngine.Color.red, 0f, false);
         //Debug.DrawRay(new Vector3(floorCheck.position.x + bc2d.size.x/2, floorCheck.position.y, floorCheck.position.z), Vector3.down * 0.1f, UnityEngine.Color.red, 0f, false);
@@ -286,20 +297,4 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
-    #region Event Listeners
-
-    private void OnDashMade(Phase phase)
-    {
-        if (phase == Phase.Start)
-        {
-            isMovementEnabled = false;
-        }
-        else
-        if (phase == Phase.End)
-        {
-            isMovementEnabled = true;
-        }
-    }
-
-    #endregion
 }
