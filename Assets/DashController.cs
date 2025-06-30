@@ -6,23 +6,37 @@ using static DashControllerOLD;
 [RequireComponent(typeof(PlayerMovement))]
 public class DashController : MonoBehaviour
 {
-    [SerializeField] AnimationClip _readyAnim;
+    [Header("-References-")] //References
+    [SerializeField] CameraMovement _cameraMovement;
+    PlayerMovement _playerMovement;
 
+    [Header("-Animations-")] //Animations
+    [SerializeField] AnimationClip _readyAnim;
+    [SerializeField] AnimationClip _disappearAnim;
+    [SerializeField] AnimationClip _appearAnim;
+
+    [Header("-Star Prefab-")] //Prefabs
     [SerializeField] Transform _starPrefab;
     Transform _starRef;
 
-    PlayerMovement _playerMovement;
+    [Header("-Attributes-")] //Attributes
+    [SerializeField] float _dashMaxDistance;
+    [SerializeField] float _dashStarSpeed;
+    [SerializeField] float _movementCancellingDelay;
 
+    //Actions
     InputAction _chargeDashAction;
     InputAction _releaseDashAction;
 
-    [SerializeField] float _dashMaxDistance;
-    [SerializeField] float _dashStarSpeed;
+    //States
+    public bool IsPreparing { get; private set; } = false;
+    public bool IsCharging { get; private set; } = false;
+    public bool IsDashing { get; private set; } = false;
 
-    public bool IsPreparing { get; private set; }
-    public bool IsCharging { get; private set; }
-
+    //Auxiliaries
     private Coroutine _dashCoroutine;
+
+    #region Event Functions
 
     private void Start()
     {
@@ -37,15 +51,10 @@ public class DashController : MonoBehaviour
         _releaseDashAction.performed += OnReleaseDashPerformed;
     }
 
-    private void OnChargeDashPerformed(InputAction.CallbackContext context)
-    {
-        _dashCoroutine = StartCoroutine(ChargeDash());
-    }
+    #endregion
 
-    private void OnReleaseDashPerformed(InputAction.CallbackContext context)
-    {
-        ReleaseDash();
-    }
+    private void OnChargeDashPerformed(InputAction.CallbackContext context) => _dashCoroutine = StartCoroutine(ChargeDash());
+    private void OnReleaseDashPerformed(InputAction.CallbackContext context) => StartCoroutine(ReleaseDash());
 
     private IEnumerator ChargeDash()
     {
@@ -80,25 +89,42 @@ public class DashController : MonoBehaviour
         }
     }
 
-    private void ReleaseDash()
+    private IEnumerator ReleaseDash()
     {
         if (IsPreparing)
         {
+            IsPreparing = false;
+            IsCharging = false;
+
             StopCoroutine(_dashCoroutine);
         }
         else if (IsCharging)
         {
+            IsPreparing = false;
+            IsCharging = false;
+
             if (_starRef != null)
             {
+                _cameraMovement.EnableHMovement(false);
+                _cameraMovement.SetSmoothTimeX(0.4f);
+                _playerMovement.EnableMovement(false);
+                IsDashing = true;
                 Vector3 newPlayerPos = _starRef.position;
-                transform.position = newPlayerPos;
-
                 Destroy(_starRef.gameObject);
+
+                yield return new WaitForSeconds(_disappearAnim.length);
+
+                transform.position = newPlayerPos;
+                IsDashing = false;
+
+                yield return new WaitForSeconds(_appearAnim.length + _movementCancellingDelay);
+                _cameraMovement.EnableHMovement(true);
+                _playerMovement.EnableMovement(true);
+
+                yield return new WaitForSeconds(1f);
+                StartCoroutine(_cameraMovement.SmoothChangeSmoothX(0.1f, 2f));
             }
         }
-
-        IsPreparing = false;
-        IsCharging = false;
     }
 
     public void CancelDash()

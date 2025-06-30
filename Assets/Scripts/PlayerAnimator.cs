@@ -55,6 +55,7 @@ public class PlayerAnimator : MonoBehaviour
         }
 
         animator.SetBool(IS_CHARGING, isChargingDash);
+        animator.SetBool(DASH_STARTED, dashController.IsDashing);
     }
 
     private void OnChargeDashStart(InputAction.CallbackContext context) => isChargingDash = true;

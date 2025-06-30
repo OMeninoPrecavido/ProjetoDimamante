@@ -485,61 +485,7 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 100133796}
-    m_ColliderPaths:
-    - - X: 60000000
-        Y: 30000000
-      - X: 0
-        Y: 30000000
-      - X: 0
-        Y: 27500000
-      - X: 60000000
-        Y: 27500000
-    - - X: 0
-        Y: 20000000
-      - X: -10000000
-        Y: 20000000
-      - X: -10000000
-        Y: 17500000
-      - X: -4375000
-        Y: 17500000
-      - X: -1875000
-        Y: 15625000
-      - X: 0
-        Y: 11250000
-    - - X: -20000000
-        Y: 12500000
-      - X: -50000000
-        Y: 12500000
-      - X: -50000000
-        Y: 10000000
-      - X: -20000000
-        Y: 10000000
-    - - X: -40000000
-        Y: 2500000
-      - X: -50000000
-        Y: 2500000
-      - X: -50000000
-        Y: 0
-      - X: -40000000
-        Y: 0
-    - - X: -20000000
-        Y: 2500000
-      - X: -30000000
-        Y: 2500000
-      - X: -30000000
-        Y: 0
-      - X: -20000000
-        Y: 0
-    - - X: 130000000
-        Y: -17500000
-      - X: 90000000
-        Y: -17500000
-      - X: 90000000
-        Y: -20000000
-      - X: 130000000
-        Y: -20000000
+  m_ColliderPaths: []
   m_CompositePaths:
     m_Paths:
     - - {x: 5.999971, y: 2.75}
@@ -1314,7 +1260,25 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 478774966}
+    m_ColliderPaths:
+    - - X: 149375008
+        Y: -12500000
+      - X: 150000000
+        Y: -12500000
+      - X: 150000000
+        Y: -10000000
+      - X: -170000000
+        Y: -10000000
+      - X: -170000000
+        Y: -12500000
+      - X: -169375008
+        Y: -12500000
+      - X: -169375008
+        Y: -50000000
+      - X: 149375008
+        Y: -50000000
   m_CompositePaths:
     m_Paths:
     - - {x: 14.937472, y: -5}
@@ -2985,20 +2949,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32c60233ff425154db22fa90f5e02b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 668395793}
-  playerMovement: {fileID: 668395795}
-  dashController: {fileID: 0}
-  regularSmoothTimeX: 0.1
-  smoothTimeY: 0.2
-  dashSmoothTimeX: 0.1
-  pZoneWidthVP: 0.15
-  playerVLimit: 0.5
-  cameraOffset: 3
-  cameraShiftDuration: 1.5
-  leftCamLimit: -20
-  rightCamLimit: 20
-  topCamLimit: 12
-  bottomCamLimit: -3.6
+  _player: {fileID: 668395793}
+  _regularSmoothTimeX: 0.1
+  _smoothTimeY: 0.2
+  _cameraShiftDuration: 1.5
+  _pZoneWidthVP: 0.15
+  _playerVLimit: 0.5
+  _cameraOffset: 3
+  _leftCamLimit: -20
+  _rightCamLimit: 20
+  _topCamLimit: 12
+  _bottomCamLimit: -3.6
 --- !u!1 &599016730
 GameObject:
   m_ObjectHideFlags: 0
@@ -3151,7 +3112,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!156049354 &616490463
 Grid:
   m_ObjectHideFlags: 0
@@ -3258,19 +3219,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ac5e158e4c9cf5409b164dd1f617bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _floorCheck: {fileID: 0}
+  _floorCheck: {fileID: 2119749784}
   _floorMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   _speed: 7
   _acceleration: 50
   _deceleration: 50
-  _jumpForce: 0
-  _apexTime: 0
-  _apexSpeed: 0
-  _jumpEndEarlyDivisor: 0
-  _jumpBufferingTime: 0
-  _coyoteTime: 0
+  _jumpForce: 13
+  _apexTime: 0.05
+  _apexSpeed: 9
+  _jumpEndEarlyDivisor: 2
+  _jumpBufferingTime: 0.1
+  _coyoteTime: 0.1
 --- !u!114 &668395797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3295,10 +3256,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77f29bd3c90982e4bba80d777fbffd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraMovement: {fileID: 519420037}
   _readyAnim: {fileID: 7400000, guid: 5b39b7f58fcf3aa4ba86c18b68721fd3, type: 2}
+  _disappearAnim: {fileID: 7400000, guid: 18f8d5e51425d8148bd0ad9644638f21, type: 2}
+  _appearAnim: {fileID: 7400000, guid: 58ee5c7c4adf9724599f91242589ab9f, type: 2}
   _starPrefab: {fileID: 5870453866118288055, guid: 390ba17fce4da41478afc504593c3004, type: 3}
   _dashMaxDistance: 5
   _dashStarSpeed: 5
+  _movementCancellingDelay: 1
 --- !u!1 &759829628
 GameObject:
   m_ObjectHideFlags: 0
@@ -5436,7 +5401,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!156049354 &1332823568
 Grid:
   m_ObjectHideFlags: 0
@@ -5539,57 +5504,7 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 1403490568}
-    m_ColliderPaths:
-    - - X: -40625000
-        Y: -12500000
-      - X: -40000000
-        Y: -12500000
-      - X: -40000000
-        Y: -10000000
-      - X: -90000000
-        Y: -10000000
-      - X: -90000000
-        Y: -12500000
-      - X: -89375000
-        Y: -12500000
-      - X: -89375000
-        Y: -50000000
-      - X: -40625000
-        Y: -50000000
-    - - X: 69375000
-        Y: -12500000
-      - X: 70000000
-        Y: -12500000
-      - X: 70000000
-        Y: -10000000
-      - X: 10000000
-        Y: -10000000
-      - X: 10000000
-        Y: -12500000
-      - X: 10625000
-        Y: -12500000
-      - X: 10625000
-        Y: -50000000
-      - X: 69375000
-        Y: -50000000
-    - - X: -625000
-        Y: -22500000
-      - X: 0
-        Y: -22500000
-      - X: 0
-        Y: -20000000
-      - X: -30000000
-        Y: -20000000
-      - X: -30000000
-        Y: -22500000
-      - X: -29375000
-        Y: -22500000
-      - X: -29375000
-        Y: -50000000
-      - X: -625000
-        Y: -50000000
+  m_ColliderPaths: []
   m_CompositePaths:
     m_Paths:
     - - {x: 6.9374704, y: -5}
