@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
     public bool WasGrounded { get; private set; }
     public bool HasJumped { get; private set; }
     public bool IsFalling { get; private set; }
-    public bool IsAffectedByPhysics { get; private set; }
+    public bool IsAffectedByPhysics { get; private set; }        
     public bool HasJumpBuffered { get; private set; }
     public bool ShouldCoyoteJump { get; private set; }
     public bool ShouldCheckGrounding { get; private set; } = true;
@@ -295,6 +295,19 @@ public class PlayerMovement : MonoBehaviour
         return hit;
     }
 
+    public void EnableGravity(bool b)
+    {
+        if (!b)
+            _rb2d.constraints |= RigidbodyConstraints2D.FreezePositionY;
+        else
+        {
+            _rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
+            _rb2d.linearVelocityY = -0.01f;
+        }
+            
+    }
+
     #endregion
 
+    
 }

@@ -108,6 +108,7 @@ public class DashController : MonoBehaviour
                 _cameraMovement.EnableHMovement(false);
                 _cameraMovement.SetSmoothTimeX(0.4f);
                 _playerMovement.EnableMovement(false);
+                _playerMovement.EnableGravity(false);
                 IsDashing = true;
                 Vector3 newPlayerPos = _starRef.position;
                 Destroy(_starRef.gameObject);
@@ -117,7 +118,11 @@ public class DashController : MonoBehaviour
                 transform.position = newPlayerPos;
                 IsDashing = false;
 
-                yield return new WaitForSeconds(_appearAnim.length + _movementCancellingDelay);
+                yield return new WaitForSeconds(_appearAnim.length);
+
+
+                yield return new WaitForSeconds(_movementCancellingDelay);
+                _playerMovement.EnableGravity(true);
                 _cameraMovement.EnableHMovement(true);
                 _playerMovement.EnableMovement(true);
 
