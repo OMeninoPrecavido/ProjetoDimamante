@@ -9,6 +9,7 @@ public class PlayerAnimator : MonoBehaviour
     const string IS_JUMPING = "isJumping";
     const string IS_FALLING = "isFalling";
     const string DASH_STARTED = "dashStarted";
+    const string HAS_DASH_JUMPED = "hasDashJumped";
 
     Animator animator;
     PlayerMovement playerMovement;
@@ -56,6 +57,7 @@ public class PlayerAnimator : MonoBehaviour
 
         animator.SetBool(IS_CHARGING, isChargingDash);
         animator.SetBool(DASH_STARTED, dashController.IsDashing);
+        animator.SetBool(HAS_DASH_JUMPED, dashController.HasDashJumped);
     }
 
     private void OnChargeDashStart(InputAction.CallbackContext context) => isChargingDash = true;

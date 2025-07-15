@@ -85,24 +85,21 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (IsMovementEnabled)
-        {
-            ReadHorizontalMovement();
-            HandleJump();
-        }
+        ReadHorizontalMovement();
+        HandleJump();
     }
 
     void FixedUpdate()
     {
-        if (IsMovementEnabled)
-            HandleHorizontalMovement();  
+        HandleHorizontalMovement();  
     }
 
     #region Horizontal Movement
 
     private void ReadHorizontalMovement()
     {
-        HOrientation = _moveAction.ReadValue<float>();
+        if (IsMovementEnabled)
+            HOrientation = _moveAction.ReadValue<float>();
     }
 
     private void HandleHorizontalMovement()
@@ -133,7 +130,8 @@ public class PlayerMovement : MonoBehaviour
                     velX = Decelerate(velX, 0); //Decelerate to 0 speed
             }
 
-            _rb2d.linearVelocityX = velX;
+            if (IsMovementEnabled)
+                _rb2d.linearVelocityX = velX;
         }
     }
 
@@ -219,7 +217,8 @@ public class PlayerMovement : MonoBehaviour
             HasJumpBuffered = false;
             ShouldCoyoteJump = false;
 
-            _rb2d.linearVelocityY = _jumpForce; //Adds vertical velocity to the player
+            if (IsMovementEnabled)
+                _rb2d.linearVelocityY = _jumpForce; //Adds vertical velocity to the player
         }
 
         if (HasJumped && !IsFalling && _jumpAction.WasReleasedThisFrame()) //Player has released the jump button early

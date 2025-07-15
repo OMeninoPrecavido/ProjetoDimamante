@@ -45,6 +45,7 @@ public class DashController : MonoBehaviour
     public bool IsPreparing { get; private set; } = false;
     public bool IsCharging { get; private set; } = false;
     public bool IsDashing { get; private set; } = false;
+    public bool HasDashJumped { get; private set; } = false;
 
     //Auxiliaries
     private Coroutine _dashCoroutine;
@@ -158,6 +159,7 @@ public class DashController : MonoBehaviour
                     if (_dashJumpAction.WasPressedThisFrame()) //Player dash jumps
                     {
                         hasDashJumped = true;
+                        HasDashJumped = true;
 
                         //Camera, player physics and gravity are unlocked
                         _cameraMovement.EnableHMovement(true);
@@ -190,6 +192,8 @@ public class DashController : MonoBehaviour
                 _playerMovement.EnableGravity(true);
                 _cameraMovement.EnableHMovement(true);
                 }
+
+                HasDashJumped = false;
 
                 //Resets friction
                 _collider2d.enabled = false;
