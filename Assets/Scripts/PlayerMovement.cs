@@ -51,7 +51,8 @@ public class PlayerMovement : MonoBehaviour
     public bool WasGrounded { get; private set; }
     public bool HasJumped { get; private set; }
     public bool IsFalling { get; private set; }
-    public bool IsAffectedByPhysics { get; private set; }        
+    public bool IsAffectedByPhysics { get; private set; }
+        public void EnablePhysics(bool b) => IsAffectedByPhysics = b;
     public bool HasJumpBuffered { get; private set; }
     public bool ShouldCoyoteJump { get; private set; }
     public bool ShouldCheckGrounding { get; private set; } = true;
@@ -157,7 +158,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float velX = currSpeed;
 
-        float subtractFromVelX = Time.deltaTime * _acceleration * _previousHOrientation;
+        float subtractFromVelX = Time.deltaTime * _deceleration * _previousHOrientation;
 
         if (Mathf.Abs(subtractFromVelX) < SPEED_ADD_THRESHOLD)
             subtractFromVelX = SPEED_ADD_THRESHOLD * _previousHOrientation;
@@ -166,8 +167,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (positiveTargetSpeed > 0)
         {
-            if (Mathf.Abs(velX) < _speed)
-                velX = _speed * _previousHOrientation;
+            if (Mathf.Abs(velX) < positiveTargetSpeed)
+                velX = positiveTargetSpeed * _previousHOrientation;
         }
         else
         {
@@ -309,5 +310,4 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
-    
 }
