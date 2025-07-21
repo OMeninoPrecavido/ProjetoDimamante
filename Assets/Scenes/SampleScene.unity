@@ -3260,6 +3260,7 @@ MonoBehaviour:
   _readyAnim: {fileID: 7400000, guid: 5b39b7f58fcf3aa4ba86c18b68721fd3, type: 2}
   _disappearAnim: {fileID: 7400000, guid: 18f8d5e51425d8148bd0ad9644638f21, type: 2}
   _appearAnim: {fileID: 7400000, guid: 58ee5c7c4adf9724599f91242589ab9f, type: 2}
+  _starAppearAnim: {fileID: 0}
   _starPrefab: {fileID: 5870453866118288055, guid: 390ba17fce4da41478afc504593c3004, type: 3}
   _dashMaxDistance: 5
   _dashStarSpeed: 5

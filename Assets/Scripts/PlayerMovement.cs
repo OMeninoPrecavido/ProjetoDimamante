@@ -233,6 +233,11 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(ApexTime(_apexTime));
         }
 
+        if (_dashController.HasDashJumped && !WasGrounded && IsGrounded) //Player has just landed from a dash jump before physics were disabled in dashController
+        {
+            _rb2d.linearVelocityX = 0f;
+        }
+
         _previousVOrientation = Mathf.Sign(_rb2d.linearVelocityY);
         WasGrounded = IsGrounded;
     }

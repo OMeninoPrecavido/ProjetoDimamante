@@ -17,6 +17,7 @@ public class DashController : MonoBehaviour
     [SerializeField] AnimationClip _readyAnim;
     [SerializeField] AnimationClip _disappearAnim;
     [SerializeField] AnimationClip _appearAnim;
+    [SerializeField] AnimationClip _starAppearAnim;
 
     [Header("-Star Prefab-")] //Prefabs
     [SerializeField] Transform _starPrefab;
@@ -35,6 +36,7 @@ public class DashController : MonoBehaviour
     [SerializeField] float _dashMaxDistance;
     [SerializeField] float _dashStarSpeed;
     [SerializeField] float _dashJumpImpulse;
+    [SerializeField] float _starSpawnDistance;
 
     [Header("-Intervals-")] //Intervals
     [SerializeField, Range(0f, 1f)] float _delayUntilDashJumpStart;
@@ -87,8 +89,17 @@ public class DashController : MonoBehaviour
         IsPreparing = true;
         IsCharging = false;
 
+        //Instantiates star
+        if (_starRef != null)
+            Destroy(_starRef.gameObject);
+
+        _starRef = Instantiate(_starPrefab,
+                               transform.position + (Vector3.right * _starSpawnDistance * _playerMovement.PlayerOrientation),
+                               Quaternion.identity);
+
+        float waitLength = _readyAnim.length > _starAppearAnim.length ? _readyAnim.length : _starAppearAnim.length;
         float timeElapsed = 0f;
-        while (timeElapsed < _readyAnim.length)
+        while (timeElapsed < waitLength)
         {
             timeElapsed += Time.deltaTime;
             yield return null;
@@ -98,11 +109,9 @@ public class DashController : MonoBehaviour
         IsPreparing = false;
         IsCharging = true;
 
-        _starRef = Instantiate(_starPrefab, transform.position, Quaternion.identity);
-
         //Moves the star unitl it reaches the maximum dash distance
         float playerStartDist = Mathf.Abs(_starRef.position.x - transform.position.x);
-        while (playerStartDist < _dashMaxDistance)
+        while (playerStartDist < _dashMaxDistance && _starRef != null)
         {
             int orientation = _playerMovement.PlayerOrientation;
             Vector3 newPos = new Vector3(_starRef.position.x + (_dashStarSpeed * Time.deltaTime * orientation),
@@ -121,6 +130,9 @@ public class DashController : MonoBehaviour
         {
             IsPreparing = false;
             IsCharging = false;
+            
+            if(_starRef != null)
+                Destroy(_starRef.gameObject);
 
             StopCoroutine(_dashCoroutine);
         }
@@ -139,6 +151,7 @@ public class DashController : MonoBehaviour
 
                 IsDashing = true;
                 Vector3 newPlayerPos = _starRef.position;
+
                 Destroy(_starRef.gameObject);
 
                 yield return new WaitForSeconds(_disappearAnim.length); //Waits until disappearing animation is complete
@@ -167,15 +180,12 @@ public class DashController : MonoBehaviour
                         _playerMovement.EnablePhysics(true);
 
                         //Player friction set high so they don't slide when landing
-                        _collider2d.enabled = false;
-                        _rb2d.sharedMaterial.friction = 100f;
-                        _collider2d.enabled = true;
+                        //SetFriction(100f);
 
                         //Applies dash jump velocity on player
                         Vector3 direction = new Vector3(_playerMovement.PlayerOrientation * 1, 1, 0).normalized;
                         _rb2d.linearVelocity = direction * _dashJumpImpulse;
 
-                        //muda variável pra mudar a animação pra pulo
                         break;
                     }
                     elapsedTime += Time.deltaTime;
@@ -194,11 +204,6 @@ public class DashController : MonoBehaviour
                 }
 
                 HasDashJumped = false;
-
-                //Resets friction
-                _collider2d.enabled = false;
-                _rb2d.sharedMaterial.friction = 0f;
-                _collider2d.enabled = true;
 
                 //Disables physics and enables player control
                 _playerMovement.EnablePhysics(false);
@@ -223,6 +228,13 @@ public class DashController : MonoBehaviour
             IsPreparing = false;
             IsCharging = false;
         }
+    }
+
+    public void SetFriction(float frictionVal)
+    {
+        _collider2d.enabled = false;
+        _rb2d.sharedMaterial.friction = frictionVal;
+        _collider2d.enabled = true;
     }
 
     #endregion
