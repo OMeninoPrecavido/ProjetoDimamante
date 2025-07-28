@@ -38,13 +38,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float _acceleration;
     [SerializeField] float _deceleration;
 
-    [Header("-Vertical Attributes")]
+    [Header("-Vertical Attributes-")]
     [SerializeField] float _jumpForce;
     [SerializeField] float _apexTime;
     [SerializeField] float _apexSpeed;
     [SerializeField] float _jumpEndEarlyDivisor;
     [SerializeField] float _jumpBufferingTime;
     [SerializeField] float _coyoteTime;
+
+    [Header("-Hit Attributes-")]
+    [SerializeField] float _hitStrenght;
+    [SerializeField] float _hitControlLossDuration;
 
     //Player states
     public bool IsGrounded { get; private set; }
@@ -58,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
     public bool ShouldCheckGrounding { get; private set; } = true;
     public bool IsMovementEnabled { get; private set; } = true;
         public void EnableMovement(bool b) => IsMovementEnabled = b;
+    public bool IsHit { get; private set; } = false;
 
     //Value holders
     public float HOrientation { get; private set; } //Movement orientation -> can be 0
@@ -314,4 +319,17 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
+    public void Hit() => StartCoroutine(HitCoroutine());
+    IEnumerator HitCoroutine()
+    {
+        EnableMovement(false);
+        EnablePhysics(true);
+        _rb2d.linearVelocity = new Vector3(-PlayerOrientation * 1, 2, 0).normalized * _hitStrenght;
+        IsHit = true;
+        yield return new WaitForSeconds(_hitControlLossDuration);
+        IsHit = false;
+        EnableMovement(true);
+        EnablePhysics(false);
+    }
+    
 }

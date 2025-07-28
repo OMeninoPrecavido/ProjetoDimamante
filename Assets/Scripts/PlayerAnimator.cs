@@ -10,56 +10,58 @@ public class PlayerAnimator : MonoBehaviour
     const string IS_FALLING = "isFalling";
     const string DASH_STARTED = "dashStarted";
     const string HAS_DASH_JUMPED = "hasDashJumped";
+    const string IS_HIT = "isHit";
 
-    Animator animator;
-    PlayerMovement playerMovement;
-    DashController dashController;
+    Animator _animator;
+    PlayerMovement _playerMovement;
+    DashController _dashController;
 
-    InputAction chargeDashAction;
+    InputAction _chargeDashAction;
 
-    bool isChargingDash = false;
+    bool _isChargingDash = false;
 
     private void Start()
     {
-        animator = GetComponentInChildren<Animator>();
-        playerMovement = GetComponent<PlayerMovement>();
-        dashController = GetComponent<DashController>();
+        _animator = GetComponentInChildren<Animator>();
+        _playerMovement = GetComponent<PlayerMovement>();
+        _dashController = GetComponent<DashController>();
 
-        chargeDashAction = InputSystem.actions.FindAction("ChargeDash");
-        chargeDashAction.started += OnChargeDashStart;
-        chargeDashAction.canceled += OnChargeDashCancel;
+        _chargeDashAction = InputSystem.actions.FindAction("ChargeDash");
+        _chargeDashAction.started += OnChargeDashStart;
+        _chargeDashAction.canceled += OnChargeDashCancel;
     }
 
     private void Update()
     {
-        animator.SetInteger(ORIENTATION, playerMovement.PlayerOrientation);
+        _animator.SetInteger(ORIENTATION, _playerMovement.PlayerOrientation);
 
-        if (playerMovement.HOrientation != 0)
-            animator.SetBool(IS_RUNNING, true);
+        if (_playerMovement.HOrientation != 0)
+            _animator.SetBool(IS_RUNNING, true);
         else
-            animator.SetBool(IS_RUNNING, false);
+            _animator.SetBool(IS_RUNNING, false);
 
-        if (playerMovement.IsGrounded)
+        if (_playerMovement.IsGrounded)
         {
-            animator.SetBool(IS_FALLING, false);
-            animator.SetBool(IS_JUMPING, false);
+            _animator.SetBool(IS_FALLING, false);
+            _animator.SetBool(IS_JUMPING, false);
         }
-        else if (playerMovement.HasJumped && !playerMovement.IsFalling)
+        else if (_playerMovement.HasJumped && !_playerMovement.IsFalling)
         {
-            animator.SetBool(IS_JUMPING, true);
-            animator.SetBool(IS_FALLING, false);
+            _animator.SetBool(IS_JUMPING, true);
+            _animator.SetBool(IS_FALLING, false);
         }
-        else if (playerMovement.IsFalling)
+        else if (_playerMovement.IsFalling)
         {
-            animator.SetBool(IS_FALLING, true);
-            animator.SetBool(IS_JUMPING, false);
+            _animator.SetBool(IS_FALLING, true);
+            _animator.SetBool(IS_JUMPING, false);
         }
 
-        animator.SetBool(IS_CHARGING, isChargingDash);
-        animator.SetBool(DASH_STARTED, dashController.IsDashing);
-        animator.SetBool(HAS_DASH_JUMPED, dashController.HasDashJumped);
+        _animator.SetBool(IS_HIT, _playerMovement.IsHit);
+        _animator.SetBool(IS_CHARGING, _isChargingDash);
+        _animator.SetBool(DASH_STARTED, _dashController.IsDashing);
+        _animator.SetBool(HAS_DASH_JUMPED, _dashController.HasDashJumped);
     }
 
-    private void OnChargeDashStart(InputAction.CallbackContext context) => isChargingDash = true;
-    private void OnChargeDashCancel(InputAction.CallbackContext context) => isChargingDash = false;
+    private void OnChargeDashStart(InputAction.CallbackContext context) => _isChargingDash = true;
+    private void OnChargeDashCancel(InputAction.CallbackContext context) => _isChargingDash = false;
 }

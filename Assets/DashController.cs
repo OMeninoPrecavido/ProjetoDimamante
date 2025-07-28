@@ -141,6 +141,8 @@ public class DashController : MonoBehaviour
             IsPreparing = false;
             IsCharging = false;
 
+            Vector3 startingPoint = transform.position;
+
             if (_starRef != null)
             {
                 //STAGE 1 - Locks player & camera
@@ -178,6 +180,7 @@ public class DashController : MonoBehaviour
                         _cameraMovement.EnableHMovement(true);
                         _playerMovement.EnableGravity(true);
                         _playerMovement.EnablePhysics(true);
+                        HitDashables(startingPoint, newPlayerPos);
 
                         //Player friction set high so they don't slide when landing
                         //SetFriction(100f);
@@ -199,8 +202,9 @@ public class DashController : MonoBehaviour
                 //STAGE 4 - DASH END
                 if (!hasDashJumped) //This will already be enabled if player has dash jumped
                 {
-                _playerMovement.EnableGravity(true);
-                _cameraMovement.EnableHMovement(true);
+                    _playerMovement.EnableGravity(true);
+                    _cameraMovement.EnableHMovement(true);
+                    HitDashables(startingPoint, newPlayerPos);
                 }
 
                 HasDashJumped = false;
@@ -235,6 +239,19 @@ public class DashController : MonoBehaviour
         _collider2d.enabled = false;
         _rb2d.sharedMaterial.friction = frictionVal;
         _collider2d.enabled = true;
+    }
+
+    public void HitDashables(Vector3 startingPoint, Vector3 endPoint)
+    {
+
+        RaycastHit2D[] hitColliders = Physics2D.LinecastAll(startingPoint, endPoint);
+        foreach (RaycastHit2D hit in hitColliders)
+        {
+            IDashable dashable = hit.collider.gameObject.GetComponent<IDashable>();
+            if (dashable != null)
+                dashable.OnDashedThrough();
+
+        }
     }
 
     #endregion
