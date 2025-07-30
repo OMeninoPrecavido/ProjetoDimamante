@@ -6,6 +6,7 @@ public class PlayerDamage : MonoBehaviour
     Collider2D _collider2D;
     PlayerMovement _playerMovement;
     SpriteRenderer _spriteRenderer;
+    DashController _dashController;
 
     [SerializeField] LayerMask _ignoreOnInvulnerability;
     [SerializeField] float _invulnerabilityTime;
@@ -16,20 +17,22 @@ public class PlayerDamage : MonoBehaviour
         _collider2D = GetComponentInChildren<Collider2D>();    
         _playerMovement = GetComponent<PlayerMovement>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _dashController = GetComponent<DashController>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.GetComponent<Enemy>() != null)
         {
+            _dashController.CancelDash();
             StartCoroutine(OnHit());
         }
     }
 
     IEnumerator OnHit()
     {
-        _playerMovement.Hit();
         _collider2D.excludeLayers = _ignoreOnInvulnerability;
+        _playerMovement.Hit();
         float elapsedTime = 0;
         float blinkingTime = 0;
         bool isTranslucent = false;

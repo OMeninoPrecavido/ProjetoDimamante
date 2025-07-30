@@ -12,6 +12,7 @@ public class DashController : MonoBehaviour
     PlayerMovement _playerMovement;
     Rigidbody2D _rb2d;
     Collider2D _collider2d;
+    EnemyManager _enemyManager;
 
     [Header("-Animations-")] //Animations
     [SerializeField] AnimationClip _readyAnim;
@@ -51,6 +52,7 @@ public class DashController : MonoBehaviour
 
     //Auxiliaries
     private Coroutine _dashCoroutine;
+    private Coroutine _releaseDashCoroutine;
 
     #endregion
 
@@ -62,6 +64,7 @@ public class DashController : MonoBehaviour
         _playerMovement = GetComponent<PlayerMovement>();
         _rb2d = GetComponent<Rigidbody2D>();
         _collider2d = GetComponentInChildren<Collider2D>();
+        _enemyManager = EnemyManager.Instance;
 
         //ChargeDash action setup
         _chargeDashAction = InputSystem.actions.FindAction("ChargeDash");
@@ -81,7 +84,7 @@ public class DashController : MonoBehaviour
 
     //Called input actions
     private void OnChargeDashPerformed(InputAction.CallbackContext context) => _dashCoroutine = StartCoroutine(ChargeDash());
-    private void OnReleaseDashPerformed(InputAction.CallbackContext context) => StartCoroutine(ReleaseDash());
+    private void OnReleaseDashPerformed(InputAction.CallbackContext context) => _releaseDashCoroutine = StartCoroutine(ReleaseDash());
 
     private IEnumerator ChargeDash()
     {
@@ -122,6 +125,8 @@ public class DashController : MonoBehaviour
 
             yield return null;
         }
+
+        _dashCoroutine = null;
     }
 
     private IEnumerator ReleaseDash()
@@ -150,6 +155,7 @@ public class DashController : MonoBehaviour
                 _cameraMovement.SetSmoothTimeX(0.4f); //Makes camera slower for when it moves
                 _playerMovement.EnableMovement(false); //Disables player movement
                 _playerMovement.EnableGravity(false); //Disables player gravity
+                _enemyManager.EnableEnemyMovement(false); //Disables enemy movement
 
                 IsDashing = true;
                 Vector3 newPlayerPos = _starRef.position;
@@ -165,7 +171,7 @@ public class DashController : MonoBehaviour
                 yield return new WaitForSeconds(_delayUntilDashJumpStart); //Delimits the start of the dash jump interval
 
                 //STAGE 3 - DASH JUMP INTERVAL
-                bool hasDashJumped = false;
+                HasDashJumped = false;
                 //GetComponentInChildren<SpriteRenderer>().color = Color.red;
 
                 float elapsedTime = 0;
@@ -173,17 +179,15 @@ public class DashController : MonoBehaviour
                 {
                     if (_dashJumpAction.WasPressedThisFrame()) //Player dash jumps
                     {
-                        hasDashJumped = true;
                         HasDashJumped = true;
 
                         //Camera, player physics and gravity are unlocked
                         _cameraMovement.EnableHMovement(true);
                         _playerMovement.EnableGravity(true);
                         _playerMovement.EnablePhysics(true);
-                        HitDashables(startingPoint, newPlayerPos);
 
-                        //Player friction set high so they don't slide when landing
-                        //SetFriction(100f);
+                        _enemyManager.EnableEnemyMovement(true);
+                        HitDashables(startingPoint, newPlayerPos);
 
                         //Applies dash jump velocity on player
                         Vector3 direction = new Vector3(_playerMovement.PlayerOrientation * 1, 1, 0).normalized;
@@ -200,10 +204,12 @@ public class DashController : MonoBehaviour
                 yield return new WaitForSeconds(_movementCancellingDelay); //Interval until player can move again
 
                 //STAGE 4 - DASH END
-                if (!hasDashJumped) //This will already be enabled if player has dash jumped
+                if (!HasDashJumped) //This will already be enabled if player has dash jumped
                 {
                     _playerMovement.EnableGravity(true);
                     _cameraMovement.EnableHMovement(true);
+
+                    _enemyManager.EnableEnemyMovement(true);
                     HitDashables(startingPoint, newPlayerPos);
                 }
 
@@ -218,6 +224,8 @@ public class DashController : MonoBehaviour
                 StartCoroutine(_cameraMovement.SmoothChangeSmoothX(0.1f, 2f));
             }
         }
+
+        _releaseDashCoroutine = null;
     }
 
     public void CancelDash()
@@ -231,6 +239,28 @@ public class DashController : MonoBehaviour
 
             IsPreparing = false;
             IsCharging = false;
+
+            _dashCoroutine = null;
+        }
+        if (_releaseDashCoroutine != null && !HasDashJumped)
+        {
+            StopCoroutine(_releaseDashCoroutine);
+
+            if (_starRef != null)
+                Destroy(_starRef.gameObject);
+
+            IsPreparing = false;
+            IsCharging = false;
+            IsDashing = false;
+
+            _cameraMovement.SetSmoothTimeX(0.1f);
+            _playerMovement.EnableGravity(true);
+            _cameraMovement.EnableHMovement(true);
+            _enemyManager.EnableEnemyMovement(true);
+            _playerMovement.EnablePhysics(false);
+            _playerMovement.EnableMovement(true);
+
+            _releaseDashCoroutine = null;
         }
     }
 
@@ -250,7 +280,6 @@ public class DashController : MonoBehaviour
             IDashable dashable = hit.collider.gameObject.GetComponent<IDashable>();
             if (dashable != null)
                 dashable.OnDashedThrough();
-
         }
     }
 

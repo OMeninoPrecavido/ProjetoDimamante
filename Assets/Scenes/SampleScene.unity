@@ -905,7 +905,7 @@ GameObject:
   - component: {fileID: 342680058}
   - component: {fileID: 342680057}
   - component: {fileID: 342680059}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1050,6 +1050,50 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &366220081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 366220082}
+  - component: {fileID: 366220083}
+  m_Layer: 0
+  m_Name: EnemyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &366220082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366220081}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &366220083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366220081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 397dec2ef3c24f7438a98c333997ceca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &461096532
 GameObject:
   m_ObjectHideFlags: 0
@@ -3157,7 +3201,7 @@ GameObject:
   - component: {fileID: 668395797}
   - component: {fileID: 668395798}
   - component: {fileID: 668395799}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5283,7 +5327,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1064136900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6818,10 +6862,10 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &2044055846
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6886,7 +6930,7 @@ Transform:
   m_GameObject: {fileID: 2044055843}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.3, y: 2.56, z: 0}
+  m_LocalPosition: {x: 10.89, y: 2.45, z: 0}
   m_LocalScale: {x: 1, y: 1.47, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6901,11 +6945,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 2044055843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0158b6ff176e7c4bb4615cd5171ebcf, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c047cdf7b4df954594291bec6125066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _hitStrenght: 5
   _deathDelay: 0.4
+  _walkingSpeed: 5
+  _lowerWaitingLimit: 1
+  _upperWaitingLimit: 3
+  _lowerWalkingLimit: 1
+  _upperWalkingLimit: 3
+  _runningSpeed: 8
+  _noPlayerFoundTolerance: 4
+  _acceleration: 50
+  _deceleration: 50
+  _sightRange: 9
+  _pitCheckLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  _playerCheckLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &2119749783
 GameObject:
   m_ObjectHideFlags: 0
@@ -6915,7 +6975,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2119749784}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: FloorCheck
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
@@ -6948,3 +7008,4 @@ SceneRoots:
   - {fileID: 1064136903}
   - {fileID: 1742247394}
   - {fileID: 2044055847}
+  - {fileID: 366220082}
