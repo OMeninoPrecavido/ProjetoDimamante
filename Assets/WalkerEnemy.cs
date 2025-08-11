@@ -27,34 +27,37 @@ public class WalkerEnemy : Enemy
 
     public bool IsSearching { get; private set; } = false;
     public bool SeesPlayer { get; private set; } = false;
+    public bool IsMoving { get; private set; } = false;
 
     protected override void Start()
     {
         base.Start();
-        _currState = EnemyState.Neutral;
+        CurrState = EnemyState.Neutral;
         StartCoroutine(CheckForPlayer());
         _currBehaviour = StartCoroutine(NeutralBehaviour());
     }
 
     private IEnumerator NeutralBehaviour()
     {
-        while (_currState == EnemyState.Neutral)
+        while (CurrState == EnemyState.Neutral)
         {
             //Stays in place for random amount of time
             _rb2d.linearVelocityX = 0;
+            IsMoving = false;
             float waitSeconds = UnityEngine.Random.Range(_lowerWaitingLimit, _upperWaitingLimit);
             yield return new WaitForSeconds(waitSeconds);
 
             //Chooses random orientation and walks in that direction for random amount of time
             int o = UnityEngine.Random.Range(0, 2);
-            _orientation = o == 0 ? 1 : -1;
+            Orientation = o == 0 ? 1 : -1;
             float walkSeconds = UnityEngine.Random.Range(_lowerWalkingLimit, _upperWalkingLimit);
             float elapsedTime = 0;
+            IsMoving = true;
             while (elapsedTime < walkSeconds)
             {
                 CheckForPit();
 
-                _rb2d.linearVelocityX = Accelerate(_rb2d.linearVelocityX, _orientation, _walkingSpeed);
+                _rb2d.linearVelocityX = Accelerate(_rb2d.linearVelocityX, Orientation, _walkingSpeed);
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
@@ -64,9 +67,10 @@ public class WalkerEnemy : Enemy
             {
                 CheckForPit();
                 _rb2d.linearVelocityX = Decelerate(_rb2d.linearVelocityX, 0);
-                _previousOrientation = _orientation;
+                _previousOrientation = Orientation;
                 yield return null;
             }
+            IsMoving = false;
 
             yield return null;
         }
@@ -74,11 +78,12 @@ public class WalkerEnemy : Enemy
 
     private IEnumerator HostileBehaviour()
     {
-        while (_currState == EnemyState.Hostile)
+        IsMoving = true;
+        while (CurrState == EnemyState.Hostile)
         {
             //While hostile, just keeps running
             CheckForPit();
-            _rb2d.linearVelocityX = _runningSpeed * _orientation;
+            _rb2d.linearVelocityX = _runningSpeed * Orientation;
             yield return null;
         }
     }
@@ -88,8 +93,8 @@ public class WalkerEnemy : Enemy
         while (true)
         {
             //Constantly checks if sees player
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector3.right * _orientation, _sightRange, _playerCheckLayerMask);
-            Debug.DrawRay(transform.position, Vector3.right * _orientation * _sightRange, Color.red, 0f);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector3.right * Orientation, _sightRange, _playerCheckLayerMask);
+            Debug.DrawRay(transform.position, Vector3.right * Orientation * _sightRange, Color.red, 0f);
 
             PlayerMovement player = null;
 
@@ -99,14 +104,14 @@ public class WalkerEnemy : Enemy
             SeesPlayer = player != null ? true : false;
 
             //Sees player and is neutral
-            if (SeesPlayer && _currState == EnemyState.Neutral)
+            if (SeesPlayer && CurrState == EnemyState.Neutral)
             {
-                _currState = EnemyState.Hostile;
+                CurrState = EnemyState.Hostile;
                 StopCoroutine(_currBehaviour);
                 _currBehaviour = StartCoroutine(HostileBehaviour());
             }
             //Doesn't see player, is hostile and isn't currently searching for player
-            else if (!SeesPlayer && _currState == EnemyState.Hostile && !IsSearching)
+            else if (!SeesPlayer && CurrState == EnemyState.Hostile && !IsSearching)
             {
                 StartCoroutine(Search());
             }
@@ -134,7 +139,7 @@ public class WalkerEnemy : Enemy
 
         if (IsSearching)
         {
-            _currState = EnemyState.Neutral;
+            CurrState = EnemyState.Neutral;
             StopCoroutine(_currBehaviour);
             _currBehaviour = StartCoroutine(NeutralBehaviour());
         }
@@ -144,14 +149,14 @@ public class WalkerEnemy : Enemy
     private void CheckForPit()
     {
         float pitCheckY = _boxCollider2d.bounds.center.y - _boxCollider2d.size.y / 2;
-        float pitCheckX = _boxCollider2d.bounds.center.x + (_boxCollider2d.size.x / 2) * _orientation;
+        float pitCheckX = _boxCollider2d.bounds.center.x + (_boxCollider2d.size.x / 2) * Orientation;
         Vector3 _pitCheckPos = new Vector3(pitCheckX, pitCheckY, 0);
 
         bool hit = Physics2D.Raycast(_pitCheckPos, Vector3.down, 0.3f, _pitCheckLayerMask);
         Debug.DrawRay(_pitCheckPos, Vector3.down * 0.3f, Color.red, 0f, false);
 
         if (!hit)
-            _orientation = -_orientation;
+            Orientation = -Orientation;
     }
 
     private float Accelerate(float currSpeed, float hOrientation, float speed)

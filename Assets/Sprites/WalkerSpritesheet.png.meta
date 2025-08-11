@@ -1,0 +1,572 @@
+fileFormatVersion: 2
+guid: 4d4dcb65d90b87149bb6367bde09a15e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 9193627570937861764
+    second: WalkerSpritesheet_0
+  - first:
+      213: -8440131795010854178
+    second: WalkerSpritesheet_1
+  - first:
+      213: -4076901653468828239
+    second: WalkerSpritesheet_2
+  - first:
+      213: -4328708292880318596
+    second: WalkerSpritesheet_3
+  - first:
+      213: -2828808367206983337
+    second: WalkerSpritesheet_4
+  - first:
+      213: -6439069618888544154
+    second: WalkerSpritesheet_5
+  - first:
+      213: 4254678033877299215
+    second: WalkerSpritesheet_6
+  - first:
+      213: -3957278579986544741
+    second: WalkerSpritesheet_7
+  - first:
+      213: 670468661539222863
+    second: WalkerSpritesheet_8
+  - first:
+      213: -1027334649561036992
+    second: WalkerSpritesheet_9
+  - first:
+      213: -3310224010067820135
+    second: WalkerSpritesheet_10
+  - first:
+      213: -4116673411507401236
+    second: WalkerSpritesheet_11
+  - first:
+      213: -7450241111138685173
+    second: WalkerSpritesheet_12
+  - first:
+      213: -452694679398561046
+    second: WalkerSpritesheet_13
+  - first:
+      213: 3535178430804432125
+    second: WalkerSpritesheet_14
+  - first:
+      213: 1222183593260925811
+    second: WalkerSpritesheet_15
+  - first:
+      213: -397000185175646680
+    second: WalkerSpritesheet_16
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: WalkerSpritesheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 93
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4861dfad093569f70800000000000000
+      internalID: 9193627570937861764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_1
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 93
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed2e5e4a9d0aeda80800000000000000
+      internalID: -8440131795010854178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_2
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 93
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bda9c8eb8feb67c0800000000000000
+      internalID: -4076901653468828239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_3
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 93
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7fb49afdb65de3c0800000000000000
+      internalID: -4328708292880318596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_4
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 93
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75999f617cd0eb8d0800000000000000
+      internalID: -2828808367206983337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_5
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 93
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 660732a1c44d3a6a0800000000000000
+      internalID: -6439069618888544154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 62
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f00f9ea2127ab0b30800000000000000
+      internalID: 4254678033877299215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_7
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 62
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b97c3aa191ce419c0800000000000000
+      internalID: -3957278579986544741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_8
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 62
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f45b31402bbfd4900800000000000000
+      internalID: 670468661539222863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_9
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 62
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 047c67b449c2eb1f0800000000000000
+      internalID: -1027334649561036992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_10
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 62
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99140f81dc8bf02d0800000000000000
+      internalID: -3310224010067820135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_11
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 62
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ced4ec2e753aed6c0800000000000000
+      internalID: -4116673411507401236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 31
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0f2197be2d6b9890800000000000000
+      internalID: -7450241111138685173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_13
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 31
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aea4dba6694b7b9f0800000000000000
+      internalID: -452694679398561046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_14
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 31
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df498b97d0a7f0130800000000000000
+      internalID: 3535178430804432125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_15
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 31
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 373c0aea08116f010800000000000000
+      internalID: 1222183593260925811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WalkerSpritesheet_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82e57da5f629d7af0800000000000000
+      internalID: -397000185175646680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 6709fdced70767b4483db428bf5139ad
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      WalkerSpritesheet_0: 9193627570937861764
+      WalkerSpritesheet_1: -8440131795010854178
+      WalkerSpritesheet_10: -3310224010067820135
+      WalkerSpritesheet_11: -4116673411507401236
+      WalkerSpritesheet_12: -7450241111138685173
+      WalkerSpritesheet_13: -452694679398561046
+      WalkerSpritesheet_14: 3535178430804432125
+      WalkerSpritesheet_15: 1222183593260925811
+      WalkerSpritesheet_16: -397000185175646680
+      WalkerSpritesheet_2: -4076901653468828239
+      WalkerSpritesheet_3: -4328708292880318596
+      WalkerSpritesheet_4: -2828808367206983337
+      WalkerSpritesheet_5: -6439069618888544154
+      WalkerSpritesheet_6: 4254678033877299215
+      WalkerSpritesheet_7: -3957278579986544741
+      WalkerSpritesheet_8: 670468661539222863
+      WalkerSpritesheet_9: -1027334649561036992
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

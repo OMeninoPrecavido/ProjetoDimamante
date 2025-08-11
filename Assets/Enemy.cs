@@ -7,24 +7,26 @@ public abstract class Enemy : MonoBehaviour, IDashable
     protected BoxCollider2D _boxCollider2d;
     protected Rigidbody2D _rb2d;
     protected EnemyManager _enemyManager;
+    protected Animator _animator;
 
     //Attributes
     [Header("-OnDash Attributes-")]
     [SerializeField] float _hitStrenght = 10f;
     [SerializeField] float _deathDelay = 0.5f;
 
-    protected int _orientation = -1;
+    public int Orientation { get; protected set; } = -1;
     protected int _previousOrientation = -1;
 
     protected Coroutine _currBehaviour;
 
     public enum EnemyState { Neutral, Hostile, Dead }
-    protected EnemyState _currState;
+    public EnemyState CurrState;
 
     protected virtual void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
-        _boxCollider2d = GetComponent<BoxCollider2D>();
+        _boxCollider2d = GetComponentInChildren<BoxCollider2D>();
+        _animator = GetComponentInChildren<Animator>();
 
         _enemyManager = EnemyManager.Instance;
         _enemyManager.EnableEnemyMovementEvent += OnEnableEnemyMovement;
@@ -33,7 +35,6 @@ public abstract class Enemy : MonoBehaviour, IDashable
     //IDashable - Called when dashed through
     public void OnDashedThrough()
     {
-        GetComponent<SpriteRenderer>().color = Color.red;
         StartCoroutine(Die());
     }
 
@@ -41,14 +42,17 @@ public abstract class Enemy : MonoBehaviour, IDashable
     {
         if (_rb2d != null)
             _rb2d.constraints = b? RigidbodyConstraints2D.FreezeRotation : RigidbodyConstraints2D.FreezeAll;
+
+        if (_animator != null)
+            _animator.speed = 0f;
     }
 
     IEnumerator Die()
     {
-        _currState = EnemyState.Dead;
+        CurrState = EnemyState.Dead;
         StopCoroutine(_currBehaviour);
 
-        _rb2d.linearVelocity = new Vector3(_orientation * 1, 2, 0).normalized * _hitStrenght;
+        _rb2d.linearVelocity = new Vector3(Orientation * 1, 2, 0).normalized * _hitStrenght;
         yield return new WaitForSeconds(_deathDelay);
         Destroy(gameObject);
     }

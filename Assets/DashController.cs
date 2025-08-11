@@ -278,6 +278,8 @@ public class DashController : MonoBehaviour
         foreach (RaycastHit2D hit in hitColliders)
         {
             IDashable dashable = hit.collider.gameObject.GetComponent<IDashable>();
+            if (dashable == null)
+                dashable = hit.collider.gameObject.GetComponentInParent<IDashable>();
             if (dashable != null)
                 dashable.OnDashedThrough();
         }
