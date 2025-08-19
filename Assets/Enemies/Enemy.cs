@@ -14,39 +14,45 @@ public abstract class Enemy : MonoBehaviour, IDashable
     [SerializeField] float _hitStrenght = 10f;
     [SerializeField] float _deathDelay = 0.5f;
 
+    //Orientation values
     public int Orientation { get; protected set; } = -1;
     protected int _previousOrientation = -1;
 
-    protected Coroutine _currBehaviour;
+    protected Coroutine _currBehaviour; //References current behaviour enemy has, as a coroutine
 
+    //Possible enemy states
     public enum EnemyState { Neutral, Hostile, Dead }
-    public EnemyState CurrState;
+    public EnemyState CurrState; //Current state
 
     protected virtual void Start()
     {
+        //Component references
         _rb2d = GetComponent<Rigidbody2D>();
         _boxCollider2d = GetComponentInChildren<BoxCollider2D>();
         _animator = GetComponentInChildren<Animator>();
 
+        //Events
         _enemyManager = EnemyManager.Instance;
         _enemyManager.EnableEnemyMovementEvent += OnEnableEnemyMovement;
     }
 
     //IDashable - Called when dashed through
-    public void OnDashedThrough()
+    public virtual void OnDashedThrough()
     {
         StartCoroutine(Die());
     }
 
+    //Freezes enemy movement as well as their animation
     private void OnEnableEnemyMovement(bool b)
     {
         if (_rb2d != null)
             _rb2d.constraints = b? RigidbodyConstraints2D.FreezeRotation : RigidbodyConstraints2D.FreezeAll;
 
         if (_animator != null)
-            _animator.speed = 0f;
+            _animator.speed = b ? 1f : 0f;
     }
 
+    //Called when enemy is dashed through
     IEnumerator Die()
     {
         CurrState = EnemyState.Dead;

@@ -25,6 +25,7 @@ public class WalkerEnemy : Enemy
     [SerializeField] LayerMask _pitCheckLayerMask;
     [SerializeField] LayerMask _playerCheckLayerMask;
 
+    //Properties
     public bool IsSearching { get; private set; } = false;
     public bool SeesPlayer { get; private set; } = false;
     public bool IsMoving { get; private set; } = false;
@@ -37,6 +38,7 @@ public class WalkerEnemy : Enemy
         _currBehaviour = StartCoroutine(NeutralBehaviour());
     }
 
+    //Behaviour methods
     private IEnumerator NeutralBehaviour()
     {
         while (CurrState == EnemyState.Neutral)
@@ -159,6 +161,7 @@ public class WalkerEnemy : Enemy
             Orientation = -Orientation;
     }
 
+    //Movement methods
     private float Accelerate(float currSpeed, float hOrientation, float speed)
     {
         float velX = currSpeed;
