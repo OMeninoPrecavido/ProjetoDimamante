@@ -22,8 +22,10 @@ public class FlyerEnemy : Enemy
     [SerializeField] float _descentSpeed;
     [SerializeField] float _swoopingSpeed;
     [SerializeField] float _risingSpeed;
+    [SerializeField] AnimationClip _downImpulseClip;
+    [SerializeField] AnimationClip _forwardImpulseClip;
 
-    FlyerState _flyerState = FlyerState.Patrolling;
+    public FlyerState CurrFlyerState { get; private set; } = FlyerState.Patrolling;
 
     public enum FlyerState
     {
@@ -84,7 +86,7 @@ public class FlyerEnemy : Enemy
     {
         //Diving movement
         SetFlyerState(FlyerState.Descending);
-        yield return new WaitForSeconds(_pauseTime);
+        yield return new WaitForSeconds(_downImpulseClip.length);
 
         bool hitFloor = false;
         while (transform.position.y > playerPosition.y + _floorCheckDistance)
@@ -102,8 +104,8 @@ public class FlyerEnemy : Enemy
 
         if (!hitFloor)
         {
-            //Curve
-            float elapsedTime = 0;
+            //Curve - Not used anymore
+            /*float elapsedTime = 0;
             float ratio = 0;
             while (elapsedTime < _turnTime)
             {
@@ -112,11 +114,14 @@ public class FlyerEnemy : Enemy
 
                 elapsedTime += Time.deltaTime;
                 yield return null;
-            }
+            }*/
+
             _rb2d.linearVelocityY = 0;
 
             //Swooping movement
             SetFlyerState(FlyerState.Swooping);
+            yield return new WaitForSeconds(_forwardImpulseClip.length);
+
             while ((Orientation == 1 && transform.position.x <= playerPosition.x) ||
                    (Orientation == -1 && transform.position.x >= playerPosition.x))
             {
@@ -238,7 +243,7 @@ public class FlyerEnemy : Enemy
 
     private void SetFlyerState(FlyerState flyerState)
     {
-        _flyerState = flyerState;
+        CurrFlyerState = flyerState;
         
         switch (flyerState)
         {
