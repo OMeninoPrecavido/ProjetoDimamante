@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Net;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -165,6 +166,12 @@ public class DashController : MonoBehaviour
                 yield return new WaitForSeconds(_disappearAnim.length); //Waits until disappearing animation is complete
 
                 //STAGE 2 - Teleports player
+                Vector3 posIfWaller;
+                if (CheckForWaller(transform.position, newPlayerPos, out posIfWaller))
+                {
+                    newPlayerPos = posIfWaller;
+                }
+
                 transform.position = newPlayerPos;
                 IsDashing = false;
 
@@ -273,7 +280,6 @@ public class DashController : MonoBehaviour
 
     public void HitDashables(Vector3 startingPoint, Vector3 endPoint)
     {
-
         RaycastHit2D[] hitColliders = Physics2D.LinecastAll(startingPoint, endPoint);
         foreach (RaycastHit2D hit in hitColliders)
         {
@@ -283,6 +289,22 @@ public class DashController : MonoBehaviour
             if (dashable != null)
                 dashable.OnDashedThrough();
         }
+    }
+
+    private bool CheckForWaller(Vector3 startingPoint, Vector3 endPoint, out Vector3 wallerPosition)
+    {
+        wallerPosition = Vector3.zero;
+        RaycastHit2D[] hitColliders = Physics2D.LinecastAll(startingPoint, endPoint);
+        foreach (RaycastHit2D hit in hitColliders)
+        {
+            Enemy enemy = hit.collider.gameObject.GetComponentInParent<Enemy>();
+            if (enemy != null && enemy is WallerEnemy waller && waller.IsWall)
+            {
+                wallerPosition = enemy.transform.position;
+                return true;
+            }
+        }
+        return false;
     }
 
     #endregion

@@ -55,6 +55,7 @@ public class WalkerEnemy : Enemy
             float walkSeconds = UnityEngine.Random.Range(_lowerWalkingLimit, _upperWalkingLimit);
             float elapsedTime = 0;
             IsMoving = true;
+
             while (elapsedTime < walkSeconds)
             {
                 CheckForPit();
