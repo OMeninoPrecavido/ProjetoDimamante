@@ -34,6 +34,8 @@ public class WallerEnemy : Enemy
         {
             //Waiting
             _rb2d.linearVelocityX = 0;
+            _rb2d.constraints = RigidbodyConstraints2D.FreezePositionX;
+
             float waitingTime = UnityEngine.Random.Range(_lowerWaitingTime, _upperWaitingTime);
             yield return new WaitForSeconds(waitingTime);
 
@@ -43,6 +45,8 @@ public class WallerEnemy : Enemy
             //Walking
             if (choice == 0)
             {
+                _rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+
                 //Chooses random orientation and walks in that direction for random amount of time
                 int o = UnityEngine.Random.Range(0, 2);
                 Orientation = o == 0 ? 1 : -1;
@@ -74,13 +78,11 @@ public class WallerEnemy : Enemy
             {
                 float wallTime = UnityEngine.Random.Range(_lowerWallTime, _upperWallTime);
                 IsWall = true;
-                GetComponentInChildren<SpriteRenderer>().color = Color.red;
 
                 yield return new WaitForSeconds(wallTime);
 
                 //Turns back
                 IsWall = false;
-                GetComponentInChildren<SpriteRenderer>().color = Color.white;
             }
 
             yield return null;

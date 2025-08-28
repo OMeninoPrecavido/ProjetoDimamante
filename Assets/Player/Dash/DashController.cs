@@ -169,7 +169,7 @@ public class DashController : MonoBehaviour
                 Vector3 posIfWaller;
                 if (CheckForWaller(transform.position, newPlayerPos, out posIfWaller))
                 {
-                    newPlayerPos = posIfWaller;
+                    newPlayerPos = posIfWaller - _playerMovement.PlayerOrientation * Vector3.right * GetComponentInChildren<BoxCollider2D>().size.x / 4;
                 }
 
                 transform.position = newPlayerPos;
