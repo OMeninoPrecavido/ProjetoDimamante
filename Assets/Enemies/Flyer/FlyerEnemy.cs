@@ -258,10 +258,10 @@ public class FlyerEnemy : Enemy
         }
     }
 
-    public override void OnDashedThrough()
+    public override void OnDashedThrough(DashController dashControllerRef)
     {
         _rb2d.linearVelocity = Vector2.zero;
         _rb2d.bodyType = RigidbodyType2D.Dynamic;
-        base.OnDashedThrough();
+        base.OnDashedThrough(dashControllerRef);
     }
 }

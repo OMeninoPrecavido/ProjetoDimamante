@@ -287,7 +287,7 @@ public class DashController : MonoBehaviour
             if (dashable == null)
                 dashable = hit.collider.gameObject.GetComponentInParent<IDashable>();
             if (dashable != null)
-                dashable.OnDashedThrough();
+                dashable.OnDashedThrough(this);
         }
     }
 
@@ -305,6 +305,11 @@ public class DashController : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void IncrementDashDistance(float increment)
+    {
+        _dashMaxDistance += increment;
     }
 
     #endregion

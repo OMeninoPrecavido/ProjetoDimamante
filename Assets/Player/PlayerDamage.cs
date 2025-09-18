@@ -12,8 +12,13 @@ public class PlayerDamage : MonoBehaviour
     [SerializeField] float _invulnerabilityTime;
     [SerializeField] float _blinkingInterval;
 
+    [SerializeField] int _startingLives = 3;
+    public int Lives { get; private set; }
+
     void Start()
     {
+        Lives = _startingLives;
+
         _collider2D = GetComponentInChildren<Collider2D>();    
         _playerMovement = GetComponent<PlayerMovement>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -25,6 +30,7 @@ public class PlayerDamage : MonoBehaviour
         if (collision.collider.GetComponentInParent<Enemy>() != null)
         {
             _dashController.CancelDash();
+            AddToLives(-1);
             StartCoroutine(OnHit());
         }
     }
@@ -55,5 +61,17 @@ public class PlayerDamage : MonoBehaviour
         Color d = _spriteRenderer.color;
         d.a = 1f;
         _spriteRenderer.color = d;
+    }
+
+    public void AddToLives(int i)
+    {
+        Lives += i;
+        if (Lives <= 0)
+            Die();
+    }
+
+    public void Die()
+    {
+        Debug.Log("Morreu!");
     }
 }

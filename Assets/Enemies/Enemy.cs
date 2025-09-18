@@ -37,7 +37,7 @@ public abstract class Enemy : MonoBehaviour, IDashable
     }
 
     //IDashable - Called when dashed through
-    public virtual void OnDashedThrough()
+    public virtual void OnDashedThrough(DashController _dashControllerRef)
     {
         StartCoroutine(Die());
     }

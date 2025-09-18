@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IDashable
 {
-    public void OnDashedThrough();
+    public void OnDashedThrough(DashController _dashControllerRef);
 }

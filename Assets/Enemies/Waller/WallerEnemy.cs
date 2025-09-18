@@ -34,9 +34,9 @@ public class WallerEnemy : Enemy
         {
             //Waiting
             _rb2d.linearVelocityX = 0;
-            _rb2d.constraints = RigidbodyConstraints2D.FreezePositionX;
+            _rb2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 
-            float waitingTime = UnityEngine.Random.Range(_lowerWaitingTime, _upperWaitingTime);
+        float waitingTime = UnityEngine.Random.Range(_lowerWaitingTime, _upperWaitingTime);
             yield return new WaitForSeconds(waitingTime);
 
             //Chooses between transforming into wall and walking
