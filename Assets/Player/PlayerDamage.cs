@@ -39,6 +39,14 @@ public class PlayerDamage : MonoBehaviour
     {
         _collider2D.excludeLayers = _ignoreOnInvulnerability;
         _playerMovement.Hit();
+        
+        yield return StartCoroutine(Blink());
+
+        _collider2D.excludeLayers = new LayerMask();
+    }
+
+    IEnumerator Blink()
+    {
         float elapsedTime = 0;
         float blinkingTime = 0;
         bool isTranslucent = false;
@@ -57,7 +65,6 @@ public class PlayerDamage : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        _collider2D.excludeLayers = new LayerMask();
         Color d = _spriteRenderer.color;
         d.a = 1f;
         _spriteRenderer.color = d;
@@ -68,6 +75,16 @@ public class PlayerDamage : MonoBehaviour
         Lives += i;
         if (Lives <= 0)
             Die();
+    }
+
+    public IEnumerator OnPitFall()
+    {
+        AddToLives(-1);
+        _playerMovement.GoToClosestRespawn();
+
+        _collider2D.excludeLayers = _ignoreOnInvulnerability;
+        yield return StartCoroutine(Blink());
+        _collider2D.excludeLayers = new LayerMask();
     }
 
     public void Die()

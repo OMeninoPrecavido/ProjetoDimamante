@@ -28,6 +28,10 @@ public class PlayerMovement : MonoBehaviour
     InputAction _moveAction;
     InputAction _jumpAction;
 
+    //RespawnZone
+    RespawnZone _respawnZone;
+    public void SetRespawnZone(RespawnZone respawnZone) => _respawnZone = respawnZone;
+
     #endregion
 
     #region Attributes
@@ -332,4 +336,22 @@ public class PlayerMovement : MonoBehaviour
         EnablePhysics(false);
     }
     
+    public void GoToClosestRespawn()
+    {
+        Transform respawnPoint = null;
+        foreach (Transform child in _respawnZone.transform)
+        {
+            if (respawnPoint == null)
+            {
+                respawnPoint = child;
+                continue;
+            }
+
+            if (Vector2.Distance(transform.position, child.position) <
+                Vector2.Distance(transform.position, respawnPoint.position))
+                respawnPoint = child;
+        }
+
+        transform.position = respawnPoint.position;
+    }
 }

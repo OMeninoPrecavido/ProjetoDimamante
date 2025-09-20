@@ -60,7 +60,7 @@ public class CameraMovement : MonoBehaviour
     float _halfCamHeight;
 
     //Camera Focus
-    Side _currFocus = Side.Left;
+    public Side CurrFocus { get; private set; } = Side.Left;
 
     //Enablers
     bool _hMoveEnabled = true;
@@ -153,13 +153,13 @@ public class CameraMovement : MonoBehaviour
         if (playerLeftDist > _pZoneHalfWidthWorld || playerRightDist > _pZoneHalfWidthWorld)
         {
             //Player changed direction to right
-            if (_player.position.x < _auxPos.x && _currFocus == Side.Left)
+            if (_player.position.x < _auxPos.x && CurrFocus == Side.Left)
             {
                 StartCoroutine(ShiftCam(Side.Right));
             }
 
             //Player changed direction to left
-            if (_player.position.x > _auxPos.x && _currFocus == Side.Right)
+            if (_player.position.x > _auxPos.x && CurrFocus == Side.Right)
             {
                 StartCoroutine(ShiftCam(Side.Left));
             }
@@ -172,9 +172,9 @@ public class CameraMovement : MonoBehaviour
     }
 
     //Shifts camera to different orientation gradually
-    private IEnumerator ShiftCam(Side newFocus)
+    public IEnumerator ShiftCam(Side newFocus)
     {
-        _currFocus = newFocus;
+        CurrFocus = newFocus;
 
         int m = (newFocus == Side.Left) ? 1 : -1;
         float newOffset = m * _cameraOffset;

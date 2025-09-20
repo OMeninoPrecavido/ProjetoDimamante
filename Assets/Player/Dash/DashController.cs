@@ -101,6 +101,13 @@ public class DashController : MonoBehaviour
                                transform.position + (Vector3.right * _starSpawnDistance * _playerMovement.PlayerOrientation),
                                Quaternion.identity);
 
+        //Positions camera according to side of charge
+        if (_playerMovement.PlayerOrientation == -1 && _cameraMovement.CurrFocus == Side.Left)
+            StartCoroutine(_cameraMovement.ShiftCam(Side.Right));
+        else if (_playerMovement.PlayerOrientation == 1 && _cameraMovement.CurrFocus == Side.Right)
+            StartCoroutine(_cameraMovement.ShiftCam(Side.Left));
+
+        //Time for start to spawn
         float waitLength = _readyAnim.length > _starAppearAnim.length ? _readyAnim.length : _starAppearAnim.length;
         float timeElapsed = 0f;
         while (timeElapsed < waitLength)
@@ -113,7 +120,7 @@ public class DashController : MonoBehaviour
         IsPreparing = false;
         IsCharging = true;
 
-        //Moves the star unitl it reaches the maximum dash distance
+        //Moves the star until it reaches the maximum dash distance
         float playerStartDist = Mathf.Abs(_starRef.position.x - transform.position.x);
         while (playerStartDist < _dashMaxDistance && _starRef != null)
         {
