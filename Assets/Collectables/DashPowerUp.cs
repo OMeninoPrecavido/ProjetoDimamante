@@ -5,9 +5,9 @@ public class DashPowerUp : Collectable
 {
     [SerializeField] float _dashIncrement;
 
-    protected override void Collect()
+    protected override void CollectEffect()
     {
-        base.Collect();
+        base.CollectEffect();
         _dashControllerRef.IncrementDashDistance(_dashIncrement);
     }
 }

@@ -14,6 +14,17 @@ public class PlayerDamage : MonoBehaviour
 
     [SerializeField] int _startingLives = 3;
     public int Lives { get; private set; }
+    public int Diamonds { get; private set; } = 0;
+    public int AddDiamonds(int diamondsNum)
+    {
+        Diamonds += diamondsNum;
+        if (Diamonds >= 10)
+        {
+            AddToLives(1);
+            Diamonds = 0;
+        }
+        return diamondsNum;
+    }
 
     void Start()
     {
@@ -73,6 +84,7 @@ public class PlayerDamage : MonoBehaviour
     public void AddToLives(int i)
     {
         Lives += i;
+        UIManager.Instance.UpdateLives(Lives);
         if (Lives <= 0)
             Die();
     }
