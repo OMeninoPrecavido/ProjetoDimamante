@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
+  m_Name: TestDrawing
+  m_EditorClassIdentifier: 
+  Title: Running Dimamante
+  Description: Dimamante was created when we were kids, so when we got a bit older
+    we tried to "modernize" his design. This is a stylized drawing of dimamante's
+    modern design. Notice how his running pose has his arms and legs inverted!
+  Drawing: {fileID: 533147997137890104, guid: 111a71562de7fb14daa6c7d50e79480e, type: 3}
