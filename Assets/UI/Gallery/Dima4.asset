@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
+  m_Name: Dima4
+  m_EditorClassIdentifier: 
+  Title: Dimamante vs ShadowMan
+  Description: Dimamante facing off against some other character I created back then.
+    I don't remember his name, but his power involved entering shadows. I was pretty
+    common for me to draw my different characters interacting with one another.
+  Drawing: {fileID: -2424825780269430403, guid: b83a64cd16791944a856483b92883145, type: 3}

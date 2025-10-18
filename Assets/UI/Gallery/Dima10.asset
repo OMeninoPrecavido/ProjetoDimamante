@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
-  m_Name: Test2
+  m_Name: Dima10
   m_EditorClassIdentifier: 
-  Title: AAA
-  Description: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  Drawing: {fileID: -8009067618649648520, guid: 49e66bbfb99e3cf47861edfad1a916b7, type: 3}
+  Title: Jagged
+  Description: A really jagged drawing of Dimamante. I always liked dark, thick outlines.
+    This might be a good spot to point out how Dimamante was probably very inspired
+    by spider-man, which Murilo is a big fan of.
+  Drawing: {fileID: -165011007956657837, guid: 18bfd9592d1b47b459f41315d429e9ae, type: 3}

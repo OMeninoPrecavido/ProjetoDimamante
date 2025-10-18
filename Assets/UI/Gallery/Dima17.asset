@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
-  m_Name: Test2
+  m_Name: Dima17
   m_EditorClassIdentifier: 
-  Title: AAA
-  Description: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  Drawing: {fileID: -8009067618649648520, guid: 49e66bbfb99e3cf47861edfad1a916b7, type: 3}
+  Title: Training
+  Description: Dimamante training under a waterfall, as all fighters obviously do.
+    The idea is that he is letting his power run free, which is why it is extending
+    uncontrolled from his body. The blindfold is just the cherry on top.
+  Drawing: {fileID: -9143392327482580907, guid: 02e9f15c82b671b469600bc61af30317, type: 3}

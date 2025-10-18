@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
-  m_Name: Test2
+  m_Name: Dima12
   m_EditorClassIdentifier: 
-  Title: AAA
-  Description: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  Drawing: {fileID: -8009067618649648520, guid: 49e66bbfb99e3cf47861edfad1a916b7, type: 3}
+  Title: Laser man?
+  Description: I have no idea what this guy's name was, but I remember him being
+    an enemy to Dimamante. Its shtick was laser powers, since those are used in real
+    life to cut diamonds. How creative.
+  Drawing: {fileID: -1760644432347556662, guid: 5cb0f25fceabab042a96b3471d702479, type: 3}

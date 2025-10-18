@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
-  m_Name: Test2
+  m_Name: Dima7
   m_EditorClassIdentifier: 
-  Title: AAA
-  Description: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  Drawing: {fileID: -8009067618649648520, guid: 49e66bbfb99e3cf47861edfad1a916b7, type: 3}
+  Title: Cooler Arm
+  Description: And this is from when I learned a cooler way to draw diamond powers
+    that wasn't just a lot of connected geometric shapes. I was taking drawing classes
+    back then, which is where I learned it, as well as the hood, from.
+  Drawing: {fileID: 7747334441354444533, guid: 7f149fb0ffa67224daf3fc192efdb2d1, type: 3}

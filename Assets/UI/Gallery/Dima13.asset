@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
+  m_Name: Dima13
+  m_EditorClassIdentifier: 
+  Title: Stylized Dimamante
+  Description: Cool stylized Dimamante I still like to this day, even though I clearly
+    didn't know how arms and legs behave while running back then. Don't mind the
+    big, bright pink "LSD" above him. I just thought it was a fun way to draw the
+    word.
+  Drawing: {fileID: -5151033198079101105, guid: 20be6b5cfe934334eabd3d3a2d1a9ee0, type: 3}

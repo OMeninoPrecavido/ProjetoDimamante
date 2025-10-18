@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
-  m_Name: Test2
+  m_Name: Dima20
   m_EditorClassIdentifier: 
-  Title: AAA
-  Description: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  Drawing: {fileID: -8009067618649648520, guid: 49e66bbfb99e3cf47861edfad1a916b7, type: 3}
+  Title: Dimamante's Comic - Part 3
+  Description: Surprisingly, there is even a draft for Dimamante's comic, as if we
+    had a whole complicated pipeline going on there. Those were really fun times.
+  Drawing: {fileID: -5061218928856160023, guid: 6682b09bb2351644c91e2a13fef89db9, type: 3}

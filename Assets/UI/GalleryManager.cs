@@ -1,128 +1,227 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
-using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static OldGalleryManager;
 
 public class GalleryManager : MonoBehaviour
 {
-    public bool GalleryIsOpen = false;
+    [Header("-Base Gallery Menu-")]
+    [SerializeField] GameObject _baseGallery;
+    [SerializeField] GameObject _baseGalleryTitle;
+    [SerializeField] GameObject _baseGalleryGLG;
+    [SerializeField] GameObject _baseGalleryGoBackButton;
 
-    public enum GalleryMode { Base, Drawing }
-    private GalleryMode _currGalleryMode = GalleryMode.Base;
+    [Header("-Drawing Menu-")]
+    [SerializeField] GameObject _drawingMenu;
+    [SerializeField] TextMeshProUGUI _drawingTitle;
+    [SerializeField] TextMeshProUGUI _drawingText;
+    [SerializeField] Image _drawingImage;
+    [SerializeField] TextMeshProUGUI _leftArrow;
+    [SerializeField] TextMeshProUGUI _rightArrow;
 
-    [SerializeField] GridLayoutGroup _galleryGLG;
-    [SerializeField] MenuOptionBase _goBackOption;
+    [Header("-Info Menu-")]
+    [SerializeField] GameObject _infoMenu;
+    [SerializeField] TextMeshProUGUI _rightInfoArrow;
+    [SerializeField] TextMeshProUGUI _leftInfoArrow;
 
-    [SerializeField] GameObject _galleryBase;
+    [Header("-Drawings List")]
+    [SerializeField] List<DrawingData> _drawings;
 
-    [SerializeField] GameObject _drawingBase;
-    [SerializeField] TextMeshProUGUI _drawingBaseTitle;
-    [SerializeField] TextMeshProUGUI _drawingBaseDescription;
-    [SerializeField] Image _drawingBaseImage;
+    [Header("-Prefabs-")]
+    [SerializeField] GameObject _galleryOptionPrefab;
 
+    [Header("-Selection Colors-")]
+    [SerializeField] Color _selectedColor;
+    [SerializeField] Color _normalColor;
+    [SerializeField] Color _lockedColor;
+
+    //Admin. de Opções
     private MenuOptionBase[,] _galleryOptions;
     (MenuOptionBase opt, int column, int row) _currOption;
 
+    //Estado atual do menu de galeria
+    public enum GalleryMode { Base, Drawing, Transition, Closed }
+    private GalleryMode _currGalleryMode = GalleryMode.Closed;
+
+    //Variáveis aux. da transição
+    private Vector3 _startingGalleryMenuPosition;
+
+    //Referências de Input
+    InputAction _upPressAction;
+    InputAction _downPressAction;
+    InputAction _leftPressAction;
+    InputAction _rightPressAction;
+    InputAction _leftReleaseAction;
+    InputAction _rightReleaseAction;
+    InputAction _confirmAction;
+
     private void Start()
     {
-        //Populates _galleryOptions matrix
-        int columnNumber = _galleryGLG.constraintCount;
-        int rowNumber = _galleryGLG.transform.childCount / columnNumber;
+        //Setup dos inputs
+        _upPressAction = InputSystem.actions.FindAction("UI/UpPress");
+        _downPressAction = InputSystem.actions.FindAction("UI/DownPress");
+        _leftPressAction = InputSystem.actions.FindAction("UI/LeftPress");
+        _rightPressAction = InputSystem.actions.FindAction("UI/RightPress");
+        _leftReleaseAction = InputSystem.actions.FindAction("UI/LeftRelease");
+        _rightReleaseAction = InputSystem.actions.FindAction("UI/RightRelease");
+        _confirmAction = InputSystem.actions.FindAction("UI/Confirm");
 
-        _galleryOptions = new MenuOptionBase[rowNumber + 1, columnNumber]; //+1 for "go back" button
+        _upPressAction.performed += UpInput;
+        _downPressAction.performed += DownInput;
+        _leftPressAction.performed += LeftInput;
+        _rightPressAction.performed += RightInput;
+        _leftReleaseAction.performed += LeftReleaseInput;
+        _rightReleaseAction.performed += RightReleaseInput;
+        _confirmAction.performed += ConfirmInput;
 
-        int i = 0;
-        int j = 0;
-        foreach (Transform container in _galleryGLG.transform)
+        _startingGalleryMenuPosition = transform.position;
+
+        //Inicializa a matriz de opções
+        int columnNumber = _baseGalleryGLG.GetComponent<GridLayoutGroup>().constraintCount;
+        int rowNumber = Mathf.CeilToInt((_drawings.Count + 1) / (float)columnNumber) + 1; //+1 para a opção de info e +1 para a opção voltar
+
+        _galleryOptions = new MenuOptionBase[rowNumber, columnNumber];
+
+        //Cria o primeiro objeto da galeria, a página de informações
+        GameObject infoContainer = new GameObject();
+        infoContainer.name = "InfoContainer";
+        infoContainer.AddComponent<RectTransform>();
+        infoContainer.transform.SetParent(_baseGalleryGLG.transform, false);
+
+        GameObject infoGalOpt = Instantiate(_galleryOptionPrefab, infoContainer.transform);
+        GalleryOption infoGalOptComp = infoGalOpt.GetComponent<GalleryOption>();
+        
+        //Define a função do botão de informação
+        infoGalOptComp.SetSelectedEvent(delegate
         {
-            _galleryOptions[i, j] = container.GetComponentInChildren<MenuOptionBase>();
+            _currGalleryMode = GalleryMode.Drawing;
+            _infoMenu.SetActive(true);
+            _drawingMenu.SetActive(false);
+            _baseGallery.SetActive(false);
+        });
 
-            if (_galleryOptions[i, j] is GalleryOption galOpt)
-            {
-                if (galOpt.drawingData != null)
-                    galOpt.SetSelectedEvent(delegate { OpenDrawingBase(galOpt.drawingData); });
-            }
+        //Ativa o visual de informação
+        infoGalOptComp.SetAsInfo();
 
-            j++;
-            if (j >= columnNumber)
+        _galleryOptions[0, 0] = infoGalOptComp; //Primeiro item da matriz de opções
+
+        //Variáveis para popular a matriz de opções
+        int r = 0;
+        int c = 1;
+
+        //Cria um objeto da galeria para cada desenho
+        foreach (DrawingData drawing in _drawings)
+        {
+            //Cria o gameobject container
+            GameObject container = new GameObject();
+            container.name = "Container";
+            container.AddComponent<RectTransform>();
+            container.transform.SetParent(_baseGalleryGLG.transform, false);
+
+            //Cria a gallery option dentro do container
+            GameObject galOpt = Instantiate(_galleryOptionPrefab, container.transform);
+            GalleryOption galOptComp = galOpt.GetComponent<GalleryOption>();
+            galOptComp.Initialize(drawing);
+            galOptComp.SetSelectedEvent(delegate { OpenDrawingMenu(galOptComp.drawingData); });
+
+            //Popula a matriz de gallery options
+            _galleryOptions[r, c] = galOptComp;
+
+            c++;
+            if (c >= columnNumber)
             {
-                i++;
-                j = 0;
+                c = 0;
+                r++;
             }
         }
 
-        _galleryOptions[rowNumber, 0] = _goBackOption;
+        //Define opção inicial selecionada
+        if (_currOption.opt != null)
+            _currOption.opt.OnUnchoose();
 
-        //Sets starting chosen option
-        _currOption.column = 0;
-        _currOption.row = 0;
         _currOption.opt = _galleryOptions[0, 0];
+        _currOption.row = 0;
+        _currOption.column = 0;
 
         _currOption.opt.OnChoose();
+
+        //Botão de retorno adicionado à matriz de opções.
+        //Sempre na última fileira e primeira coluna.
+        _galleryOptions[_galleryOptions.GetLength(0) - 1, 0] = _baseGalleryGoBackButton.GetComponent<MenuTextOption>();
     }
 
-    private void Update()
+    #region Gallery Methods
+
+    //Inicialização a ser chamada para abrir o menu da galeria
+    public IEnumerator Initialize()
     {
-        if (!GalleryIsOpen)
-            return;
+        _currGalleryMode = GalleryMode.Closed;
 
-        if (_currGalleryMode == GalleryMode.Base)
-        {
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-                ChangeSelectedOption(_currOption.column + 1, _currOption.row);
+        //Coloca a opção selecionada como a primeira
+        if (_currOption.opt != null)
+            _currOption.opt.OnUnchoose();
 
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-                ChangeSelectedOption(_currOption.column - 1, _currOption.row);
+        _currOption.opt = _galleryOptions[0, 0];
+        _currOption.row = 0;
+        _currOption.column = 0;
 
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-                ChangeSelectedOption(_currOption.column, _currOption.row + 1);
+        _currOption.opt.OnChoose();
 
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-                ChangeSelectedOption(_currOption.column, _currOption.row - 1);
+        //Esconde seus componentes
+        _baseGalleryTitle.SetActive(false);
+        _baseGalleryGLG.SetActive(false);
+        _baseGalleryGoBackButton.SetActive(false);
 
-            if (Input.GetKeyDown(KeyCode.Z))
-                _currOption.opt.Select();
-        }
-        else if (_currGalleryMode == GalleryMode.Drawing)
-        {
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                int row = _currOption.row;
-                int column = _currOption.column + 1;
+        //Move o menu de galeria para a posição inicial
+        transform.position = _startingGalleryMenuPosition;
 
-                if (column > _galleryOptions.GetLength(1) - 1)
-                {
-                    column = 0;
-                    row++;
-                }
+        //Ativa obj base e título
+        yield return new WaitForSeconds(0.3f);
+        _baseGallery.SetActive(true);
+        _baseGalleryTitle.SetActive(true);
 
-                if (row > _galleryOptions.GetLength(0) - 2)
-                    return;
+        //Ativa GLG
+        yield return new WaitForSeconds(0.3f);
+        _baseGalleryGLG.SetActive(true);
 
-                ChangeDrawingPage(column, row);
-            }
+        //Ativa botão de retorno
+        yield return new WaitForSeconds(0.3f);
+        _baseGalleryGoBackButton.SetActive(true);
+        yield return null;
 
-            //if (Input.GetKeyDown(KeyCode.LeftArrow))
-                // ChangeSelectedOption(_currOption.column - 1, _currOption.row);
-        }
-
+        _currGalleryMode = GalleryMode.Base;
     }
 
-    private void ChangeSelectedOption(int newColumn, int newRow)
+    //Muda a opção selecionada
+    private void SetSelectedOption(int newColumn, int newRow)
     {
+        //Não permite selecionar rows além das existentes
         if (newRow >= _galleryOptions.GetLength(0) || newRow < 0)
             return;
 
+        //Se for pra última row, será sempre na coluna zero (onde está a opção voltar)
         if (newRow == _galleryOptions.GetLength(0) - 1)
             newColumn = 0;
 
+        //Se estiver na opção voltar e for pra cima, seleciona a opção da coluna do meio
         if (_currOption.row == _galleryOptions.GetLength(0) - 1
             && newRow < _currOption.row)
             newColumn = Mathf.CeilToInt((_galleryOptions.GetLength(1) - 1) / 2);
 
+        //Não permite selecionar colunas além das existentes
         if (newColumn >= _galleryOptions.GetLength(1) || newColumn < 0)
             return;
 
+        //Impede a seleção de espaços nulos
+        if (_galleryOptions[newRow, newColumn] == null)
+            return;
+
+        //Troca a opção selecionada
         _currOption.opt.OnUnchoose();
 
         _currOption.column = newColumn;
@@ -130,35 +229,209 @@ public class GalleryManager : MonoBehaviour
         _currOption.opt = _galleryOptions[newRow, newColumn];
 
         _currOption.opt.OnChoose();
-
     }
 
-    public void OpenDrawingBase(DrawingData drawingData)
+    //Para outros scripts poderem marcar a galeria como fechada
+    public void SetClosed() => _currGalleryMode = GalleryMode.Closed;
+
+    //Abre o DrawingMenu e faz seu setup
+    public void OpenDrawingMenu(DrawingData drawingData)
     {
-        _galleryBase.SetActive(false);
-        _drawingBase.SetActive(true);
-        _drawingBaseTitle.text = drawingData.Title;
-        _drawingBaseDescription.text = drawingData.Description;
-        _drawingBaseImage.sprite = drawingData.Drawing;
         _currGalleryMode = GalleryMode.Drawing;
+        _baseGallery.SetActive(false);
+        _drawingMenu.SetActive(true);
+        _infoMenu.SetActive(false);
+
+        _drawingText.text = drawingData.Description;
+        _drawingTitle.text = drawingData.Title;
+        _drawingImage.sprite = drawingData.Drawing;
     }
 
-    public void UpdateDrawingBase(DrawingData drawingData)
+    //Fecha o DrawingMenu
+    public void CloseDrawingMenu()
     {
-        _drawingBaseTitle.text = drawingData.Title;
-        _drawingBaseDescription.text = drawingData.Description;
-        _drawingBaseImage.sprite = drawingData.Drawing;
+        _currGalleryMode = GalleryMode.Base;
+        _baseGallery.SetActive(true);
+        _drawingMenu.SetActive(false);
+        _infoMenu.SetActive(false);
     }
 
-    private void ChangeDrawingPage(int newColumn, int newRow)
-    {
-        _currOption.column = newColumn;
-        _currOption.row = newRow;
-        _currOption.opt = _galleryOptions[newRow, newColumn];
+    #endregion
 
-        if (_currOption.opt is GalleryOption galOpt)
+    #region Input Methods
+
+    private void LeftInput(InputAction.CallbackContext context)
+    {
+        //Nada ocorre se a galeria estiver em transição ou fechada
+        if (_currGalleryMode == GalleryMode.Closed || _currGalleryMode == GalleryMode.Transition)
+            return;
+
+        //Modo base
+        if (_currGalleryMode == GalleryMode.Base)
         {
-            UpdateDrawingBase(galOpt.drawingData);
+            SetSelectedOption(_currOption.column - 1, _currOption.row);
+        }
+        //Modo drawing
+        else if (_currGalleryMode == GalleryMode.Drawing)
+        {
+            if (_currOption.opt != _galleryOptions[0, 0])
+            {
+                _leftArrow.color = _selectedColor;
+                _leftInfoArrow.color = _selectedColor;
+                _rightArrow.color = _normalColor;
+            }
+            else
+            {
+                _leftInfoArrow.color = _lockedColor;
+            }
+
+
+            int newColumn = _currOption.column + -1;
+            int newRow = _currOption.row;
+
+            if (newColumn < 0)
+            {
+                newRow -= 1;
+                newColumn = _galleryOptions.GetLength(1) - 1;
+            }
+
+            if (newRow < 0)
+                return;
+
+            SetSelectedOption(newColumn, newRow);
+
+            if (_currOption.opt == _galleryOptions[0, 0])
+            {
+                _infoMenu.SetActive(true);
+                _drawingMenu.SetActive(false);
+                return;
+            }
+
+            GalleryOption galOpt = _currOption.opt as GalleryOption;
+            OpenDrawingMenu(galOpt.drawingData);
         }
     }
+
+    private void RightInput(InputAction.CallbackContext context)
+    {
+        //Nada ocorre se a galeria estiver em transição ou fechada
+        if (_currGalleryMode == GalleryMode.Closed || _currGalleryMode == GalleryMode.Transition)
+            return;
+
+        //Modo base
+        if (_currGalleryMode == GalleryMode.Base)
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+                SetSelectedOption(_currOption.column + 1, _currOption.row);
+        }
+        //Modo drawing
+        else if (_currGalleryMode == GalleryMode.Drawing)
+        {
+            if (_currOption.opt != _galleryOptions[_galleryOptions.GetLength(0) - 2, _galleryOptions.GetLength(1) - 1])
+            {
+                _rightArrow.color = _selectedColor;
+                _rightInfoArrow.color = _selectedColor;
+                _leftInfoArrow.color = _normalColor;
+            }
+
+            int newColumn = _currOption.column + 1;
+            int newRow = _currOption.row;
+
+            if (newColumn >= _galleryOptions.GetLength(1))
+            {
+                newRow += 1;
+                newColumn = 0;
+            }
+
+            if (newRow >= _galleryOptions.GetLength(0) - 1)
+                return;
+
+            SetSelectedOption(newColumn, newRow);
+            GalleryOption galOpt = _currOption.opt as GalleryOption;
+            OpenDrawingMenu(galOpt.drawingData);
+        }
+    }
+
+    private void UpInput(InputAction.CallbackContext context)
+    {
+        if (_currGalleryMode == GalleryMode.Closed || _currGalleryMode == GalleryMode.Transition)
+            return;
+
+        if (_currGalleryMode == GalleryMode.Base)
+        {
+            SetSelectedOption(_currOption.column, _currOption.row - 1);
+        }
+    }
+
+    private void DownInput(InputAction.CallbackContext context)
+    {
+        if (_currGalleryMode == GalleryMode.Closed || _currGalleryMode == GalleryMode.Transition)
+            return;
+
+        if (_currGalleryMode == GalleryMode.Base)
+        {
+            SetSelectedOption(_currOption.column, _currOption.row + 1);
+        }
+    }
+
+    private void LeftReleaseInput(InputAction.CallbackContext context)
+    {
+        if (_currGalleryMode == GalleryMode.Closed || _currGalleryMode == GalleryMode.Transition)
+            return;
+
+        if (_currGalleryMode == GalleryMode.Drawing)
+        {
+            if (_currOption.opt == _galleryOptions[_galleryOptions.GetLength(0) - 2, _galleryOptions.GetLength(1) - 1])
+            {
+                _rightArrow.color = _normalColor;
+                _rightInfoArrow.color = _normalColor;
+            }
+            else
+            {
+                _leftArrow.color = _normalColor;
+                _leftInfoArrow.color = _lockedColor;
+            }
+        }
+    }
+
+    private void RightReleaseInput(InputAction.CallbackContext context)
+    {
+        if (_currGalleryMode == GalleryMode.Closed || _currGalleryMode == GalleryMode.Transition)
+            return;
+
+        if (_currGalleryMode == GalleryMode.Drawing)
+        {
+            if (_currOption.opt != _galleryOptions[_galleryOptions.GetLength(0) - 2, _galleryOptions.GetLength(1) - 1])
+            {
+                _rightArrow.color = _normalColor;
+                _rightInfoArrow.color = _normalColor;
+            }
+            else
+            {
+                _rightArrow.color = _lockedColor;
+                _rightInfoArrow.color = _lockedColor;
+            }
+        }
+    }
+
+    private void ConfirmInput(InputAction.CallbackContext context)
+    {
+        if (_currGalleryMode == GalleryMode.Closed || _currGalleryMode == GalleryMode.Transition)
+            return;
+
+        if (_currGalleryMode == GalleryMode.Base)
+        {
+            _currOption.opt.Select();
+            if (_currOption.opt == _galleryOptions[_galleryOptions.GetLength(0) - 2, _galleryOptions.GetLength(1) - 1])
+            {
+                _rightArrow.color = _lockedColor;
+            }
+        }
+        else if (_currGalleryMode == GalleryMode.Drawing)
+        {
+            CloseDrawingMenu();
+        }
+    }
+
+    #endregion
 }

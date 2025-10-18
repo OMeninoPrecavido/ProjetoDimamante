@@ -24,6 +24,6 @@ public class MenuOptionBase : MonoBehaviour
 
     public void SetSelectedEvent(Action method)
     {
-        OnSelect.AddListener(delegate { method(); });
+        OnSelect.AddListener(delegate { method();});
     }
 }

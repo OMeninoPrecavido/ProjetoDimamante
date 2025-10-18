@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
-  m_Name: Test2
+  m_Name: Dima2
   m_EditorClassIdentifier: 
-  Title: AAA
-  Description: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  Drawing: {fileID: -8009067618649648520, guid: 49e66bbfb99e3cf47861edfad1a916b7, type: 3}
+  Title: Renaissance
+  Description: Dimamante's renaissance! This is when I got back to drawing the character
+    after a pretty long time, and so tried to give him an edgier, sleeker design.
+    As it can be seen, I was already going by "O Menino Precavido" back then.
+  Drawing: {fileID: -6711724705940143871, guid: 3b39c5c66d4c80b4ebd26056baf9ff9b, type: 3}

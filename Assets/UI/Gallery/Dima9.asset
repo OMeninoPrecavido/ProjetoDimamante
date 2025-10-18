@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
+  m_Name: Dima9
+  m_EditorClassIdentifier: 
+  Title: Oh no...
+  Description: "This certainly didn't age well... This character fighting Dimamante
+    was another hero I created named Capit\xE3o Prego, which means Captain Nail.
+    His power was pretty cool: he could spit nails at people. What isn't so cool
+    is what his abbreviated name, displayed on his chest, looks like."
+  Drawing: {fileID: -7556035215146311416, guid: 4d0c7c55b2f3732479893633e66f3942, type: 3}

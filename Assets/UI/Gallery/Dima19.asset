@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
+  m_Name: Dima19
+  m_EditorClassIdentifier: 
+  Title: Dimamante's Comic - Part 2
+  Description: 'The second page of Dimamante''s comic. Here, we get a look at Dimamante''s
+    origin: he was a salaryman named Rafael! After having just been fired from his
+    job, he would get his diamond powers after being hit directly by a meteor. You
+    can''t make this stuff up.'
+  Drawing: {fileID: 4378574054754904778, guid: ee9b16f834eb8ec44b3d9e93e71a9eb3, type: 3}

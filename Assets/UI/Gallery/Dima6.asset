@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cdbd46690528d24fa64ab6ad2e972b2, type: 3}
+  m_Name: Dima6
+  m_EditorClassIdentifier: 
+  Title: GenerationClash
+  Description: Now this is a good one! This is a crossover between what I dubbed
+    the three generations of heroes I created back then. They are different groups
+    of heroes I would draw in different periods of my life. Here are SuperPorquinho,
+    Stickman and Dimamante (his redesigned self).
+  Drawing: {fileID: -4102490127801020843, guid: ad49338f6b19ce648a4399908f3d8174, type: 3}
