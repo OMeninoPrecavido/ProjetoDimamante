@@ -9,6 +9,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class MainMenuManager : MonoBehaviour
@@ -82,6 +83,13 @@ public class MainMenuManager : MonoBehaviour
         StartCoroutine(SetStartingOption());
     }
 
+    private void OnDestroy()
+    {
+        _upPressAction.performed -= UpInput;
+        _downPressAction.performed -= DownInput;
+        _confirmAction.performed -= ConfirmInput;
+    }
+
     #endregion
 
     #region Main Menu Methods
@@ -99,7 +107,7 @@ public class MainMenuManager : MonoBehaviour
         if (_menuMovingOp != null)
             yield break;
 
-        if ((this._currMenuOption.index < menuList.Count - 1 && !up) || (_currMenuOption.index > 0) && up)
+        if ((_currMenuOption.index < menuList.Count - 1 && !up) || (_currMenuOption.index > 0) && up)
         {
             Color retreatColor = _regularOptionColor;
             Color advanceColor = _selectedOptionColor;
@@ -406,6 +414,14 @@ public class MainMenuManager : MonoBehaviour
     public void CloseGalleryED() => StartCoroutine(CloseGallery());
     public void LevelToMainMenuED() => StartCoroutine(LevelToMainMenu());
     public void OpenCreditsED() => StartCoroutine(SetCreditsMenu());
+    public void StartLevel1(){
+        StopAllCoroutines();
+        SceneManager.LoadScene("Level1");
+    }
+    public void StartLevel2(){
+        StopAllCoroutines();
+        SceneManager.LoadScene("Level2");
+    }
 
     #endregion
 
@@ -435,7 +451,8 @@ public class MainMenuManager : MonoBehaviour
             return;
         }
 
-        if (_currMenuMode != MainMenuMode.Closed && _currMenuMode != MainMenuMode.Transition)
+        if (_currMenuMode != MainMenuMode.Closed && _currMenuMode != MainMenuMode.Transition
+            && !_currMenuOption.opt.IsLocked)
             _currMenuOption.opt.Select();
     }
 

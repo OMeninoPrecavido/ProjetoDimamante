@@ -79,6 +79,12 @@ public class DashController : MonoBehaviour
         _dashJumpAction = InputSystem.actions.FindAction("Jump");
     }
 
+    private void OnDestroy()
+    {
+        _chargeDashAction.performed -= OnChargeDashPerformed;
+        _releaseDashAction.performed -= OnReleaseDashPerformed;
+    }
+
     #endregion
 
     #region Methods

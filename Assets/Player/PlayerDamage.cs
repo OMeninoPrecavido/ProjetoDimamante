@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerDamage : MonoBehaviour
 {
@@ -43,6 +44,9 @@ public class PlayerDamage : MonoBehaviour
             _dashController.CancelDash();
             AddToLives(-1);
             StartCoroutine(OnHit());
+
+            if (Lives <= 0)
+                SceneManager.LoadScene("Menu");
         }
     }
 

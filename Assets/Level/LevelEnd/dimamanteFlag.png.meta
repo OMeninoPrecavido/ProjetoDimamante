@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: b83a64cd16791944a856483b92883145
+guid: 878e3e1af687d8d42a4038f8a19d5649
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2424825780269430403
-    second: "Imagem do WhatsApp de 2025-10-16 \xE0(s) 17.52.23_113aa882_0"
+      213: -7222639897174417836
+    second: dimamanteFlag_0
+  - first:
+      213: 6336648269314653574
+    second: dimamanteFlag_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +40,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +54,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +78,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +116,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Imagem do WhatsApp de 2025-10-16 \xE0(s) 17.52.23_113aa882_0"
+      name: dimamanteFlag_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 733
-        height: 1100
+        width: 21
+        height: 23
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +131,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d79c4d4dcc9495ed0800000000000000
-      internalID: -2424825780269430403
+      spriteID: 45eda5cd74704cb90800000000000000
+      internalID: -7222639897174417836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dimamanteFlag_1
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 0
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68df717270c40f750800000000000000
+      internalID: 6336648269314653574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dimamanteFlag_2
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 0
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1d5cfc58efffdd43b1f902063057075
+      internalID: -862111200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dimamanteFlag_3
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 0
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72a3fcce04582bd409322c85d4648a54
+      internalID: 792052206
       vertices: []
       indices: 
       edges: []
@@ -138,7 +207,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 6e8e261e5fdcc9246a139f281c07ee88
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +217,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "Imagem do WhatsApp de 2025-10-16 \xE0(s) 17.52.23_113aa882_0": -2424825780269430403
+      dimamanteFlag_0: -7222639897174417836
+      dimamanteFlag_1: 6336648269314653574
+      dimamanteFlag_2: -862111200
+      dimamanteFlag_3: 792052206
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

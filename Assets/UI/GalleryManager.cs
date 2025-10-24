@@ -155,6 +155,17 @@ public class GalleryManager : MonoBehaviour
         _galleryOptions[_galleryOptions.GetLength(0) - 1, 0] = _baseGalleryGoBackButton.GetComponent<MenuTextOption>();
     }
 
+    private void OnDestroy()
+    {
+        _upPressAction.performed -= UpInput;
+        _downPressAction.performed -= DownInput;
+        _leftPressAction.performed -= LeftInput;
+        _rightPressAction.performed -= RightInput;
+        _leftReleaseAction.performed -= LeftReleaseInput;
+        _rightReleaseAction.performed -= RightReleaseInput;
+        _confirmAction.performed -= ConfirmInput;
+    }
+
     #region Gallery Methods
 
     //Inicialização a ser chamada para abrir o menu da galeria
