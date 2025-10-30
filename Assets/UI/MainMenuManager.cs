@@ -422,6 +422,11 @@ public class MainMenuManager : MonoBehaviour
         StopAllCoroutines();
         SceneManager.LoadScene("Level2");
     }
+    public void StartLevel3()
+    {
+        StopAllCoroutines();
+        SceneManager.LoadScene("Level3");
+    }
 
     #endregion
 

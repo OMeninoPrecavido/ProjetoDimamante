@@ -44,9 +44,6 @@ public class PlayerDamage : MonoBehaviour
             _dashController.CancelDash();
             AddToLives(-1);
             StartCoroutine(OnHit());
-
-            if (Lives <= 0)
-                SceneManager.LoadScene("Menu");
         }
     }
 
@@ -105,6 +102,6 @@ public class PlayerDamage : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Morreu!");
+        SceneManager.LoadScene("Menu");
     }
 }
