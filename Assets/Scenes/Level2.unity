@@ -33456,7 +33456,7 @@ MonoBehaviour:
   _starPrefab: {fileID: 5870453866118288055, guid: 390ba17fce4da41478afc504593c3004, type: 3}
   _dashMaxDistance: 7
   _dashStarSpeed: 5
-  _dashJumpImpulse: 18
+  _dashJumpImpulse: 20
   _starSpawnDistance: 0.8
   _delayUntilDashJumpStart: 0.7
   _dashJumpInterval: 0.3

@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PurpleDiamondOC
+  m_Controller: {fileID: 9100000, guid: 7d4fd5f06db12154ebc1d1a0784bc8f4, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: c4e636259feeb484ba13a43e8ea333e4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 49e073a6a2203ea439e3ae8fab55addd, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 7dc23271be042b94198d66eb8511576b, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 8e9d0658762ac624fa8c0868c572f8a6, type: 2}
