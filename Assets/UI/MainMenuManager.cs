@@ -438,6 +438,12 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("Level5");
     }
 
+    public void StartLevel6()
+    {
+        StopAllCoroutines();
+        SceneManager.LoadScene("Level6");
+    }
+
     #endregion
 
     #region Input Methods
