@@ -17,7 +17,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] float _regularSmoothTimeX; //Amount of smoothing in following aux
     [SerializeField] float _smoothTimeY; //Amount of smoothing in vertical camera movement
 
-    float _smoothTimeX; //Value holder
+    public float _smoothTimeX { get; private set; } //Value holder
     public void SetSmoothTimeX(float smoothTimeX) => _smoothTimeX = smoothTimeX;
 
     //ShiftTime
@@ -69,6 +69,11 @@ public class CameraMovement : MonoBehaviour
     public void EnableVMovement(bool b) => _vMoveEnabled = b;
 
     float _velocityY; //Used for vertical SmoothDamping
+
+    //Coroutine pointer
+    public Coroutine _shiftingCoroutine;
+
+    public bool IsDashShifting = false;
 
     #endregion
 
@@ -125,7 +130,7 @@ public class CameraMovement : MonoBehaviour
 
         //Sets values for player zone coordinates and measures
         _pZoneWidthWorld = GetWidthVPToWorld(_pZoneWidthVP);
-        _pZoneHalfWidthWorld = _pZoneWidthWorld / 2;
+        _pZoneHalfWidthWorld = Mathf.Round(_pZoneWidthWorld / 2 * 1000) / 1000;
         _pZoneLeftBound = _auxPos.x - _pZoneHalfWidthWorld; //Used only for drawing in editor
         _pZoneRightBound = _auxPos.x + _pZoneHalfWidthWorld; //
 
@@ -146,22 +151,40 @@ public class CameraMovement : MonoBehaviour
 
     private void HorizontalLateUpdate()
     {
-        float playerLeftDist = Mathf.Abs(_playerLeftX - _auxPos.x);
-        float playerRightDist = Mathf.Abs(_playerRightX - _auxPos.x);
+        float playerLeftDist = Mathf.Round(Mathf.Abs(_playerLeftX - _auxPos.x) * 1000) / 1000;
+        float playerRightDist = Mathf.Round(Mathf.Abs(_playerRightX - _auxPos.x) * 1000) / 1000;
 
         //Player has left player zone
-        if (playerLeftDist > _pZoneHalfWidthWorld || playerRightDist > _pZoneHalfWidthWorld)
+        if ((playerLeftDist > _pZoneHalfWidthWorld || playerRightDist > _pZoneHalfWidthWorld) && !IsDashShifting)
         {
             //Player changed direction to right
             if (_player.position.x < _auxPos.x && CurrFocus == Side.Left)
             {
-                StartCoroutine(ShiftCam(Side.Right));
+                Debug.Log("PlayerLeftDist: " + playerLeftDist
+                + "\nPlayerRightDist: " + playerRightDist
+                + "\npZoneHalfWidthWorld: " + _pZoneHalfWidthWorld);
+
+                Debug.Log("Shifting Right through camera script");
+
+                if (_shiftingCoroutine != null)
+                    StopCoroutine(_shiftingCoroutine);
+
+                _shiftingCoroutine = StartCoroutine(ShiftCam(Side.Right));
             }
 
             //Player changed direction to left
             if (_player.position.x > _auxPos.x && CurrFocus == Side.Right)
             {
-                StartCoroutine(ShiftCam(Side.Left));
+                Debug.Log("PlayerLeftDist: " + playerLeftDist
+                + "\nPlayerRightDist: " + playerRightDist
+                + "\npZoneHalfWidthWorld: " + _pZoneHalfWidthWorld);
+
+                Debug.Log("Shifting Left through camera script");
+
+                if (_shiftingCoroutine != null)
+                    StopCoroutine(_shiftingCoroutine);
+
+                _shiftingCoroutine = StartCoroutine(ShiftCam(Side.Left));
             }
         }
 
@@ -194,6 +217,10 @@ public class CameraMovement : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
+
+        _currCamOffset = newOffset;
+
+        IsDashShifting = false;
     }
 
     public IEnumerator SmoothChangeSmoothX(float newValue, float changeTime)
@@ -207,6 +234,17 @@ public class CameraMovement : MonoBehaviour
             yield return null;
         }
         _smoothTimeX = newValue;
+    }
+
+    //To be called on other scripts to avoid error messages
+    public void StartShiftCoroutine(Side side)
+    {
+        if (_shiftingCoroutine != null)
+            StopCoroutine( _shiftingCoroutine );
+
+        IsDashShifting = true;
+
+        _shiftingCoroutine = StartCoroutine(ShiftCam(side));
     }
 
     #endregion

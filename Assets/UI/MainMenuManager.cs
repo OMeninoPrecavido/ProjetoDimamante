@@ -444,6 +444,8 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("Level6");
     }
 
+    public void CloseGame() => Application.Quit();
+
     #endregion
 
     #region Input Methods

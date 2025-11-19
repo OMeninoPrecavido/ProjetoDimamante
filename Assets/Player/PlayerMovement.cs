@@ -225,6 +225,7 @@ public class PlayerMovement : MonoBehaviour
             IsGrounded = ShouldCheckGrounding = false;
             HasJumpBuffered = false;
             ShouldCoyoteJump = false;
+            IsFalling = false;
 
             if (IsMovementEnabled)
                 _rb2d.linearVelocityY = _jumpForce; //Adds vertical velocity to the player
@@ -237,6 +238,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (HasJumped && !IsFalling && Mathf.Sign(_rb2d.linearVelocityY) < _previousVOrientation) //Player has reached the peak of a jump
         {
+            Debug.Log("!");
+
             ShouldCheckGrounding = true; //Allows the ground check only after mid-jump so there's no risk of hasJumped becoming true prematurely
             IsFalling = true;
             StartCoroutine(ApexTime(_apexTime));
@@ -303,8 +306,8 @@ public class PlayerMovement : MonoBehaviour
 
         hit = Physics2D.BoxCast(_floorCheck.position, new Vector2(_bc2d.size.x, 0.01f), 0, Vector2.down, 0.1f, _floorMask);
 
-        //Debug.DrawRay(new Vector3(floorCheck.position.x - bc2d.size.x/2, floorCheck.position.y, floorCheck.position.z), Vector3.down * 0.1f, UnityEngine.Color.red, 0f, false);
-        //Debug.DrawRay(new Vector3(floorCheck.position.x + bc2d.size.x/2, floorCheck.position.y, floorCheck.position.z), Vector3.down * 0.1f, UnityEngine.Color.red, 0f, false);
+        //Debug.DrawRay(new Vector3(_floorCheck.position.x - _bc2d.size.x/2, _floorCheck.position.y, _floorCheck.position.z), Vector3.down * 0.1f, UnityEngine.Color.red, 0f, false);
+        //Debug.DrawRay(new Vector3(_floorCheck.position.x + _bc2d.size.x/2, _floorCheck.position.y, _floorCheck.position.z), Vector3.down * 0.1f, UnityEngine.Color.red, 0f, false);
 
         return hit;
     }

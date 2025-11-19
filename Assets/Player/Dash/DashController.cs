@@ -109,9 +109,15 @@ public class DashController : MonoBehaviour
 
         //Positions camera according to side of charge
         if (_playerMovement.PlayerOrientation == -1 && _cameraMovement.CurrFocus == Side.Left)
-            StartCoroutine(_cameraMovement.ShiftCam(Side.Right));
+        {
+            Debug.Log("Shifting Right through controller");
+            _cameraMovement.StartShiftCoroutine(Side.Right);
+        }
         else if (_playerMovement.PlayerOrientation == 1 && _cameraMovement.CurrFocus == Side.Right)
-            StartCoroutine(_cameraMovement.ShiftCam(Side.Left));
+        {
+            Debug.Log("Shifting Left through controller");
+            _cameraMovement.StartShiftCoroutine(Side.Left);
+        }
 
         //Time for start to spawn
         float waitLength = _readyAnim.length > _starAppearAnim.length ? _readyAnim.length : _starAppearAnim.length;
