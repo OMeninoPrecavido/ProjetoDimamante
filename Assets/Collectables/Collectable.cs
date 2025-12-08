@@ -22,6 +22,7 @@ public abstract class Collectable : MonoBehaviour, IDashable
 
     protected IEnumerator Collect()
     {
+        AudioManager.Instance.Play("Collect");
         CollectEffect();
         _animator.SetTrigger("Destroy");
         yield return new WaitForSeconds(_collectClip.length);

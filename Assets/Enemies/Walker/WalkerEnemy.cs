@@ -23,12 +23,16 @@ public class WalkerEnemy : Enemy
     [Header("-Checks-")]
     [SerializeField] float _sightRange;
     [SerializeField] LayerMask _pitCheckLayerMask;
+    [SerializeField] LayerMask _wallCheckLayerMask;
     [SerializeField] LayerMask _playerCheckLayerMask;
 
     //Properties
     public bool IsSearching { get; private set; } = false;
     public bool SeesPlayer { get; private set; } = false;
     public bool IsMoving { get; private set; } = false;
+
+    //Auxiliaries
+    private Coroutine _stepSoundRef;
 
     protected override void Start()
     {
@@ -43,6 +47,9 @@ public class WalkerEnemy : Enemy
     {
         while (CurrState == EnemyState.Neutral)
         {
+            if (_stepSoundRef != null)
+                StopCoroutine(_stepSoundRef);
+
             //Stays in place for random amount of time
             _rb2d.linearVelocityX = 0;
             IsMoving = false;
@@ -56,9 +63,14 @@ public class WalkerEnemy : Enemy
             float elapsedTime = 0;
             IsMoving = true;
 
+            if (CheckIfWithinSoundRange(15f))
+            {
+                _stepSoundRef = StartCoroutine(StepSounds("WalkerStep", 0.5f));
+            }
+
             while (elapsedTime < walkSeconds)
             {
-                CheckForPit();
+                CheckForPitOrWall();
 
                 _rb2d.linearVelocityX = Accelerate(_rb2d.linearVelocityX, Orientation, _walkingSpeed);
                 elapsedTime += Time.deltaTime;
@@ -68,12 +80,15 @@ public class WalkerEnemy : Enemy
             //Decelerates after it's done walking
             while (_rb2d.linearVelocityX > 0)
             {
-                CheckForPit();
+                CheckForPitOrWall();
                 _rb2d.linearVelocityX = Decelerate(_rb2d.linearVelocityX, 0);
                 _previousOrientation = Orientation;
                 yield return null;
             }
             IsMoving = false;
+
+            if (_stepSoundRef != null)
+                StopCoroutine(_stepSoundRef);
 
             yield return null;
         }
@@ -81,11 +96,17 @@ public class WalkerEnemy : Enemy
 
     private IEnumerator HostileBehaviour()
     {
+        if (_stepSoundRef != null)
+            StopCoroutine(_stepSoundRef);
+
+        AudioManager.Instance.Play("WalkerDash");
+
+        AudioManager.Instance.Play("WalkerGrunt");
         IsMoving = true;
         while (CurrState == EnemyState.Hostile)
         {
             //While hostile, just keeps running
-            CheckForPit();
+            CheckForPitOrWall();
             _rb2d.linearVelocityX = _runningSpeed * Orientation;
             yield return null;
         }
@@ -149,16 +170,22 @@ public class WalkerEnemy : Enemy
         IsSearching = false;
     }
 
-    private void CheckForPit()
+    private void CheckForPitOrWall()
     {
         float pitCheckY = _boxCollider2d.bounds.center.y - _boxCollider2d.size.y / 2;
         float pitCheckX = _boxCollider2d.bounds.center.x + (_boxCollider2d.size.x / 2) * Orientation;
         Vector3 _pitCheckPos = new Vector3(pitCheckX, pitCheckY, 0);
 
-        bool hit = Physics2D.Raycast(_pitCheckPos, Vector3.down, 0.3f, _pitCheckLayerMask);
-        Debug.DrawRay(_pitCheckPos, Vector3.down * 0.3f, Color.red, 0f, false);
+        float wallCheckY = _boxCollider2d.bounds.center.y;
+        Vector3 _wallCheckPos = new Vector3(pitCheckX, wallCheckY, 0);
 
-        if (!hit)
+        bool groundHit = Physics2D.Raycast(_pitCheckPos, Vector3.down, 0.3f, _pitCheckLayerMask);
+        bool wallHit = Physics2D.Raycast(_wallCheckPos, Vector3.right * Orientation, 0.3f, _wallCheckLayerMask);
+        
+        Debug.DrawRay(_pitCheckPos, Vector3.down * 0.3f, Color.red, 0f, false);
+        Debug.DrawRay(_wallCheckPos, Vector3.right * 0.3f * Orientation, Color.red, 0f, false);
+
+        if (!groundHit || wallHit)
             Orientation = -Orientation;
     }
 

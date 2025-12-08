@@ -117,6 +117,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cameraMovement: {fileID: 0}
+  _solidGround:
+    serializedVersion: 2
+    m_Bits: 8
   _readyAnim: {fileID: 7400000, guid: 5b39b7f58fcf3aa4ba86c18b68721fd3, type: 2}
   _disappearAnim: {fileID: 7400000, guid: 18f8d5e51425d8148bd0ad9644638f21, type: 2}
   _appearAnim: {fileID: 7400000, guid: 58ee5c7c4adf9724599f91242589ab9f, type: 2}
@@ -146,6 +149,7 @@ MonoBehaviour:
     m_Bits: 64
   _invulnerabilityTime: 3
   _blinkingInterval: 0.2
+  _pitFallClip: {fileID: 8300000, guid: e5ec35c6d56e8b24994912c96946d522, type: 3}
   _startingLives: 3
 --- !u!1 &7124068599969874242
 GameObject:

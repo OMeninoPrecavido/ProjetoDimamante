@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Net;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,7 @@ public class DashController : MonoBehaviour
 
     [Header("-References-")] //References
     [SerializeField] CameraMovement _cameraMovement;
+    [SerializeField] LayerMask _solidGround;
     PlayerMovement _playerMovement;
     Rigidbody2D _rb2d;
     Collider2D _collider2d;
@@ -51,6 +53,8 @@ public class DashController : MonoBehaviour
     public bool IsDashing { get; private set; } = false;
     public bool HasDashJumped { get; private set; } = false;
 
+    public bool DashHold { get; private set; } = false; //Prevents sudden animation change when dash is over in air
+
     //Auxiliaries
     private Coroutine _dashCoroutine;
     private Coroutine _releaseDashCoroutine;
@@ -85,6 +89,18 @@ public class DashController : MonoBehaviour
         _releaseDashAction.performed -= OnReleaseDashPerformed;
     }
 
+    private void OnDrawGizmos()
+    {
+        if (_playerMovement == null) return; // evita erro no editor
+
+        // mesma posição usada no OverlapCircle
+        Vector3 checkPos = transform.position +
+                           (Vector3.right * _starSpawnDistance * _playerMovement.PlayerOrientation);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(checkPos, 0.5f);
+    }
+
     #endregion
 
     #region Methods
@@ -95,6 +111,15 @@ public class DashController : MonoBehaviour
 
     private IEnumerator ChargeDash()
     {
+        //Check if there's space to spawn star
+        bool hitWall = Physics2D.OverlapCircle(transform.position + (Vector3.right * _starSpawnDistance * _playerMovement.PlayerOrientation), 0.5f, _solidGround);
+        if (hitWall)
+            yield break;
+
+        //Can't start dash if mid air
+        if (!_playerMovement.IsGrounded)
+            yield break;
+
         //Preparing for charging the dash - time for animation to complete
         IsPreparing = true;
         IsCharging = false;
@@ -106,6 +131,8 @@ public class DashController : MonoBehaviour
         _starRef = Instantiate(_starPrefab,
                                transform.position + (Vector3.right * _starSpawnDistance * _playerMovement.PlayerOrientation),
                                Quaternion.identity);
+
+        AudioManager.Instance.Play("Star");
 
         //Positions camera according to side of charge
         if (_playerMovement.PlayerOrientation == -1 && _cameraMovement.CurrFocus == Side.Left)
@@ -128,15 +155,22 @@ public class DashController : MonoBehaviour
             yield return null;
         }
 
+        AudioManager.Instance.Play("Charge");
+
         //Actual charging of the dash
         IsPreparing = false;
         IsCharging = true;
 
         //Moves the star until it reaches the maximum dash distance
         float playerStartDist = Mathf.Abs(_starRef.position.x - transform.position.x);
-        while (playerStartDist < _dashMaxDistance && _starRef != null)
+        bool starHitWall = false;
+        while (!starHitWall && playerStartDist < _dashMaxDistance && _starRef != null)
         {
             int orientation = _playerMovement.PlayerOrientation;
+
+            //Checks for wall
+            starHitWall = Physics2D.Raycast(_starRef.position, Vector2.right * orientation, 0.5f, _solidGround);
+
             Vector3 newPos = new Vector3(_starRef.position.x + (_dashStarSpeed * Time.deltaTime * orientation),
                                          _starRef.position.y, _starRef.position.z);
 
@@ -151,6 +185,8 @@ public class DashController : MonoBehaviour
 
     private IEnumerator ReleaseDash()
     {
+        AudioManager.Instance.StopPlaying("Charge");
+
         if (IsPreparing)
         {
             IsPreparing = false;
@@ -178,9 +214,12 @@ public class DashController : MonoBehaviour
                 _enemyManager.EnableEnemyMovement(false); //Disables enemy movement
 
                 IsDashing = true;
+                DashHold = true;
                 Vector3 newPlayerPos = _starRef.position;
 
                 Destroy(_starRef.gameObject);
+
+                AudioManager.Instance.Play("Disappear");
 
                 yield return new WaitForSeconds(_disappearAnim.length); //Waits until disappearing animation is complete
 
@@ -194,7 +233,11 @@ public class DashController : MonoBehaviour
                 transform.position = newPlayerPos;
                 IsDashing = false;
 
+                AudioManager.Instance.Play("Cut");
+
                 yield return new WaitForSeconds(_delayUntilDashJumpStart); //Delimits the start of the dash jump interval
+
+                AudioManager.Instance.Play("Appear");
 
                 //STAGE 3 - DASH JUMP INTERVAL
                 HasDashJumped = false;
@@ -205,6 +248,7 @@ public class DashController : MonoBehaviour
                 {
                     if (_dashJumpAction.WasPressedThisFrame()) //Player dash jumps
                     {
+                        DashHold = false;
                         HasDashJumped = true;
 
                         //Camera, player physics and gravity are unlocked
@@ -232,6 +276,7 @@ public class DashController : MonoBehaviour
                 //STAGE 4 - DASH END
                 if (!HasDashJumped) //This will already be enabled if player has dash jumped
                 {
+                    DashHold = false;
                     _playerMovement.EnableGravity(true);
                     _cameraMovement.EnableHMovement(true);
 
@@ -256,12 +301,14 @@ public class DashController : MonoBehaviour
 
     public void CancelDash()
     {
+        AudioManager.Instance.StopPlaying("Charge");
+
+        if (_starRef != null)
+            Destroy(_starRef.gameObject);
+
         if (_dashCoroutine != null)
         {
             StopCoroutine(_dashCoroutine);
-
-            if (_starRef != null)
-                Destroy(_starRef.gameObject);
 
             IsPreparing = false;
             IsCharging = false;
@@ -306,7 +353,15 @@ public class DashController : MonoBehaviour
             if (dashable == null)
                 dashable = hit.collider.gameObject.GetComponentInParent<IDashable>();
             if (dashable != null)
+            {
                 dashable.OnDashedThrough(this);
+                if (dashable is Enemy)
+                {
+                    AudioManager.Instance.Play("SwordHit");
+                    AudioManager.Instance.Play("EnemyHit");
+                }
+            }
+                
         }
     }
 

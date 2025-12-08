@@ -26,6 +26,7 @@ public class FlyerEnemy : Enemy
     [SerializeField] AnimationClip _forwardImpulseClip;
 
     public FlyerState CurrFlyerState { get; private set; } = FlyerState.Patrolling;
+    public Coroutine _flapSoundRef;
 
     public enum FlyerState
     {
@@ -46,7 +47,10 @@ public class FlyerEnemy : Enemy
 
     //Neutral behaviour loop
     private IEnumerator NeutralBehaviour()
-    {
+    {        
+        if (_flapSoundRef == null)
+            _flapSoundRef = StartCoroutine(StepSounds("Flap", 0.65f));
+
         SetFlyerState(FlyerState.Patrolling);
         float cooldownTimer = 0;
 
@@ -84,9 +88,15 @@ public class FlyerEnemy : Enemy
     //Hostile behaviour loop
     private IEnumerator HostileBehaviour(Vector2 playerPosition)
     {
+        if (_flapSoundRef != null)
+            StopCoroutine(_flapSoundRef);
+
         //Diving movement
         SetFlyerState(FlyerState.Descending);
         yield return new WaitForSeconds(_downImpulseClip.length);
+
+        AudioManager.Instance.Play("FlyerDescent");
+        AudioManager.Instance.Play("FlyerScreech");
 
         bool hitFloor = false;
         while (transform.position.y > playerPosition.y + _floorCheckDistance)
@@ -122,6 +132,8 @@ public class FlyerEnemy : Enemy
             SetFlyerState(FlyerState.Swooping);
             yield return new WaitForSeconds(_forwardImpulseClip.length);
 
+            AudioManager.Instance.Play("FlyerImpulse");
+
             while ((Orientation == 1 && transform.position.x <= playerPosition.x) ||
                    (Orientation == -1 && transform.position.x >= playerPosition.x))
             {
@@ -142,6 +154,9 @@ public class FlyerEnemy : Enemy
 
         //Rising movement        
         SetFlyerState(FlyerState.Rising);
+
+        _flapSoundRef = StartCoroutine(StepSounds("Flap", 0.65f));
+
         while (transform.position.y < _pointLeft.position.y ||
                transform.position.x < _pointLeft.position.x ||
                transform.position.x > _pointRight.position.x)

@@ -11,6 +11,7 @@ public class LevelEnd : MonoBehaviour
         if (GlobalVariables.LevelsUnlocked <= _levelNumber)
             GlobalVariables.IncrementLevelsUnlocked();
 
-        SceneManager.LoadScene("Menu");
+        AudioManager.Instance.Play("Win");
+        LevelManager.Instance.ChangeToScene("Menu");
     }
 }

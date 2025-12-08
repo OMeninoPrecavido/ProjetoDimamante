@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Dima18
   m_EditorClassIdentifier: 
   Title: Dimamante's Comic - Part 1
-  Description: This is the first page of Dimamnte's comic, which me and Murilo decided
+  Description: This is the first page of Dimamante's comic, which me and Murilo decided
     to make back then. It's pretty rough, but I am weirdly proud about it today.
     He wrote the story and I did the drawings. We only ever made two pages, but it
     was fun regardless!
-  Drawing: {fileID: 4903658828677709481, guid: 563ccfbe26dd09446b223801d6fac73a, type: 3}
+  Drawing: {fileID: -3201854896322656211, guid: 5b37c85c7be455547b7a5333d7772fc0, type: 3}

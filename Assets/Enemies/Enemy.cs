@@ -14,6 +14,9 @@ public abstract class Enemy : MonoBehaviour, IDashable
     [SerializeField] float _hitStrenght = 10f;
     [SerializeField] float _deathDelay = 0.5f;
 
+    [Header("-Sound Attributes-")]
+    [SerializeField] float _soundRange = 20f;
+
     //Orientation values
     public int Orientation { get; protected set; } = -1;
     protected int _previousOrientation = -1;
@@ -57,9 +60,31 @@ public abstract class Enemy : MonoBehaviour, IDashable
     {
         CurrState = EnemyState.Dead;
         StopCoroutine(_currBehaviour);
+        _boxCollider2d.enabled = false;
 
         _rb2d.linearVelocity = new Vector3(Orientation * 1, 2, 0).normalized * _hitStrenght;
         yield return new WaitForSeconds(_deathDelay);
         Destroy(gameObject);
+    }
+
+    protected bool CheckIfWithinSoundRange(float range)
+    {
+        Vector3 camPos = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
+        Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, 0);
+
+        if (Vector3.Distance(camPos, enemyPos) < range)
+            return true;
+
+        return false;
+    }
+
+    protected IEnumerator StepSounds(string soundName, float interval)
+    {
+        while (true)
+        {
+            if (CheckIfWithinSoundRange(15f))
+                AudioManager.Instance.Play(soundName);
+            yield return new WaitForSeconds(interval);
+        }
     }
 }

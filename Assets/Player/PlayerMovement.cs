@@ -77,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
     //Auxiliaries
     Coroutine _jumpBufferingCoroutine;
+    Coroutine _stepSoundCoroutine;
 
     #endregion
 
@@ -119,6 +120,14 @@ public class PlayerMovement : MonoBehaviour
 
             if (HOrientation != 0f) //Player wants to move
             {
+                if (_previousHOrientation == 0f && IsGrounded)
+                {
+                    if (_stepSoundCoroutine != null)
+                        StopCoroutine(_stepSoundCoroutine);
+
+                    _stepSoundCoroutine = StartCoroutine(StepSounds("Run", 0.4f));
+                }
+
                 if (Mathf.Abs(velX) < _speed) //Player hasn't reached full speed or is still
                     velX = Accelerate(velX, HOrientation); //Accelerate
 
@@ -135,8 +144,14 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (HOrientation == 0f) //Player wants to stay still
             {
+                if (_previousHOrientation != 0f)
+                    if (_stepSoundCoroutine != null)
+                        StopCoroutine(_stepSoundCoroutine);
+
                 if (Mathf.Abs(velX) > 0f) //Player hasn't yet stopped
                     velX = Decelerate(velX, 0); //Decelerate to 0 speed
+
+                _previousHOrientation = HOrientation;
             }
 
             if (IsMovementEnabled)
@@ -199,10 +214,24 @@ public class PlayerMovement : MonoBehaviour
         {
             HasJumped = false; //If player is grounded, obviously hasJumped == false
             IsFalling = false; //Same for isFalling
+
+            if (!WasGrounded) //Player just landed
+            {
+                AudioManager.Instance.Play("Land");
+
+                if (HOrientation != 0)
+                {
+                    if (_stepSoundCoroutine != null)
+                        StopCoroutine(_stepSoundCoroutine);
+
+                    _stepSoundCoroutine = StartCoroutine(StepSounds("Run", 0.4f));
+                }
+            }
         }
         else
         {
-            _dashController.CancelDash();
+            if (_stepSoundCoroutine != null)
+                StopCoroutine(_stepSoundCoroutine);
         }
 
         if (!HasJumped && WasGrounded && !IsGrounded && !ShouldCoyoteJump) //Player dropped from a platform
@@ -226,6 +255,8 @@ public class PlayerMovement : MonoBehaviour
             HasJumpBuffered = false;
             ShouldCoyoteJump = false;
             IsFalling = false;
+
+            AudioManager.Instance.Play("Jump");
 
             if (IsMovementEnabled)
                 _rb2d.linearVelocityY = _jumpForce; //Adds vertical velocity to the player
@@ -356,5 +387,22 @@ public class PlayerMovement : MonoBehaviour
         }
 
         transform.position = respawnPoint.position;
+    }
+
+    private IEnumerator StepSounds(string soundName, float interval)
+    {
+        while (true)
+        {
+            AudioManager.Instance.Play(soundName);
+            yield return new WaitForSeconds(interval);
+        }
+    }
+
+    public void Freeze(bool b)
+    {
+        if (b)
+            _rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
+        else
+            _rb2d.constraints = RigidbodyConstraints2D.None;
     }
 }

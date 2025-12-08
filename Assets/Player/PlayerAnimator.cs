@@ -11,6 +11,7 @@ public class PlayerAnimator : MonoBehaviour
     const string DASH_STARTED = "dashStarted";
     const string HAS_DASH_JUMPED = "hasDashJumped";
     const string IS_HIT = "isHit";
+    const string DASH_HOLDER = "dashHold";
 
     Animator _animator;
     PlayerMovement _playerMovement;
@@ -27,8 +28,8 @@ public class PlayerAnimator : MonoBehaviour
         _dashController = GetComponent<DashController>();
 
         _chargeDashAction = InputSystem.actions.FindAction("ChargeDash");
-        _chargeDashAction.started += OnChargeDashStart;
-        _chargeDashAction.canceled += OnChargeDashCancel;
+        //_chargeDashAction.started += OnChargeDashStart;
+        //_chargeDashAction.canceled += OnChargeDashCancel;
     }
 
     private void Update()
@@ -55,11 +56,16 @@ public class PlayerAnimator : MonoBehaviour
             _animator.SetBool(IS_FALLING, true);
             _animator.SetBool(IS_JUMPING, false);
         }
+        
+        if (_dashController.IsCharging || _dashController.IsPreparing)
+            _animator.SetBool(IS_CHARGING, true);
+        else
+            _animator.SetBool(IS_CHARGING, false);
 
         _animator.SetBool(IS_HIT, _playerMovement.IsHit);
-        _animator.SetBool(IS_CHARGING, _isChargingDash);
         _animator.SetBool(DASH_STARTED, _dashController.IsDashing);
         _animator.SetBool(HAS_DASH_JUMPED, _dashController.HasDashJumped);
+        _animator.SetBool(DASH_HOLDER, _dashController.DashHold);
     }
 
     private void OnChargeDashStart(InputAction.CallbackContext context) => _isChargingDash = true;

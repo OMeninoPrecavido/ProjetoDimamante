@@ -15,11 +15,14 @@ public class UIManager : MonoBehaviour
         }
 
         Instance = this;
+
+        _livesShowUpPosition = new Vector2(_lives.anchoredPosition.x, 75);
     }
 
     [SerializeField] RectTransform _lives;
     [SerializeField] TextMeshProUGUI _livesText;
     Coroutine _livesShowUpCoroutine;
+    Vector2 _livesShowUpPosition;
     public void UpdateLives(int lives)
     {
         _livesText.text = "X" + lives.ToString();
@@ -30,7 +33,7 @@ public class UIManager : MonoBehaviour
     private IEnumerator ShowUpLives()
     {
         Vector2 startingPos = _lives.anchoredPosition;
-        Vector2 newPos = new Vector2(startingPos.x, 75);
+        Vector2 newPos = _livesShowUpPosition;
         _lives.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(1);

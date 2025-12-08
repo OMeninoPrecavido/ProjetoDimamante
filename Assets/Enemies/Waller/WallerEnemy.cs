@@ -21,6 +21,8 @@ public class WallerEnemy : Enemy
     public bool IsWall { get; private set; } = false;
     public bool IsMoving { get; private set; } = false;
 
+    private Coroutine _dragSoundRef;
+
     protected override void Start()
     {
         base.Start();
@@ -34,9 +36,9 @@ public class WallerEnemy : Enemy
         {
             //Waiting
             _rb2d.linearVelocityX = 0;
-            _rb2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            //_rb2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 
-        float waitingTime = UnityEngine.Random.Range(_lowerWaitingTime, _upperWaitingTime);
+            float waitingTime = UnityEngine.Random.Range(_lowerWaitingTime, _upperWaitingTime);
             yield return new WaitForSeconds(waitingTime);
 
             //Chooses between transforming into wall and walking
@@ -45,7 +47,7 @@ public class WallerEnemy : Enemy
             //Walking
             if (choice == 0)
             {
-                _rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+                //_rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
 
                 //Chooses random orientation and walks in that direction for random amount of time
                 int o = UnityEngine.Random.Range(0, 2);
@@ -53,20 +55,24 @@ public class WallerEnemy : Enemy
                 float walkSeconds = UnityEngine.Random.Range(_lowerWalkingTime, _upperWalkingTime);
                 float elapsedTime = 0;
                 IsMoving = true;
-                
+
+                _dragSoundRef = StartCoroutine(StepSounds("WallerDrag", 0.6f));
+
                 while (elapsedTime < walkSeconds)
                 {
-                    CheckForPit();
+                    CheckForPitOrWall();
 
                     _rb2d.linearVelocityX = Accelerate(_rb2d.linearVelocityX, Orientation, _speed);
                     elapsedTime += Time.deltaTime;
                     yield return null;
                 }
 
+                StopCoroutine(_dragSoundRef);
+
                 //Decelerates after it's done walking
                 while (_rb2d.linearVelocityX > 0)
                 {
-                    CheckForPit();
+                    CheckForPitOrWall();
                     _rb2d.linearVelocityX = Decelerate(_rb2d.linearVelocityX, 0);
                     _previousOrientation = Orientation;
                     yield return null;
@@ -77,11 +83,18 @@ public class WallerEnemy : Enemy
             else if (choice == 1)
             {
                 float wallTime = UnityEngine.Random.Range(_lowerWallTime, _upperWallTime);
+
+                if (!IsWall && CheckIfWithinSoundRange(15f))
+                    AudioManager.Instance.Play("WallerGrunt");
+
                 IsWall = true;
 
                 yield return new WaitForSeconds(wallTime);
 
                 //Turns back
+
+                if (CheckIfWithinSoundRange(15f))
+                    AudioManager.Instance.Play("WallerGrunt");
                 IsWall = false;
             }
 
@@ -126,16 +139,22 @@ public class WallerEnemy : Enemy
         return velX;
     }
 
-    private void CheckForPit()
+    private void CheckForPitOrWall()
     {
         float pitCheckY = _boxCollider2d.bounds.center.y - (_boxCollider2d.size.y / 2) * _boxCollider2d.transform.localScale.y;
         float pitCheckX = _boxCollider2d.bounds.center.x + (_boxCollider2d.size.x / 2) * Orientation;
         Vector3 _pitCheckPos = new Vector3(pitCheckX, pitCheckY, 0);
 
-        bool hit = Physics2D.Raycast(_pitCheckPos, Vector3.down, 0.3f, _pitCheckLayerMask);
-        Debug.DrawRay(_pitCheckPos, Vector3.down * 0.3f, Color.red, 0f, false);
+        float wallCheckY = _boxCollider2d.bounds.center.y;
+        Vector3 _wallCheckPos = new Vector3(pitCheckX, wallCheckY, 0);
 
-        if (!hit)
+        bool groundHit = Physics2D.Raycast(_pitCheckPos, Vector3.down, 0.3f, _pitCheckLayerMask);
+        bool wallHit = Physics2D.Raycast(_wallCheckPos, Vector3.right * Orientation, 0.3f, _pitCheckLayerMask);
+
+        Debug.DrawRay(_pitCheckPos, Vector3.down * 0.3f, Color.red, 0f, false);
+        Debug.DrawRay(_wallCheckPos, Vector3.right * 0.3f * Orientation, Color.red, 0f, false);
+
+        if (!groundHit || wallHit)
             Orientation = -Orientation;
     }
 }

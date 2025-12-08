@@ -112,7 +112,7 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 127
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -233,6 +233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hitStrenght: 5
   _deathDelay: 0.4
+  _soundRange: 20
   CurrState: 0
   _lowerWaitingTime: 2
   _upperWaitingTime: 3

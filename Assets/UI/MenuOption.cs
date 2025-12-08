@@ -9,6 +9,7 @@ public class MenuOption : MonoBehaviour
     TextMeshProUGUI _tmpro;
 
     [SerializeField] UnityEvent OnSelect;
+    public string _selectionSound;
 
     public bool IsLocked { get; set; } = false;
 

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Dima9
   m_EditorClassIdentifier: 
   Title: Oh no...
-  Description: "This certainly didn't age well... This character fighting Dimamante
-    was another hero I created named Capit\xE3o Prego, which means Captain Nail.
-    His power was pretty cool: he could spit nails at people. What isn't so cool
-    is what his abbreviated name, displayed on his chest, looks like."
-  Drawing: {fileID: -7556035215146311416, guid: 4d0c7c55b2f3732479893633e66f3942, type: 3}
+  Description: 'This certainly didn''t age well... This character fighting Dimamante
+    was another hero I created named Capitao Prego, which means Captain Nail. His
+    power was pretty cool: he could spit nails at people. What isn''t so cool is
+    what his abbreviated name, displayed on his chest, looks like.'
+  Drawing: {fileID: -7545533747045489471, guid: 8aebcda3a5372d0499dfb88798bddd1a, type: 3}

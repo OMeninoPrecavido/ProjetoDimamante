@@ -10,7 +10,10 @@ public class Sign : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.GetComponentInParent<PlayerMovement>() != null)
+        {
             SignUIManager.Instance.ActivateSignView(_text, _textPos.position);
+            AudioManager.Instance.Play("Pop");
+        } 
     }
 
     private void OnTriggerExit2D(Collider2D collision)

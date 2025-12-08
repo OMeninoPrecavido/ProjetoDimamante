@@ -1,0 +1,207 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2396714663574517297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6038382315953421281}
+  - component: {fileID: 8622163730507645249}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6038382315953421281
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2396714663574517297}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1084.4266, y: 415.94467, z: 2.0608556}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8622163730507645249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2396714663574517297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07cae102c1d32ba4f82b2a1cf9b56487, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Jump
+    clip: {fileID: 8300000, guid: a03865ae3a89e444fb0128c4683cdd4f, type: 3}
+    volume: 0.02
+    pitch: 1
+    source: {fileID: 0}
+  - name: Run
+    clip: {fileID: 8300000, guid: 3cac41c64af227440bb7450717b63005, type: 3}
+    volume: 0.02
+    pitch: 1
+    source: {fileID: 0}
+  - name: Land
+    clip: {fileID: 8300000, guid: bd69995524538794e9f59f81a982dc0a, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: Disappear
+    clip: {fileID: 8300000, guid: 03ca93efd9d3ae44db8416aaf0ae05da, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: Cut
+    clip: {fileID: 8300000, guid: b6870408e6597bc4d8fe17851e4431e6, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: Appear
+    clip: {fileID: 8300000, guid: 68902c5ef9afef54da86fe02a71b234d, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: Pop
+    clip: {fileID: 8300000, guid: 7bf541a032afbf6438a051d1a95c167a, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: Collect
+    clip: {fileID: 8300000, guid: c38f84683385e0c4ea6974b5d43fc431, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: Thump
+    clip: {fileID: 8300000, guid: 2c89e2f1f3b10ed49a16a305e32d5c78, type: 3}
+    volume: 0.06
+    pitch: 1
+    source: {fileID: 0}
+  - name: Charge
+    clip: {fileID: 8300000, guid: 274fbf9f25182c94a9602faf569718cb, type: 3}
+    volume: 0.005
+    pitch: 1
+    source: {fileID: 0}
+  - name: Star
+    clip: {fileID: 8300000, guid: 58e402608089f5548b4fdb052bfe0eea, type: 3}
+    volume: 0.08
+    pitch: 1
+    source: {fileID: 0}
+  - name: SwordHit
+    clip: {fileID: 8300000, guid: f0e8ba396ff6c91488dac6399a567ed2, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: EnemyHit
+    clip: {fileID: 8300000, guid: c1d9f4a71e202344d82672dff129daad, type: 3}
+    volume: 0.56
+    pitch: 1
+    source: {fileID: 0}
+  - name: PitFall
+    clip: {fileID: 8300000, guid: e5ec35c6d56e8b24994912c96946d522, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: WalkerGrunt
+    clip: {fileID: 8300000, guid: 4ffae7a48bdc45c4a89cf1eff974d957, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: WalkerStep
+    clip: {fileID: 8300000, guid: 230fa3c01cddf7142b66ce8bef83ca24, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: WalkerDash
+    clip: {fileID: 8300000, guid: 709fa0f9408081746b06d78c34c26f1d, type: 3}
+    volume: 0.01
+    pitch: 1.7
+    source: {fileID: 0}
+  - name: Flap
+    clip: {fileID: 8300000, guid: 9d8cc1756f361424e987cfc8d9c56ac5, type: 3}
+    volume: 0.02
+    pitch: 1.7
+    source: {fileID: 0}
+  - name: FlyerDescent
+    clip: {fileID: 8300000, guid: fdf6b9b3103d6cb4fb770a9cb0ae4e9f, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: FlyerImpulse
+    clip: {fileID: 8300000, guid: 09428c139f49ba84392e9f7cb9932831, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: FlyerScreech
+    clip: {fileID: 8300000, guid: 58f248e13eeaeb84285944fca8bd7e02, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: WallerGrunt
+    clip: {fileID: 8300000, guid: a136624b62158d74ab65e44b156191a0, type: 3}
+    volume: 0.02
+    pitch: 1
+    source: {fileID: 0}
+  - name: WallerDrag
+    clip: {fileID: 8300000, guid: 944b1b87ff8000b48b65cd0e395d54b6, type: 3}
+    volume: 0.01
+    pitch: 1
+    source: {fileID: 0}
+  - name: UIChoose
+    clip: {fileID: 8300000, guid: 7e345c8b33b532d4c92f339e710f040e, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: UISelect
+    clip: {fileID: 8300000, guid: a1b8c363fba103a4bb41c418c4c6fd1a, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: GalleryChoose
+    clip: {fileID: 8300000, guid: 5a669ef49db13724b97234726189e459, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: UIBack
+    clip: {fileID: 8300000, guid: 8f103846f6a96064ba8e1a346bfd2144, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: UIStartLevel
+    clip: {fileID: 8300000, guid: 41bdcbc6d40ab304d80f5f760923c1e1, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: UIExit
+    clip: {fileID: 8300000, guid: 0bf2b0b3f75dd744ba55d2638f44404c, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: NewLife
+    clip: {fileID: 8300000, guid: 2d4c89dffec774f41b3eda8e49f549d9, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: Win
+    clip: {fileID: 8300000, guid: bdff12b964a915247811c1a8100c1bb1, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}
+  - name: Lose
+    clip: {fileID: 8300000, guid: 3abf31e71729cde4893613aa75305bab, type: 3}
+    volume: 0.04
+    pitch: 1
+    source: {fileID: 0}

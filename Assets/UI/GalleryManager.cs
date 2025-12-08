@@ -238,6 +238,8 @@ public class GalleryManager : MonoBehaviour
         _currOption.opt = _galleryOptions[newRow, newColumn];
 
         _currOption.opt.OnChoose();
+
+        AudioManager.Instance.Play("GalleryChoose");
     }
 
     //Para outros scripts poderem marcar a galeria como fechada
@@ -259,6 +261,8 @@ public class GalleryManager : MonoBehaviour
     //Fecha o DrawingMenu
     public void CloseDrawingMenu()
     {
+        AudioManager.Instance.Play("UIBack");
+
         _currGalleryMode = GalleryMode.Base;
         _baseGallery.SetActive(true);
         _drawingMenu.SetActive(false);

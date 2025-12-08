@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
 
 /* Manages Main Menu UI, which icludes the main menu options and the level options */
 
-using NUnit.Framework;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -14,6 +13,11 @@ using UnityEngine.Tilemaps;
 
 public class MainMenuManager : MonoBehaviour
 {
+    [Header("-Transition Reference-")]
+    [SerializeField] Animator _transitionAnimator;
+    [SerializeField] AnimationClip _transitionInClip;
+    [SerializeField] AnimationClip _transitionOutClip;
+
     [Header("-Main Menu References-")]
     [SerializeField] List<MenuOption> _menuOptions;
     [SerializeField] List<MenuOption> _levelOptions;
@@ -36,6 +40,9 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] Color _regularOptionColor;
     [SerializeField] Color _lockedOptionColor;
 
+    [Header("-SFX-")]
+    [SerializeField] AudioClip _closeGameSFX;
+
     //Option admin. variables
     (MenuOption opt, int index) _currMenuOption; //Currently selected option
     Coroutine _menuMovingOp; //Current UI movement operation, so one can wait for another to end
@@ -57,6 +64,8 @@ public class MainMenuManager : MonoBehaviour
 
     private void Start()
     {
+        AudioManager.Instance.SetMusic("MenuMusic");
+
         InputSystem.actions.FindActionMap("Player").Disable();
         InputSystem.actions.FindActionMap("UI").Enable();
 
@@ -76,6 +85,11 @@ public class MainMenuManager : MonoBehaviour
         {
             if (i >= GlobalVariables.LevelsUnlocked && i < _levelOptions.Count - 1) //Last one is "Back"
                 _levelOptions[i].IsLocked = true;
+        }
+
+        if (GlobalVariables.shouldMenuTransition)
+        {
+            _transitionAnimator.SetTrigger("ExitTransition");
         }
 
         _currMenuOption.opt = _menuOptions[0];
@@ -128,6 +142,8 @@ public class MainMenuManager : MonoBehaviour
 
             if (_currMenuOption.opt.IsLocked)
                 advanceColor = _lockedOptionColor;
+
+            AudioManager.Instance.Play("UIChoose");
 
             yield return _menuMovingOp = StartCoroutine(_currMenuOption.opt.Highlight(200, 0.1f, advanceColor));
         }
@@ -369,11 +385,15 @@ public class MainMenuManager : MonoBehaviour
             child.gameObject.SetActive(false);
         }
 
+        AudioManager.Instance.SetMusic("GalleryMusic");
+
         _currMenuMode = MainMenuMode.Closed;
     }
 
     private IEnumerator CloseGallery()
     {
+        AudioManager.Instance.Play("UIBack");
+
         //Move a câmera de volta ao menu principal
         Vector3 startingPos = _camera.transform.position;
         Vector3 startingGalleryPos = _galleryMenu.anchoredPosition;
@@ -400,6 +420,8 @@ public class MainMenuManager : MonoBehaviour
             yield return null;
         }
 
+        AudioManager.Instance.SetMusic("MenuMusic");
+
         //Inicializa o menu inicial
         yield return StartCoroutine(Initialize());
 
@@ -416,35 +438,54 @@ public class MainMenuManager : MonoBehaviour
     public void OpenCreditsED() => StartCoroutine(SetCreditsMenu());
     public void StartLevel1(){
         StopAllCoroutines();
-        SceneManager.LoadScene("Level1");
+        ChangeToScene("Level1");
     }
     public void StartLevel2(){
         StopAllCoroutines();
-        SceneManager.LoadScene("Level2");
+        ChangeToScene("Level2");
     }
     public void StartLevel3()
     {
         StopAllCoroutines();
-        SceneManager.LoadScene("Level3");
+        ChangeToScene("Level3");
     }
     public void StartLevel4()
     {
         StopAllCoroutines();
-        SceneManager.LoadScene("Level4");
+        ChangeToScene("Level4");
     }
     public void StartLevel5()
     {
         StopAllCoroutines();
-        SceneManager.LoadScene("Level5");
+        ChangeToScene("Level5");
     }
 
     public void StartLevel6()
     {
         StopAllCoroutines();
-        SceneManager.LoadScene("Level6");
+        ChangeToScene("Level6");
     }
 
-    public void CloseGame() => Application.Quit();
+    public void ChangeToScene(string sceneName)
+    {
+        StartCoroutine(ChangeToSceneCoroutine(sceneName));
+    }
+
+    private IEnumerator ChangeToSceneCoroutine(string sceneName)
+    {
+        _transitionAnimator.SetTrigger("EnterTransition");
+        yield return new WaitForSeconds(_transitionInClip.length);
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void CloseGame() => StartCoroutine(CloseGameCoroutine());
+
+    private IEnumerator CloseGameCoroutine()
+    {
+        _currMenuMode = MainMenuMode.Transition;
+        yield return new WaitForSeconds(_closeGameSFX.length);
+        Application.Quit();
+    }
 
     #endregion
 
@@ -471,12 +512,17 @@ public class MainMenuManager : MonoBehaviour
         if (_currMenuMode == MainMenuMode.Credits)
         {
             StartCoroutine(CloseCredits());
+            AudioManager.Instance.Play("UIBack");
             return;
         }
 
         if (_currMenuMode != MainMenuMode.Closed && _currMenuMode != MainMenuMode.Transition
             && !_currMenuOption.opt.IsLocked)
+        {
             _currMenuOption.opt.Select();
+            AudioManager.Instance.Play(_currMenuOption.opt._selectionSound);
+        }
+            
     }
 
     #endregion
