@@ -75,6 +75,9 @@ public class CameraMovement : MonoBehaviour
 
     public bool IsDashShifting = false;
 
+    //Aux vars for Y movement
+    float _playerY;
+
     #endregion
 
     #region Event Functions
@@ -160,12 +163,6 @@ public class CameraMovement : MonoBehaviour
             //Player changed direction to right
             if (_player.position.x < _auxPos.x && CurrFocus == Side.Left)
             {
-                Debug.Log("PlayerLeftDist: " + playerLeftDist
-                + "\nPlayerRightDist: " + playerRightDist
-                + "\npZoneHalfWidthWorld: " + _pZoneHalfWidthWorld);
-
-                Debug.Log("Shifting Right through camera script");
-
                 if (_shiftingCoroutine != null)
                     StopCoroutine(_shiftingCoroutine);
 
@@ -175,12 +172,6 @@ public class CameraMovement : MonoBehaviour
             //Player changed direction to left
             if (_player.position.x > _auxPos.x && CurrFocus == Side.Right)
             {
-                Debug.Log("PlayerLeftDist: " + playerLeftDist
-                + "\nPlayerRightDist: " + playerRightDist
-                + "\npZoneHalfWidthWorld: " + _pZoneHalfWidthWorld);
-
-                Debug.Log("Shifting Left through camera script");
-
                 if (_shiftingCoroutine != null)
                     StopCoroutine(_shiftingCoroutine);
 
@@ -261,15 +252,19 @@ public class CameraMovement : MonoBehaviour
 
     private void VerticalLateUpdate()
     {
-        float playerY = _player.position.y;
+        float currPlayerY = _player.position.y;
+
+        if (_playerMovement.IsGrounded)
+            _playerY = currPlayerY;
+
         _playerVLimitWorld = Camera.main.ViewportToWorldPoint(new Vector3(0, _playerVLimit, 0)).y;
 
         //Player is under the vertical limit
-        if (playerY < _playerVLimitWorld)
+        if (currPlayerY < _playerVLimitWorld)
             MoveCameraY();
 
         //Player is above the vertical limit and is already grounded
-        if (playerY > _playerVLimitWorld && _playerMovement.IsGrounded)
+        if (_playerY > _playerVLimitWorld)
             MoveCameraY();
     }
 

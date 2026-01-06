@@ -75,9 +75,31 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "negative",
+                    "id": "70cc345e-efed-4b1b-a9e1-6042827a9f58",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "positive",
                     "id": "780096c9-2388-4d26-be01-aa010d2ffb93",
                     "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "37d897d8-e64b-4e54-a96e-eaecd67a3158",
+                    "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -131,6 +153,17 @@
                 },
                 {
                     "name": "",
+                    "id": "865b1058-2246-4fd4-aa3f-a1e6627cbbbc",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "a0d89085-e088-44c0-8835-05408085fbcf",
                     "path": "<Keyboard>/space",
                     "interactions": "Press",
@@ -142,8 +175,30 @@
                 },
                 {
                     "name": "",
+                    "id": "214d9f4c-189e-4b7f-97dd-d2cf46915974",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChargeDash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "36f9e0a3-b42b-483f-b96d-c83d2083e732",
                     "path": "<Keyboard>/space",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ReleaseDash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2c12e0eb-87f5-4695-8696-4518a1808cf3",
+                    "path": "<Keyboard>/shift",
                     "interactions": "Press(behavior=1)",
                     "processors": "",
                     "groups": "",
@@ -235,8 +290,30 @@
                 },
                 {
                     "name": "",
+                    "id": "077d74b0-94a6-41e4-ba04-8c8d0a8420c5",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightPress",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ad8e8261-f2da-4304-821f-98630f86ce6a",
                     "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightRelease",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eaf508c4-df8f-4056-982f-9bc31049d0d2",
+                    "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -257,8 +334,30 @@
                 },
                 {
                     "name": "",
+                    "id": "6fc29df8-243c-4f2c-a318-faab7ddb537e",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftPress",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "76c54abb-fe8b-4286-a419-364dcfb26a0a",
                     "path": "<Keyboard>/leftArrow",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftRelease",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "85dd5aa7-3bf2-4219-84af-622a51b83372",
+                    "path": "<Keyboard>/a",
                     "interactions": "Press(behavior=1)",
                     "processors": "",
                     "groups": "",
@@ -279,6 +378,17 @@
                 },
                 {
                     "name": "",
+                    "id": "5294c154-d319-474c-9288-08af08237654",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UpPress",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "5ade1ab9-ad1c-4041-9728-ad5dc5bc9f32",
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
@@ -290,8 +400,41 @@
                 },
                 {
                     "name": "",
+                    "id": "b62ab31a-0565-4cae-84d9-e08cddb844e9",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DownPress",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "bd0c29ce-049a-457b-ab92-e1c22bff797d",
                     "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a12a8ddf-f90e-49b0-9d46-b3298d460307",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "09a966cc-e8f8-4913-92f2-7e71b4b2f141",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

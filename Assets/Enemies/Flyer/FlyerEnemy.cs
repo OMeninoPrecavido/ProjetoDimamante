@@ -143,7 +143,6 @@ public class FlyerEnemy : Enemy
 
                 if (hit)
                 {
-                    Debug.Log(hit.collider.gameObject.name);
                     break;
                 }
 

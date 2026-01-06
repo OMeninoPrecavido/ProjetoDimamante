@@ -62,6 +62,11 @@ public class MainMenuManager : MonoBehaviour
 
     #region Event Functions
 
+    private void Awake()
+    {
+        GlobalVariables.LoadLevelsUnlocked();
+    }
+
     private void Start()
     {
         AudioManager.Instance.SetMusic("MenuMusic");

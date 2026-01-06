@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Net;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -54,6 +55,8 @@ public class DashController : MonoBehaviour
     public bool HasDashJumped { get; private set; } = false;
 
     public bool DashHold { get; private set; } = false; //Prevents sudden animation change when dash is over in air
+
+    bool _dashIsHappening = false;
 
     //Auxiliaries
     private Coroutine _dashCoroutine;
@@ -120,6 +123,13 @@ public class DashController : MonoBehaviour
         if (!_playerMovement.IsGrounded)
             yield break;
 
+        //Can't start dash if already dashing
+        if (IsDashing)
+            yield break;
+
+        if (_dashIsHappening)
+            yield break;
+
         //Preparing for charging the dash - time for animation to complete
         IsPreparing = true;
         IsCharging = false;
@@ -137,12 +147,10 @@ public class DashController : MonoBehaviour
         //Positions camera according to side of charge
         if (_playerMovement.PlayerOrientation == -1 && _cameraMovement.CurrFocus == Side.Left)
         {
-            Debug.Log("Shifting Right through controller");
             _cameraMovement.StartShiftCoroutine(Side.Right);
         }
         else if (_playerMovement.PlayerOrientation == 1 && _cameraMovement.CurrFocus == Side.Right)
         {
-            Debug.Log("Shifting Left through controller");
             _cameraMovement.StartShiftCoroutine(Side.Left);
         }
 
@@ -204,6 +212,8 @@ public class DashController : MonoBehaviour
 
             Vector3 startingPoint = transform.position;
 
+            _dashIsHappening = true;
+
             if (_starRef != null)
             {
                 //STAGE 1 - Locks player & camera
@@ -231,6 +241,25 @@ public class DashController : MonoBehaviour
                 }
 
                 transform.position = newPlayerPos;
+                Physics2D.SyncTransforms();
+
+                //Checks if player is inside a collider
+                RaycastHit2D hit = Physics2D.BoxCast(_collider2d.bounds.center, new Vector2(_collider2d.bounds.size.x, 0.01f), 0f, Vector2.down, 10f, _solidGround);
+
+                Debug.DrawRay(_collider2d.bounds.center, Vector2.down * 10f, Color.blue, 3f, false);
+
+                if (hit)
+                {
+                    float distance = Mathf.Abs(hit.point.y - _collider2d.bounds.center.y);
+                    float dif = distance - _collider2d.bounds.size.y / 2;
+
+                    if (dif < 0)
+                    {
+                        transform.position = new Vector2(transform.position.x, transform.position.y + Mathf.Abs(dif));
+                    }
+                }
+
+
                 IsDashing = false;
 
                 AudioManager.Instance.Play("Cut");
@@ -246,7 +275,7 @@ public class DashController : MonoBehaviour
                 float elapsedTime = 0;
                 while (elapsedTime < _dashJumpInterval) //Dash jump interval
                 {
-                    if (_dashJumpAction.WasPressedThisFrame()) //Player dash jumps
+                    if (_dashJumpAction.WasPressedThisFrame() && _playerMovement.IsGrounded) //Player dash jumps
                     {
                         DashHold = false;
                         HasDashJumped = true;
@@ -262,6 +291,8 @@ public class DashController : MonoBehaviour
                         //Applies dash jump velocity on player
                         Vector3 direction = new Vector3(_playerMovement.PlayerOrientation * 1, 1, 0).normalized;
                         _rb2d.linearVelocity = direction * _dashJumpImpulse;
+
+                        _dashIsHappening = false;
 
                         break;
                     }
@@ -282,6 +313,8 @@ public class DashController : MonoBehaviour
 
                     _enemyManager.EnableEnemyMovement(true);
                     HitDashables(startingPoint, newPlayerPos);
+
+                    _dashIsHappening = false;
                 }
 
                 HasDashJumped = false;
@@ -302,6 +335,8 @@ public class DashController : MonoBehaviour
     public void CancelDash()
     {
         AudioManager.Instance.StopPlaying("Charge");
+
+        _dashIsHappening = false;
 
         if (_starRef != null)
             Destroy(_starRef.gameObject);

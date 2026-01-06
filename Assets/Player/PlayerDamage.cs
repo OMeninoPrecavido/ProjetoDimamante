@@ -104,6 +104,9 @@ public class PlayerDamage : MonoBehaviour
     {
         AudioManager.Instance.Play("PitFall");
 
+        _playerMovement.EnableMovement(false);
+        _playerMovement.RemoveHorizontalVelocity();
+
         yield return new WaitForSeconds(_pitFallClip.length);
 
         if (!IsInvulnerable)
@@ -111,6 +114,7 @@ public class PlayerDamage : MonoBehaviour
 
         if (Lives > 0)
         {
+            _playerMovement.EnableMovement(true);
             _playerMovement.GoToClosestRespawn();
             _collider2D.excludeLayers = _ignoreOnInvulnerability;
             yield return StartCoroutine(Blink());

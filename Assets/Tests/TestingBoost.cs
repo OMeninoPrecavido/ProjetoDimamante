@@ -14,7 +14,6 @@ public class TestingBoost : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("!");
             Vector3 v3 = new Vector3(1, 1, 0).normalized;
             rb2d.linearVelocity = v3 * power;
         }

@@ -248,7 +248,7 @@ public class PlayerMovement : MonoBehaviour
             _jumpBufferingCoroutine = StartCoroutine(JumpBuffering(_jumpBufferingTime));
         }
 
-        if ((IsGrounded && _jumpAction.WasPressedThisFrame()) || HasJumpBuffered || ShouldCoyoteJump) //Player pressed for jump while grounded
+        if (((IsGrounded && _jumpAction.WasPressedThisFrame()) || HasJumpBuffered || ShouldCoyoteJump) && IsMovementEnabled) //Player pressed for jump while grounded
         {
             HasJumped = true;
             IsGrounded = ShouldCheckGrounding = false;
@@ -260,6 +260,10 @@ public class PlayerMovement : MonoBehaviour
 
             if (IsMovementEnabled)
                 _rb2d.linearVelocityY = _jumpForce; //Adds vertical velocity to the player
+
+            Debug.Log(Application.persistentDataPath);
+
+            _dashController.CancelDash();
         }
 
         if (HasJumped && !IsFalling && _jumpAction.WasReleasedThisFrame()) //Player has released the jump button early
@@ -269,8 +273,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (HasJumped && !IsFalling && Mathf.Sign(_rb2d.linearVelocityY) < _previousVOrientation) //Player has reached the peak of a jump
         {
-            Debug.Log("!");
-
             ShouldCheckGrounding = true; //Allows the ground check only after mid-jump so there's no risk of hasJumped becoming true prematurely
             IsFalling = true;
             StartCoroutine(ApexTime(_apexTime));
@@ -337,8 +339,8 @@ public class PlayerMovement : MonoBehaviour
 
         hit = Physics2D.BoxCast(_floorCheck.position, new Vector2(_bc2d.size.x, 0.01f), 0, Vector2.down, 0.1f, _floorMask);
 
-        //Debug.DrawRay(new Vector3(_floorCheck.position.x - _bc2d.size.x/2, _floorCheck.position.y, _floorCheck.position.z), Vector3.down * 0.1f, UnityEngine.Color.red, 0f, false);
-        //Debug.DrawRay(new Vector3(_floorCheck.position.x + _bc2d.size.x/2, _floorCheck.position.y, _floorCheck.position.z), Vector3.down * 0.1f, UnityEngine.Color.red, 0f, false);
+        Debug.DrawRay(new Vector3(_floorCheck.position.x - _bc2d.size.x/2, _floorCheck.position.y, _floorCheck.position.z), Vector3.down * 0.1f, UnityEngine.Color.red, 0f, false);
+        Debug.DrawRay(new Vector3(_floorCheck.position.x + _bc2d.size.x/2, _floorCheck.position.y, _floorCheck.position.z), Vector3.down * 0.1f, UnityEngine.Color.red, 0f, false);
 
         return hit;
     }
@@ -404,5 +406,10 @@ public class PlayerMovement : MonoBehaviour
             _rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
         else
             _rb2d.constraints = RigidbodyConstraints2D.None;
+    }
+
+    public void RemoveHorizontalVelocity()
+    {
+        _rb2d.linearVelocityX = 0;
     }
 }
