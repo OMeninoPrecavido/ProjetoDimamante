@@ -334,8 +334,7 @@ public class GalleryManager : MonoBehaviour
         //Modo base
         if (_currGalleryMode == GalleryMode.Base)
         {
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-                SetSelectedOption(_currOption.column + 1, _currOption.row);
+            SetSelectedOption(_currOption.column + 1, _currOption.row);
         }
         //Modo drawing
         else if (_currGalleryMode == GalleryMode.Drawing)
