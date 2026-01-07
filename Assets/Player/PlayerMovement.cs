@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using System.Collections;
+using UnityEngine.Windows;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -108,8 +109,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void ReadHorizontalMovement()
     {
+        float input = 0;
+
         if (IsMovementEnabled)
-            HOrientation = _moveAction.ReadValue<float>();
+            input = _moveAction.ReadValue<float>();
+
+        if (Mathf.Abs(input) < 0.1f)
+            HOrientation = 0;
+        else
+            HOrientation = Mathf.Sign(input);
+
     }
 
     private void HandleHorizontalMovement()
